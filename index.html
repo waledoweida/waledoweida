@@ -670,20 +670,13 @@ html, body {
 <body>
 <!-- ══ PHASE 0: ENVELOPE ══ -->
 <div id="envelopeScreen">
-  <div class="env-dust" id="envDust"></div>
-  <p class="env-header">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-  <div id="envelope" role="button" aria-label="افتح الدعوة">
-    <div class="env-body">
-      <div class="env-left"></div>
-      <div class="env-right"></div>
-      <div class="env-bottom"></div>
-      <div class="env-border"></div>
-      <div class="env-letter" id="envLetter">
-        <span class="letter-bismillah">دعوة عقد قران</span>
-        <span class="letter-names">Waled Ahmed &amp;ℛ
-        
-        </span>
-      </div>
+  <!-- ... باقي الكود ... -->
+    <div class="env-letter" id="envLetter">
+  <span class="letter-bismillah">دعوة عقد قران</span>
+  <span class="letter-names">Waled Ahmed &amp; ℛ</span>
+</div>
+  <!-- ... باقي الكود ... -->
+</div>
     </div>
     <div class="env-flap" id="envFlap">
       <div class="env-flap-face"></div>
@@ -744,12 +737,9 @@ html, body {
   <div class="hero-wrap">
 
   <!-- الصورة في الخلف -->
-  <div class="hero-video-wrap">
-  <div class="hero-video-frame">
-    <video id="heroVideo" autoplay loop muted playsinline poster="hero.jpg">
-      <source src="video.mp4" type="video/mp4">
-      متصفحك لا يدعم تشغيل الفيديو.
-    </video>
+ <video id="heroVideo" autoplay loop playsinline poster="hero-poster.jpg">
+  <source src="hero-video.mp4" type="video/mp4">
+</video>
     <div class="hero-video-overlay"></div>
   </div>
 </div>
@@ -1254,15 +1244,20 @@ const colors = ['#d4af5a', '#b8892a', '#e8c870'];
   }
 
   function dismissIntro() {
-    intro.classList.add('hide');
-    // Reveal main card + start background music
-    setTimeout(() => {
-      intro.style.display = 'none';
-      document.querySelector('.card').classList.add('revealed');
-      startBackgroundMusic();
-    }, 950);
-    try { audioCtx && audioCtx.resume(); } catch(e) {}
+  intro.classList.add('hide');
+  
+  // تشغيل صوت الفيديو فور الدخول
+  const video = document.getElementById('heroVideo');
+  if (video) {
+    video.muted = false; // إلغاء كتم الصوت
+    video.play().catch(e => console.log("يحتاج المستخدم للتفاعل مع الصفحة أولاً"));
   }
+
+  setTimeout(() => {
+    intro.style.display = 'none';
+    document.querySelector('.card').classList.add('revealed');
+  }, 950);
+}
 
   intro.addEventListener('click', () => { if (current <= 1) dismissIntro(); });
 
