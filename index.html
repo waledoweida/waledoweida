@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="عقد قران Waled Ahmed &ℛ">
+<meta name="twitter:title" content="عقد قران Waled Ahmed &amp; ℛ">
 <meta name="twitter:description" content="يسعدنا مشاركتكم فرحتنا، افتح الرابط لمعرفة التفاصيل والمكان  ❤">
 <meta name="twitter:image" content="https://waledoweida.com/aaass.jpg">
   <style>
@@ -737,11 +737,16 @@ html, body {
   <div class="hero-wrap">
 
   <!-- الصورة في الخلف -->
- <video id="heroVideo" autoplay loop playsinline poster="hero-poster.jpg">
-  <source src="hero-video.mp4" type="video/mp4">
-</video>
+ <div class="hero-wrap">
+  <div class="hero-video-wrap">
+    <video id="heroVideo" autoplay loop playsinline poster="hero-poster.jpg">
+      <source src="hero-video.mp4" type="video/mp4">
+    </video>
     <div class="hero-video-overlay"></div>
   </div>
+  <!-- الستائر والثريا يجب أن يبقوا هنا داخل الـ hero-wrap -->
+  <div class="curtain-wrap" aria-hidden="true">... (كود الـ SVG الخاص بالستائر) ...</div>
+  <div class="chandelier-wrap" aria-hidden="true">... (كود الـ SVG الخاص بالثريا) ...</div>
 </div>
 
   <!-- CURTAINS SVG فوق الفيديو -->
@@ -1243,14 +1248,21 @@ const colors = ['#d4af5a', '#b8892a', '#e8c870'];
     if (elapsed < STEP_DURATION * 3) requestAnimationFrame(tick);
   }
 
-  function dismissIntro() {
+function dismissIntro() {
   intro.classList.add('hide');
-  
-  // تشغيل صوت الفيديو فور الدخول
+
+  // 1. إيقاف الموسيقى الخلفية
+  const audio = document.getElementById('bgMusic');
+  if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+  }
+
+  // 2. تشغيل صوت الفيديو
   const video = document.getElementById('heroVideo');
   if (video) {
-    video.muted = false; // إلغاء كتم الصوت
-    video.play().catch(e => console.log("يحتاج المستخدم للتفاعل مع الصفحة أولاً"));
+    video.muted = false; 
+    video.play().catch(e => console.log("الصوت يحتاج تفاعل"));
   }
 
   setTimeout(() => {
