@@ -328,6 +328,89 @@ html, body {
 }
 .map-btn:hover { opacity: .88; transform: translateY(-1px); }
 
+/* ══════════════════════════════
+   INTERACTIVITY — tap ripple feedback
+   (applies to any clickable "place" element: venue links, map card)
+══════════════════════════════ */
+.tap-fx {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.tap-fx:active { transform: scale(.97); }
+.ripple-fx {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  transform: translate(-50%,-50%) scale(0);
+  pointer-events: none;
+  animation: rippleGrow .65s ease-out forwards;
+  z-index: 20;
+}
+@keyframes rippleGrow {
+  to { transform: translate(-50%,-50%) scale(22); opacity: 0; }
+}
+
+/* ══════════════════════════════
+   INTERACTIVITY — couple's names (tap for hearts)
+══════════════════════════════ */
+.names-tap { cursor: pointer; -webkit-tap-highlight-color: transparent; display: inline-block; }
+.names-tap.name-pop { animation: namePop .55s ease; }
+@keyframes namePop {
+  0%   { transform: scale(1) rotate(0deg); }
+  35%  { transform: scale(1.1) rotate(-1deg); }
+  60%  { transform: scale(.96) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.heart-fx {
+  position: fixed;
+  z-index: 9500;
+  pointer-events: none;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(122,92,16,.35));
+  animation: heartFloat var(--hdur) cubic-bezier(.18,.7,.4,1) forwards;
+}
+@keyframes heartFloat {
+  0%   { transform: translate(0,0) scale(.5) rotate(0deg);   opacity: 0; }
+  12%  { opacity: 1; }
+  100% { transform: translate(var(--hx), -170px) scale(1.2) rotate(var(--hrot)); opacity: 0; }
+}
+
+/* ══════════════════════════════
+   GOLD ILLUSTRATED MAP CARD
+══════════════════════════════ */
+.map-card {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border-radius: 14px;
+  margin-bottom: 4px;
+  background: linear-gradient(160deg, var(--cream2) 0%, var(--cream3) 100%);
+  border: 1px solid rgba(184,137,42,.45);
+  box-shadow: 0 6px 22px rgba(122,92,16,.28), inset 0 1px 1px rgba(255,255,255,.4);
+  overflow: hidden;
+}
+.map-card:active { box-shadow: 0 3px 12px rgba(122,92,16,.3), inset 0 1px 1px rgba(255,255,255,.4); }
+.map-card-illustration {
+  width: 100%;
+  display: block;
+  aspect-ratio: 300/150;
+}
+.map-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: clamp(9px,2.2vw,12px) clamp(12px,3vw,16px);
+  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 45%, var(--gold-dark) 100%);
+}
+.map-card-text { display: flex; flex-direction: column; text-align: right; }
+.map-card-title { color: #fff; font-family: 'Amiri', serif; font-size: clamp(.85rem,3.4vw,.98rem); font-weight: 700; }
+.map-card-sub   { color: rgba(255,255,255,.85); font-size: clamp(.66rem,2.4vw,.76rem); margin-top: 1px; }
+.map-card-arrow { color: #fff; font-size: 1.1rem; flex-shrink: 0; }
+
 /* sparkle corners */
 .sparkle {
   position: absolute;
@@ -969,70 +1052,146 @@ html, body {
   <!-- CONTENT -->
   <div class="content">
 
-    <p class="bismillah fi d1">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+    <p class="bismillah fi d1 tap-fx">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
 
-    <p class="verse fi d2">
+    <p class="verse fi d2 tap-fx">
       وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا<br>
       لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
     </p>
 
-    <p class="subtitle fi d2">ونتشرف بدعوتكم &nbsp;|&nbsp; عقد قراني</p>
+    <p class="subtitle fi d2 tap-fx">ونتشرف بدعوتكم &nbsp;|&nbsp; عقد قراني</p>
 
-    <div class="names fi d3">Waled  &amp; ℛ</div>
+    <div class="fi d3">
+      <div class="names-tap" id="namesText">
+        <div class="names">Waled  &amp; ℛ</div>
+      </div>
+    </div>
 
-    <p class="dua fi d3">اللهم اجعله عقداً متيناً وارزقنا التمام الجميل</p>
+    <p class="dua fi d3 tap-fx">اللهم اجعله عقداً متيناً وارزقنا التمام الجميل</p>
 
-    <div class="divider fi d4"><span class="divider-icon">✦</span></div>
+    <div class="divider fi d4 tap-fx"><span class="divider-icon">✦</span></div>
 
-    <div class="date-block fi d4">
+    <div class="date-block fi d4 tap-fx">
       وذلك بمشيئة الله مساء يوم الثلاثاء<br>
       <strong>30.06.2026</strong> الموافق <strong>15 محرم 1448</strong>
     </div>
 
     <div class="countdown fi d5" id="cd">
-      <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">يوم</span></div>
-      <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">ساعة</span></div>
-      <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">دقيقة</span></div>
-      <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">ثانية</span></div>
+      <div class="cd-box tap-fx"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">يوم</span></div>
+      <div class="cd-box tap-fx"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">ساعة</span></div>
+      <div class="cd-box tap-fx"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">دقيقة</span></div>
+      <div class="cd-box tap-fx"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">ثانية</span></div>
     </div>
 
-    <div class="divider fi d5" style="margin-top:4px"><span class="divider-icon">💍</span></div>
+    <div class="divider fi d5 tap-fx" style="margin-top:4px"><span class="divider-icon">💍</span></div>
 
    <div class="timing fi d6">
   <!-- القاعة (رابط لخرائط جوجل - في المقدمة) -->
-  <a href="https://maps.app.goo.gl/Kf9PLfLNpuxndzMH6" target="_blank" rel="noopener" class="timing-item" style="text-decoration: none; cursor: pointer;">
+  <a href="https://maps.app.goo.gl/Kf9PLfLNpuxndzMH6" target="_blank" rel="noopener" class="timing-item tap-fx" style="text-decoration: none; cursor: pointer;">
     <span class="t-icon">🕌</span>
     <span class="t-label">قاعة لامور</span>
     <span class="t-venue" style="font-size: 0.65rem; color: var(--gold-dark); font-weight: bold;">📍نادي الانتاج الحربى كورنيش حلوان</span>
   </a>
   <!-- الاستقبال -->
-  <div class="timing-item">
+  <div class="timing-item tap-fx">
     <span class="t-icon">🤝</span>
     <span class="t-label">الاستقبال</span>
     <span class="t-time">7:15 PM</span>
   </div>
   <!-- الزفة -->
-  <div class="timing-item">
+  <div class="timing-item tap-fx">
     <span class="t-icon">🎊</span>
     <span class="t-label">الزفة</span>
     <span class="t-time">7:20 PM</span>
   </div>
   <!-- كتب الكتاب -->
-  <div class="timing-item">
+  <div class="timing-item tap-fx">
     <span class="t-icon">📜</span>
     <span class="t-label">عقد القران</span>
     <span class="t-time">7:30 PM</span>
   </div>
 </div>
 
-    <p class="blessings fi d7">✨وبحضوركم يتم لنا الفرح والسرور✨</p>
+    <p class="blessings fi d7 tap-fx">✨وبحضوركم يتم لنا الفرح والسرور✨</p>
    
 
-    <a class="map-btn fi d8" href="https://maps.app.goo.gl/nYvg4d4uEySctgK88" target="_blank" rel="noopener">
-      📍 الإنتاج الحربي — عرض الموقع على الخريطة
+    <a class="map-card tap-fx fi d8" href="https://maps.app.goo.gl/nYvg4d4uEySctgK88" target="_blank" rel="noopener" aria-label="عرض موقع نادي الإنتاج الحربي على خرائط جوجل">
+      <svg class="map-card-illustration" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f5ead6"/>
+            <stop offset="100%" stop-color="#e8d5b0"/>
+          </linearGradient>
+          <linearGradient id="riverG" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#e0c890"/>
+            <stop offset="100%" stop-color="#c8a868"/>
+          </linearGradient>
+          <radialGradient id="pinG" cx="35%" cy="28%" r="75%">
+            <stop offset="0%" stop-color="#f0d878"/>
+            <stop offset="55%" stop-color="#b8892a"/>
+            <stop offset="100%" stop-color="#7a5c10"/>
+          </radialGradient>
+        </defs>
+
+        <rect width="300" height="150" fill="url(#mapBg)"/>
+
+        <!-- subtle street grid -->
+        <g stroke="#b8892a" stroke-width="1" opacity=".18" fill="none">
+          <path d="M0 30 Q90 22 180 34 T300 26"/>
+          <path d="M0 70 Q100 60 190 74 T300 66"/>
+          <path d="M0 112 Q95 104 200 116 T300 108"/>
+          <path d="M70 0 Q80 60 65 150"/>
+          <path d="M150 0 Q140 70 158 150"/>
+          <path d="M232 0 Q224 65 240 150"/>
+        </g>
+
+        <!-- نهر النيل / الكورنيش -->
+        <path d="M0 0 Q16 40 5 80 Q-6 116 17 150 L0 150 Z" fill="url(#riverG)" opacity=".55"/>
+        <path d="M0 8 Q17 42 6 80 Q-4 114 19 146" stroke="#7a5c10" stroke-width="1" fill="none" opacity=".3"/>
+        <g fill="#9a7430" opacity=".55">
+          <circle cx="23" cy="26" r="3.2"/>
+          <circle cx="14" cy="58" r="3"/>
+          <circle cx="25" cy="96" r="3.4"/>
+          <circle cx="12" cy="126" r="3"/>
+        </g>
+
+        <!-- مسار منقط للموقع -->
+        <path d="M30 134 Q80 120 120 98 Q158 78 184 60" stroke="#7a5c10" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round" fill="none" opacity=".75"/>
+        <circle cx="30" cy="134" r="4" fill="#7a5c10"/>
+
+        <!-- بوصلة زخرفية -->
+        <g transform="translate(258,28)" opacity=".55">
+          <circle r="13" fill="none" stroke="#7a5c10" stroke-width="1"/>
+          <path d="M0 -11 L3 0 L0 11 L-3 0 Z" fill="#7a5c10"/>
+          <path d="M-11 0 L0 -3 L11 0 L0 3 Z" fill="#b8892a"/>
+          <text x="0" y="-15" text-anchor="middle" font-size="6" fill="#7a5c10" font-family="serif">N</text>
+        </g>
+
+        <!-- زخارف الزوايا -->
+        <g fill="#b8892a" opacity=".4">
+          <circle cx="272" cy="130" r="2.4"/>
+          <circle cx="280" cy="136" r="1.5"/>
+          <circle cx="264" cy="136" r="1.5"/>
+        </g>
+
+        <!-- ظل الدبوس -->
+        <ellipse cx="190" cy="124" rx="11" ry="3.4" fill="#7a5c10" opacity=".22"/>
+
+        <!-- دبوس الموقع -->
+        <path d="M170 70 C170 59 179 50 190 50 C201 50 210 59 210 70 C210 88 196 98 190 122 C184 98 170 88 170 70 Z" fill="url(#pinG)" stroke="#7a5c10" stroke-width="1"/>
+        <circle cx="190" cy="70" r="9" fill="#fdf6e3"/>
+        <text x="190" y="74" text-anchor="middle" font-size="11" fill="#b8892a" font-family="serif">♥</text>
+      </svg>
+      <div class="map-card-footer">
+        <div class="map-card-text">
+          <span class="map-card-title">📍 نادي الإنتاج الحربي</span>
+          <span class="map-card-sub">كورنيش حلوان — اضغط لعرض الموقع على الخريطة</span>
+        </div>
+        <span class="map-card-arrow">↗</span>
+      </div>
     </a>
-     <p class="blessings2 fi d7">🤳📵ملحوظة يمنع التصوير نهائيا داخل القاعة لاي اسباب </p>
- <p class="blessings2 fi d7">وجعل الله بينكم مودةً ورحمةً</p>
+     <p class="blessings2 fi d7 tap-fx">🤳📵ملحوظة يمنع التصوير نهائيا داخل القاعة لاي اسباب </p>
+ <p class="blessings2 fi d7 tap-fx">وجعل الله بينكم مودةً ورحمةً</p>
 
     
   </div>
@@ -1328,6 +1487,63 @@ function tick2() {
   document.getElementById('cd-s').textContent = String(Math.floor((diff % 60000)    / 1000)).padStart(2,'0');
 }
 tick2(); setInterval(tick2, 1000);
+</script>
+
+<script>
+/* ══════════════════════
+   INTERACTIVE TOUCHES (new, isolated)
+   - tap ripple feedback on all "place" elements (.tap-fx)
+   - heart/sparkle burst when tapping the couple's names
+══════════════════════ */
+(function() {
+  // Generic ripple feedback for any clickable place/card
+  function attachRipple(el) {
+    el.addEventListener('pointerdown', function(e) {
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-fx';
+      const x = (typeof e.clientX === 'number' ? e.clientX : rect.left + rect.width / 2) - rect.left;
+      const y = (typeof e.clientY === 'number' ? e.clientY : rect.top + rect.height / 2) - rect.top;
+      ripple.style.left = x + 'px';
+      ripple.style.top  = y + 'px';
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    });
+  }
+  document.querySelectorAll('.tap-fx').forEach(attachRipple);
+
+  // Hearts burst when tapping the couple's names
+  const namesEl = document.getElementById('namesText');
+  if (namesEl) {
+    namesEl.addEventListener('click', function() {
+      namesEl.classList.remove('name-pop');
+      void namesEl.offsetWidth; // restart animation
+      namesEl.classList.add('name-pop');
+
+      const rect = namesEl.getBoundingClientRect();
+      const symbols = ['❤️','💛','✨','💕','🌟','💍'];
+      const count = 16;
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement('span');
+        s.className = 'heart-fx';
+        s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        const startX = rect.left + rect.width * Math.random();
+        const startY = rect.top + rect.height * (0.25 + Math.random() * 0.5);
+        const dx   = (Math.random() - 0.5) * 170;
+        const rot  = (Math.random() - 0.5) * 60;
+        const dur  = 1.1 + Math.random() * 0.9;
+        s.style.left = startX + 'px';
+        s.style.top  = startY + 'px';
+        s.style.fontSize = (14 + Math.random() * 16) + 'px';
+        s.style.setProperty('--hx', dx + 'px');
+        s.style.setProperty('--hrot', rot + 'deg');
+        s.style.setProperty('--hdur', dur + 's');
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), dur * 1000 + 150);
+      }
+    });
+  }
+})();
 </script>
 
 
