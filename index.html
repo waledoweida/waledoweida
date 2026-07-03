@@ -890,7 +890,7 @@ body{
         <span class="monogram gold-flow shine-sweep">Waled&amp;​𝓡</span>
         <span class="monogram-sub">WALED &amp; ​𝓡</span>
       </div>
-      <video id="heroImg" src="hero.mp4" autoplay muted loop playsinline webkit-playsinline="true" preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate" draggable="false" onerror="this.style.display='none'" style="position:relative; z-index:2;"></video>
+      <video id="heroImg" src="video.mp4" autoplay muted loop playsinline webkit-playsinline="true" preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate" draggable="false" onerror="this.style.display='none'" style="position:relative; z-index:2;"></video>
       <div class="hero-veil"></div>
       <div class="hero-lightbar"></div>
       <div class="hero-overlay"></div>
@@ -1023,7 +1023,6 @@ body{
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<audio id="bgMusic" src="song.mp3" loop preload="auto" style="display:none"></audio>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1144,7 +1143,7 @@ function playSealSound(){
   const illustration = document.getElementById('envelopeIllustration');
   const screen = document.getElementById('envelopeScreen');
   const card = document.getElementById('card');
-  const music = document.getElementById('bgMusic');
+  const heroVideo = document.getElementById('heroImg');
   const musicBtn = document.getElementById('musicBtn');
   let opened = false;
 
@@ -1164,7 +1163,10 @@ function playSealSound(){
       screen.classList.add('hide');
       document.body.style.overflow = 'auto';
       card.classList.add('revealed');
-      music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+      if(heroVideo){
+        heroVideo.muted = false;
+        heroVideo.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+      }
     }, 1250);
   }
   wrap.addEventListener('click', openInvite);
@@ -1307,10 +1309,16 @@ function celebrateBurst(count){
 /* ══ MUSIC TOGGLE ══ */
 (function(){
   const btn = document.getElementById('musicBtn');
-  const audio = document.getElementById('bgMusic');
+  const video = document.getElementById('heroImg');
   btn.addEventListener('click', function(){
-    if(audio.paused){ audio.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){}); }
-    else { audio.pause(); btn.textContent='🔈'; btn.classList.remove('playing'); }
+    if(!video) return;
+    if(video.muted || video.paused){
+      video.muted = false;
+      video.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){});
+    } else {
+      video.muted = true;
+      btn.textContent='🔈'; btn.classList.remove('playing');
+    }
   });
 })();
 
