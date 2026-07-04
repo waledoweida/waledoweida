@@ -778,20 +778,6 @@ body{
   100%{transform:translate(var(--cdrift,0px),var(--cfall,70vh)) rotate(var(--crot,320deg)); opacity:0;}
 }
 
-.big-butterfly{
-  position:fixed; z-index:190; pointer-events:none; font-size:2.4rem;
-  will-change:transform,opacity; line-height:1;
-  animation: butterflyUp 2.6s cubic-bezier(.2,.7,.3,1) forwards;
-  filter: drop-shadow(0 6px 14px rgba(122,92,16,.3));
-}
-@keyframes butterflyUp{
-  0%{ transform:translate(-50%,-40%) scale(.25) rotate(-8deg); opacity:0; }
-  10%{ opacity:1; }
-  30%{ transform:translate(calc(-50% + 18px), -220%) scale(1.15) rotate(10deg); }
-  55%{ transform:translate(calc(-50% - 20px), -420%) scale(1) rotate(-10deg); }
-  80%{ transform:translate(calc(-50% + 16px), -640%) scale(.9) rotate(8deg); opacity:1; }
-  100%{ transform:translate(calc(-50% - 10px), -820%) scale(.7) rotate(-6deg); opacity:0; }
-}
 
 .toast{
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
@@ -803,6 +789,36 @@ body{
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
   *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+}
+/* ══ REAL BUTTERFLY (spawned when the R monogram is tapped) ══ */
+#nameRahma{
+  display:inline-block;
+  cursor:pointer;
+  transition:opacity .55s cubic-bezier(.4,0,.2,1), transform .55s cubic-bezier(.4,0,.2,1), filter .55s ease;
+}
+#nameRahma.letter-vanish{
+  opacity:0;
+  transform:scale(.25) rotate(18deg);
+  filter:blur(2px);
+}
+.paper-butterfly{
+  position:fixed;
+  z-index:9999;
+  width:112px; height:92px;
+  pointer-events:none;
+  will-change:transform, opacity;
+  filter:drop-shadow(0 6px 16px rgba(80,30,60,.35)) drop-shadow(0 0 14px rgba(255,214,140,.35));
+}
+.paper-butterfly svg{ width:100%; height:100%; overflow:visible; display:block; }
+.bfly-wingL{ transform-box:fill-box; transform-origin:100% 50%; animation:bflyFlapL .28s ease-in-out infinite; }
+.bfly-wingR{ transform-box:fill-box; transform-origin:0% 50%; animation:bflyFlapR .28s ease-in-out infinite; }
+@keyframes bflyFlapL{
+  0%,100%{ transform:scaleX(1) rotate(0deg); }
+  50%{ transform:scaleX(.32) rotate(-10deg); }
+}
+@keyframes bflyFlapR{
+  0%,100%{ transform:scaleX(1) rotate(0deg); }
+  50%{ transform:scaleX(.32) rotate(10deg); }
 }
 </style>
 </head>
@@ -836,6 +852,8 @@ body{
 <div id="envelopeScreen">
   <div class="env-wrap">
     <p class="env-bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+
+    <p class="env-guest-name" id="envGuestName"></p>
 
     <div class="envelope-illustration" id="envelopeIllustration">
       <div class="envelope-body">
@@ -875,8 +893,6 @@ body{
         </svg>
       </div>
     </div>
-
-    <p class="env-guest-name" id="envGuestName"></p>
 
     <h1 class="env-title">دعوة حفل زفاف</h1>
     <p class="env-names">Waled &amp; ​𝓡</p>
@@ -1286,25 +1302,12 @@ function spawnNameFx(el, emojis, count){
     setTimeout(function(){ span.remove(); }, 2000);
   }
 }
-/* ══ BIG BUTTERFLY: flies up from above the letter on tap ══ */
-function spawnBigButterfly(el){
-  if(reduceMotion || !el) return;
-  const rect = el.getBoundingClientRect();
-  const b = document.createElement('span');
-  b.className = 'big-butterfly';
-  b.textContent = '🦋';
-  b.style.left = (rect.left + rect.width/2) + 'px';
-  b.style.top = rect.top + 'px';
-  document.body.appendChild(b);
-  setTimeout(function(){ b.remove(); }, 2700);
-}
+/* (big-butterfly emoji effect removed — replaced by the realistic SVG butterfly) */
 (function(){
   const rahma = document.getElementById('nameRahma');
   const waleed = document.getElementById('nameWaleed');
   if(rahma) rahma.addEventListener('click', function(){
     spawnNameFx(this, ['✨','⚡'], 8);
-    spawnNameFx(this, ['🦋'], 8);
-    spawnBigButterfly(this);
   });
   if(waleed) waleed.addEventListener('click', function(){
     spawnNameFx(this, ['✨','⚡'], 8);
@@ -1754,6 +1757,135 @@ function celebrateBurst(count){
   }
   setInterval(spawnFleck, 2100);
   spawnFleck();
+})();
+
+/* ══ TAP THE R MONOGRAM → A REAL BUTTERFLY FLIES AWAY ══ */
+(function(){
+  const rEl = document.getElementById('nameRahma');
+  if(!rEl) return;
+
+  function buildButterflyMarkup(uid){
+    return '<svg viewBox="0 0 120 100">'
+      + '<defs>'
+      + '<linearGradient id="'+uid+'a" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0%" stop-color="#fff6d8"/>'
+      + '<stop offset="24%" stop-color="#ffcf6e"/>'
+      + '<stop offset="50%" stop-color="#f2827f"/>'
+      + '<stop offset="75%" stop-color="#a862c4"/>'
+      + '<stop offset="100%" stop-color="#6a3fa8"/>'
+      + '</linearGradient>'
+      + '<linearGradient id="'+uid+'b" x1="0" y1="1" x2="1" y2="0">'
+      + '<stop offset="0%" stop-color="#5f3aa0"/>'
+      + '<stop offset="42%" stop-color="#e8749a"/>'
+      + '<stop offset="75%" stop-color="#ffb37a"/>'
+      + '<stop offset="100%" stop-color="#fff3c8"/>'
+      + '</linearGradient>'
+      + '<radialGradient id="'+uid+'eye" cx="50%" cy="50%" r="50%">'
+      + '<stop offset="0%" stop-color="#241636"/>'
+      + '<stop offset="45%" stop-color="#7c4aa8"/>'
+      + '<stop offset="75%" stop-color="#ffcf6b"/>'
+      + '<stop offset="100%" stop-color="#3b2712"/>'
+      + '</radialGradient>'
+      + '<linearGradient id="'+uid+'body" x1="0" y1="0" x2="0" y2="1">'
+      + '<stop offset="0%" stop-color="#5a3a1c"/>'
+      + '<stop offset="100%" stop-color="#2a1a0d"/>'
+      + '</linearGradient>'
+      + '<radialGradient id="'+uid+'gloss" cx="35%" cy="30%" r="65%">'
+      + '<stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/>'
+      + '<stop offset="55%" stop-color="#ffffff" stop-opacity=".18"/>'
+      + '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>'
+      + '</radialGradient>'
+      + '</defs>'
+      + '<path d="M60 30 Q52 12 43 4" stroke="#3b2712" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
+      + '<path d="M60 30 Q68 12 77 4" stroke="#3b2712" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="43" cy="4" r="2.1" fill="#3b2712"/>'
+      + '<circle cx="77" cy="4" r="2.1" fill="#3b2712"/>'
+
+      + '<g class="bfly-wingL">'
+      + '<path d="M58 40 C34 4 -2 6 -5 36 C-7 60 22 70 58 48 Z" fill="url(#'+uid+'a)" stroke="#3b2712" stroke-width="1.2"/>'
+      + '<path d="M58 40 C34 4 -2 6 -5 36 C-7 60 22 70 58 48 Z" fill="url(#'+uid+'gloss)" style="mix-blend-mode:screen"/>'
+      + '<path d="M18 20 Q30 24 36 36" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
+      + '<path d="M6 32 Q22 36 34 44" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
+      + '<path d="M0 46 Q18 48 32 52" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".45"/>'
+      + '<circle cx="10" cy="24" r="3.4" fill="#fff6df" opacity=".92"/>'
+      + '<circle cx="22" cy="16" r="2.1" fill="#fff6df" opacity=".85"/>'
+      + '<circle cx="25" cy="40" r="2.3" fill="#2b1b40" opacity=".55"/>'
+      + '<circle cx="8" cy="42" r="2" fill="#fff6df" opacity=".7"/>'
+
+      + '<path d="M56 52 C30 42 -8 50 -12 74 C-14 90 6 96 24 90 C22 86 26 82 30 84 C34 78 30 70 36 68 C46 64 52 58 56 60 Z" fill="url(#'+uid+'b)" stroke="#3b2712" stroke-width="1.2"/>'
+      + '<circle cx="10" cy="72" r="5.2" fill="url(#'+uid+'eye)" stroke="#3b2712" stroke-width="1"/>'
+      + '<circle cx="30" cy="66" r="1.8" fill="#fff6df" opacity=".75"/>'
+      + '</g>'
+
+      + '<g class="bfly-wingR">'
+      + '<path d="M62 40 C86 4 122 6 125 36 C127 60 98 70 62 48 Z" fill="url(#'+uid+'a)" stroke="#3b2712" stroke-width="1.2"/>'
+      + '<path d="M62 40 C86 4 122 6 125 36 C127 60 98 70 62 48 Z" fill="url(#'+uid+'gloss)" style="mix-blend-mode:screen" transform="scale(-1,1) translate(-120,0)"/>'
+      + '<path d="M102 20 Q90 24 84 36" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
+      + '<path d="M114 32 Q98 36 86 44" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
+      + '<path d="M120 46 Q102 48 88 52" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".45"/>'
+      + '<circle cx="110" cy="24" r="3.4" fill="#fff6df" opacity=".92"/>'
+      + '<circle cx="98" cy="16" r="2.1" fill="#fff6df" opacity=".85"/>'
+      + '<circle cx="95" cy="40" r="2.3" fill="#2b1b40" opacity=".55"/>'
+      + '<circle cx="112" cy="42" r="2" fill="#fff6df" opacity=".7"/>'
+
+      + '<path d="M64 52 C90 42 128 50 132 74 C134 90 114 96 96 90 C98 86 94 82 90 84 C86 78 90 70 84 68 C74 64 68 58 64 60 Z" fill="url(#'+uid+'b)" stroke="#3b2712" stroke-width="1.2"/>'
+      + '<circle cx="110" cy="72" r="5.2" fill="url(#'+uid+'eye)" stroke="#3b2712" stroke-width="1"/>'
+      + '<circle cx="90" cy="66" r="1.8" fill="#fff6df" opacity=".75"/>'
+      + '</g>'
+
+      + '<ellipse cx="60" cy="48" rx="3.2" ry="21" fill="url(#'+uid+'body)"/>'
+      + '<ellipse cx="60" cy="40" rx="2.2" ry="6" fill="#7a5228" opacity=".7"/>';
+  }
+
+  function animateFlight(el){
+    const startX = parseFloat(el.style.left);
+    const startY = parseFloat(el.style.top);
+    const duration = reduceMotion ? 900 : (3600 + Math.random()*1400);
+    const dirX = Math.random() > 0.5 ? 1 : -1;
+    const distX = 220 + Math.random()*280;
+    const distY = 260 + Math.random()*340;
+    const t0 = performance.now();
+
+    function frame(now){
+      const t = Math.min(1, (now - t0) / duration);
+      const x = startX + dirX*distX*t + Math.sin(t*Math.PI*4)*32;
+      const y = startY - distY*t + Math.cos(t*Math.PI*3)*16;
+      const rot = dirX * (12*Math.sin(t*Math.PI*4));
+      let opacity = 1;
+      if(t > 0.65) opacity = Math.max(0, 1 - (t-0.65)/0.35);
+      el.style.transform = 'translate('+(x-startX)+'px,'+(y-startY)+'px) rotate('+rot+'deg)';
+      el.style.opacity = String(opacity);
+      if(t < 1){
+        requestAnimationFrame(frame);
+      } else {
+        el.remove();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function spawnButterfly(rect){
+    const uid = 'bf' + Date.now() + Math.floor(Math.random()*1000);
+    const b = document.createElement('div');
+    b.className = 'paper-butterfly';
+    b.style.left = (rect.left + rect.width/2 - 56) + 'px';
+    b.style.top = (rect.top + rect.height/2 - 46) + 'px';
+    b.innerHTML = buildButterflyMarkup(uid);
+    document.body.appendChild(b);
+    animateFlight(b);
+  }
+
+  rEl.addEventListener('click', function(){
+    if(rEl.dataset.busy) return;
+    rEl.dataset.busy = '1';
+    const rect = rEl.getBoundingClientRect();
+    rEl.classList.add('letter-vanish');
+    spawnButterfly(rect);
+    setTimeout(function(){
+      rEl.classList.remove('letter-vanish');
+      delete rEl.dataset.busy;
+    }, reduceMotion ? 1400 : 4800);
+  });
 })();
 
 function burstGoldFlecks(){
