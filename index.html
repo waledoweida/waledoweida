@@ -2,19 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>حفل زفاف | Waled &amp; ​𝓡</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>حفل زفاف | وليد &amp; 𝓡</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="preload" href="video.mp4" as="video" type="video/mp4" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<meta property="og:title" content="حفل زفاف Waled &amp; ​𝓡">
+<link rel="preload" as="video" href="video.mp4" type="video/mp4">
+<meta property="og:title" content="حفل زفاف وليد &amp; 𝓡">
 <meta property="og:description" content="يسعدنا مشاركتكم فرحتنا، افتح الرابط لمعرفة التفاصيل والمكان ❤">
 <meta property="og:image" content="https://waledoweida.com/aaass.jpg?v=3">
 <meta property="og:url" content="https://waledoweida.com">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="حفل زفاف Waled &amp; ​𝓡">
+<meta name="twitter:title" content="حفل زفاف وليد &amp; 𝓡">
 <meta name="twitter:description" content="يسعدنا مشاركتكم فرحتنا، افتح الرابط لمعرفة التفاصيل والمكان ❤">
 <meta name="twitter:image" content="https://waledoweida.com/aaass.jpg">
 <style>
@@ -93,7 +93,6 @@ body{
     radial-gradient(ellipse 75% 65% at 100% 100%, rgba(179,130,31,.12), transparent 60%),
     linear-gradient(160deg,#faf7ef 0%,#f1e7cd 35%,#f9f3e3 55%,#ece0bf 78%,#f9f5ea 100%);
   background-size:520px 520px, cover, cover, cover, cover;
-  background-attachment:scroll, scroll, scroll, scroll, scroll;
   min-height:100dvh;
   transition:background .4s ease;
 }
@@ -109,6 +108,28 @@ body{
 
 /* ambient canvas */
 #dustCanvas{position:fixed; inset:0; z-index:1; pointer-events:none;}
+/* ── a faint shadow of a butterfly drifting far in the background — a
+   quiet hint of life stirring, before the real, tappable butterflies
+   ever appear inside the card ── */
+.life-shadow{ position:fixed; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+.life-shadow span{
+  position:absolute; left:-12%; top:60%;
+  font-size:clamp(50px,15vw,80px);
+  opacity:.16;
+  filter:blur(1px) brightness(0);
+  animation:lifeDrift 16s linear infinite;
+  will-change:transform;
+}
+@keyframes lifeDrift{
+  0%{ transform:translate(0,0) rotate(0deg) scale(1); }
+  22%{ transform:translate(34vw,-20vh) rotate(14deg) scale(1.08); }
+  48%{ transform:translate(66vw,2vh) rotate(-9deg) scale(.94); }
+  74%{ transform:translate(92vw,-26vh) rotate(11deg) scale(1.05); }
+  100%{ transform:translate(122vw,-4vh) rotate(0deg) scale(1); }
+}
+@media (prefers-reduced-motion:reduce){
+  .life-shadow{ display:none; }
+}
 
 .outer{
   position:relative; z-index:2;
@@ -127,14 +148,30 @@ body{
   background:
     radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255,251,232,.9), transparent 55%),
     linear-gradient(175deg,var(--paper) 0%, var(--marble-1) 55%, var(--marble-2) 100%);
-  border-radius:8px;
+  border-radius:14px;
   overflow:hidden;
-  box-shadow: var(--sh-gold), 0 40px 90px rgba(35,24,4,.28);
-  border:1px solid rgba(179,130,31,.35);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,251,225,.6),
+    inset 0 0 46px rgba(179,130,31,.08),
+    var(--sh-gold),
+    0 3px 0 rgba(179,130,31,.25),
+    0 55px 110px rgba(30,20,4,.32);
+  border:1px solid rgba(179,130,31,.4);
   transform-style:preserve-3d;
   will-change:transform;
   transition:transform .25s cubic-bezier(.22,1,.36,1);
 }
+/* slim outer hairline set just inside the card edge — the "double frame"
+   look of a proper letterpress invitation, sitting outside the drawn
+   frame-svg line for a layered, richer border */
+.card::after{
+  content:'';
+  position:absolute; inset:4px;
+  border:1px solid rgba(179,130,31,.22);
+  border-radius:11px;
+  pointer-events:none; z-index:1;
+}
+body.night .card::after{ border-color:rgba(230,196,101,.16); }
 .card::before{
   content:'';
   position:absolute; inset:0;
@@ -153,13 +190,66 @@ body{
 }
 .card.tilt-active .card-sheen{opacity:1;}
 
-.frame-svg{position:absolute; inset:9px; z-index:6; pointer-events:none; width:calc(100% - 18px); height:calc(100% - 18px);}
+/* a single, wide band of gold light that glides across the whole card
+   once, the moment the invitation reveals itself — the "unveiling" glint */
+.card-grand-sweep{
+  position:absolute; inset:0; z-index:8; pointer-events:none; overflow:hidden;
+}
+.card-grand-sweep::after{
+  content:'';
+  position:absolute; top:-20%; left:-60%; width:40%; height:140%;
+  background:linear-gradient(100deg, transparent 10%, rgba(255,255,255,.5) 45%, rgba(255,246,208,.65) 50%, rgba(255,255,255,.5) 55%, transparent 90%);
+  transform:skewX(-18deg);
+  opacity:0;
+}
+.card.revealed .card-grand-sweep::after{
+  animation:grandSweep 1.9s cubic-bezier(.3,.1,.2,1) forwards;
+  animation-delay:.65s;
+}
+@keyframes grandSweep{
+  0%{ left:-60%; opacity:0; }
+  8%{ opacity:1; }
+  55%{ opacity:1; }
+  100%{ left:130%; opacity:0; }
+}
+
+.frame-svg{position:absolute; inset:9px; z-index:9; pointer-events:none; width:calc(100% - 18px); height:calc(100% - 18px);}
 .frame-svg rect{
   fill:none; stroke:url(#frameGrad); stroke-width:1.4;
   stroke-dasharray:1600; stroke-dashoffset:1600;
 }
 .card.revealed .frame-svg rect{ animation:drawFrame 2.6s cubic-bezier(.4,0,.2,1) forwards; animation-delay:.1s; }
 @keyframes drawFrame{ to{stroke-dashoffset:0;} }
+/* a small glowing tip that rides along the frame while it draws itself,
+   like a brush actually painting the border rather than a static line
+   simply appearing — sized and layered so it stays visible even during
+   the bright "grand sweep" glint that plays over the card at the same time */
+.frame-brush-tip{
+  fill:#fff8dd;
+  opacity:0;
+  filter:drop-shadow(0 0 5px rgba(255,246,208,1)) drop-shadow(0 0 10px rgba(255,214,107,.85));
+}
+.card.revealed .frame-brush-tip{
+  animation:brushTipFade 2.8s ease forwards;
+  animation-delay:.1s;
+}
+.frame-brush-halo{
+  fill:none; stroke:rgba(255,246,208,.55); stroke-width:.7;
+  opacity:0;
+}
+.card.revealed .frame-brush-halo{
+  animation:brushTipFade 2.8s ease forwards;
+  animation-delay:.1s;
+}
+@keyframes brushTipFade{
+  0%{ opacity:0; }
+  6%{ opacity:1; }
+  88%{ opacity:1; }
+  100%{ opacity:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .frame-brush-tip, .frame-brush-halo{ display:none; }
+}
 
 .corner-flourish{position:absolute; width:38px; height:38px; z-index:6; pointer-events:none; opacity:0;}
 .card.revealed .corner-flourish{opacity:.9; animation:fleurIn .8s ease forwards;}
@@ -173,6 +263,56 @@ body{
 .corner-flourish.tr{top:14px;right:14px;transform:scaleX(-1);}
 .corner-flourish.bl{bottom:14px;left:14px;transform:scaleY(-1);}
 .corner-flourish.br{bottom:14px;right:14px;transform:scale(-1,-1);}
+
+/* ══ GOLDEN INK REVEAL — the name appears as if a pen just wrote it,
+   right-to-left (matching Arabic writing direction), with a warm
+   golden glint tracing the edge of the ink as it's laid down ══ */
+.ink-reveal{position:relative; display:inline-block;}
+.ink-reveal::after{
+  content:'';
+  position:absolute; top:-14%; bottom:-14%; left:-3%; right:-3%;
+  background:linear-gradient(to left, var(--paper) 80%, var(--gold-shine) 92%, rgba(255,246,208,0) 100%);
+  transform-origin:left center;
+  transform:scaleX(1);
+  z-index:4;
+  pointer-events:none;
+}
+.card.revealed .ink-reveal::after{
+  animation:inkWipe 1.3s cubic-bezier(.45,0,.15,1) forwards;
+}
+.ink-reveal.ink-d1::after{animation-delay:1.9s;}
+.ink-reveal.ink-d2::after{animation-delay:2.25s;}
+@keyframes inkWipe{ to{ transform:scaleX(0); } }
+
+/* a tiny pen tip that rides along the edge of the ink as it's laid down,
+   right to left, so the name genuinely looks hand-written */
+.ink-reveal .ink-pen{
+  position:absolute; top:38%; right:-4%; z-index:5;
+  transform:translate(50%,-55%) rotate(-25deg) scale(.7);
+  font-size:.5em; opacity:0; pointer-events:none;
+}
+.card.revealed .ink-reveal.ink-d1 .ink-pen{ animation:penWrite 1.3s cubic-bezier(.45,0,.15,1) forwards; animation-delay:1.9s; }
+.card.revealed .ink-reveal.ink-d2 .ink-pen{ animation:penWrite 1.3s cubic-bezier(.45,0,.15,1) forwards; animation-delay:2.25s; }
+@keyframes penWrite{
+  0%{ right:-4%; opacity:0; transform:translate(50%,-55%) rotate(-25deg) scale(.7); }
+  8%{ opacity:1; transform:translate(50%,-55%) rotate(-25deg) scale(1); }
+  90%{ opacity:1; }
+  100%{ right:100%; opacity:0; transform:translate(50%,-55%) rotate(-25deg) scale(.85); }
+}
+@media (prefers-reduced-motion:reduce){
+  .ink-reveal::after{ display:none; }
+  .ink-reveal .ink-pen{ display:none; }
+}
+
+/* two little stars that break away from the seal the instant it opens
+   and streak up toward each name, arriving right as the ink starts to
+   write itself */
+.rl-name-star{
+  position:fixed; z-index:520; pointer-events:none;
+  font-size:18px; line-height:1;
+  filter:drop-shadow(0 0 6px rgba(255,246,196,.9));
+  will-change:transform, opacity;
+}
 
 /* ══ GOLD FLOWING / FOIL TEXT ══ */
 .gold-flow{
@@ -217,12 +357,79 @@ body{
 @keyframes flashOut{0%{opacity:0;}30%{opacity:1;}100%{opacity:0;}}
 #envelopeScreen.hide{opacity:0; visibility:hidden; pointer-events:none;}
 .env-wrap{ text-align:center; padding:20px; position:relative; }
+
+/* ── a calm night sky, only awake when the night theme is on: quiet
+   stars that twinkle at their own pace, with the occasional one
+   glowing brighter for a moment — as if making a wish ── */
+.night-sky{
+  position:absolute; inset:0; z-index:0; overflow:hidden;
+  pointer-events:none; opacity:0; transition:opacity 1.1s ease;
+}
+body.night .night-sky{ opacity:1; }
+.sky-star{
+  position:absolute; border-radius:50%;
+  background:#fff6da;
+  box-shadow:0 0 4px 1px rgba(255,246,218,.6);
+  animation:skyTwinkle 3.6s ease-in-out infinite;
+}
+.sky-star.wishing{
+  animation:skyWish 2.2s ease-in-out;
+}
+@keyframes skyTwinkle{
+  0%,100%{ opacity:var(--tw-min,.25); transform:scale(1); }
+  50%{ opacity:var(--tw-max,.9); transform:scale(1.15); }
+}
+@keyframes skyWish{
+  0%{ opacity:.6; transform:scale(1); box-shadow:0 0 4px 1px rgba(255,246,218,.6); }
+  35%{ opacity:1; transform:scale(2.4); box-shadow:0 0 14px 4px rgba(255,246,218,.95); }
+  100%{ opacity:.6; transform:scale(1); box-shadow:0 0 4px 1px rgba(255,246,218,.6); }
+}
+@media (prefers-reduced-motion:reduce){
+  .sky-star{ animation:none; opacity:.5; }
+}
+
+/* ── monogram: و and ر interlaced inside a thin gold medallion,
+   a small personal signature before anything else appears ── */
+.env-monogram{
+  width:clamp(46px,13vw,60px); height:clamp(46px,13vw,60px);
+  margin:0 auto 14px;
+  opacity:0;
+  animation:monoIn 1s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:2s;
+}
+.env-monogram svg{ width:100%; height:100%; display:block; overflow:visible; }
+@keyframes monoIn{
+  0%{ opacity:0; transform:scale(.4) rotate(-16deg); }
+  60%{ opacity:1; }
+  100%{ opacity:1; transform:scale(1) rotate(0deg); }
+}
 .env-bismillah{
   font-family:'Scheherazade New',serif;
   font-size:clamp(1rem,4vw,1.2rem);
   color:var(--gold-deep);
   margin-bottom:22px;
-  opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.2s;
+  opacity:0; animation:fadeUp .8s ease forwards; animation-delay:2.15s;
+}
+/* ── the envelope first appears as a single far-off point of light,
+   like a distant star, then travels in and grows until it becomes the
+   envelope itself — a sense that this invitation has journeyed to you ── */
+.travel-star{
+  position:absolute; left:50%; top:36%; z-index:50; pointer-events:none;
+  width:16px; height:16px; border-radius:50%;
+  background:radial-gradient(circle, #ffffff 0%, #ffe28a 45%, #d99a1e 100%);
+  transform:translate(-50%,-50%) translate(24vw,-16vh) scale(.3);
+  opacity:0;
+  box-shadow:0 0 16px 6px rgba(255,214,107,1), 0 0 34px 16px rgba(255,183,59,.65);
+  animation:starTravel 2.2s cubic-bezier(.32,.6,.24,1) forwards;
+}
+@keyframes starTravel{
+  0%{ opacity:0; transform:translate(-50%,-50%) translate(24vw,-16vh) scale(.25); }
+  12%{ opacity:1; }
+  75%{ opacity:1; transform:translate(-50%,-50%) translate(2vw,-1vh) scale(1); }
+  100%{ opacity:0; transform:translate(-50%,-50%) translate(0,0) scale(1.7); box-shadow:0 0 40px 20px rgba(255,214,107,0); }
+}
+@media (prefers-reduced-motion:reduce){
+  .travel-star{ display:none; }
 }
 /* ── envelope illustration ── */
 .envelope-illustration{
@@ -230,7 +437,30 @@ body{
   margin:0 auto 30px;
   position:relative;
   perspective:1000px;
-  opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.35s;
+  opacity:1;
+  animation:envDrop 1.15s cubic-bezier(.22,.68,.32,1.28) both;
+  animation-delay:2.1s;
+}
+/* ── entrance: the envelope drifts down gently as if just delivered ── */
+@keyframes envDrop{
+  0%{ opacity:0; transform:translateY(-46px) rotate(-4deg) scale(.92); }
+  55%{ opacity:1; }
+  78%{ transform:translateY(4px) rotate(1.2deg) scale(1.01); }
+  100%{ opacity:1; transform:translateY(0) rotate(0deg) scale(1); }
+}
+/* ── idle sway: a soft breathing tilt (and the faintest scale-breath)
+   while it waits to be opened, so it never feels perfectly frozen ── */
+.envelope-illustration.env-idle{
+  animation:envSway 4.6s ease-in-out infinite;
+}
+@keyframes envSway{
+  0%,100%{ transform:translateY(0) rotate(-.6deg) scale(1); }
+  50%{ transform:translateY(-5px) rotate(.6deg) scale(1.014); }
+}
+.envelope-illustration.opening{ animation:none !important; transform:none; }
+@media (prefers-reduced-motion:reduce){
+  .envelope-illustration{ animation:fadeUp .8s ease forwards; animation-delay:.35s; }
+  .envelope-illustration.env-idle{ animation:none; }
 }
 .envelope-body{
   position:relative; width:100%; aspect-ratio:5/3.15;
@@ -266,20 +496,258 @@ body{
   opacity:.92;
 }
 
+/* ── the letter itself: a slim paper edge tucked inside the envelope,
+   sitting under the flap so it's fully hidden while closed, then
+   rising up out of the opening once the seal breaks and the flap
+   folds back — just enough to read the two names before the whole
+   scene fades into the invitation card ── */
+.envelope-letter{
+  position:absolute; left:50%; top:46%;
+  width:78%; height:64%;
+  transform:translate(-50%,18%) scale(.94);
+  z-index:2;
+  border-radius:3px 3px 1px 1px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.5), transparent 30%),
+    linear-gradient(160deg,#fffdf6 0%,#fbf3d9 60%,#f3e6bc 100%);
+  box-shadow:0 -2px 10px rgba(122,92,16,.16), 0 6px 16px rgba(90,66,10,.18);
+  border:1px solid rgba(179,130,31,.32);
+  opacity:0;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding-top:12%;
+  pointer-events:none;
+  transition:transform 1s cubic-bezier(.22,1,.36,1) .32s, opacity .7s ease .32s;
+}
+.envelope-illustration.opening .envelope-letter{
+  opacity:1;
+  transform:translate(-50%,-34%) scale(1);
+}
+.envelope-letter .letter-inner{ text-align:center; }
+.envelope-letter .letter-line{
+  width:34px; height:1px; margin:0 auto 8px;
+  background:linear-gradient(90deg, transparent, rgba(179,130,31,.65), transparent);
+}
+.envelope-letter .letter-names{
+  font-family:'Aref Ruqaa', serif;
+  font-size:clamp(.95rem,4.4vw,1.2rem);
+  color:var(--gold-deep);
+  letter-spacing:.5px;
+  white-space:nowrap;
+}
+.envelope-letter .letter-names .amp{
+  font-family:'Scheherazade New', serif;
+  margin:0 4px;
+  color:var(--gold);
+}
+body.night .envelope-letter{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), transparent 30%),
+    linear-gradient(160deg,#232744,#1c2030 60%,#181b29 100%);
+  border-color:rgba(230,196,101,.28);
+}
+@media (prefers-reduced-motion:reduce){
+  .envelope-letter{ transition:opacity .5s ease; transform:translate(-50%,-30%) scale(1); }
+}
+
 /* ── wax seal medallion ── */
 .env-seal-wrap{
   width:clamp(78px,24vw,104px); height:clamp(78px,24vw,104px);
   position:absolute; left:50%; top:56%;
   transform:translate(-50%,-50%);
   z-index:5; cursor:pointer;
+  touch-action:none;
   animation:sealPulse 2.6s ease-in-out infinite;
   transition:transform .55s cubic-bezier(.5,-0.35,.5,1.4), opacity .55s ease;
 }
+.env-seal-wrap::before{
+  content:'';
+  position:absolute; inset:-32%;
+  border-radius:50%; z-index:-1; pointer-events:none;
+  background:radial-gradient(circle, rgba(255,246,208,.55), transparent 70%);
+  animation:sealHalo 2.6s ease-in-out infinite;
+}
+@keyframes sealHalo{0%,100%{opacity:.35; transform:scale(.9);}50%{opacity:.8; transform:scale(1.18);}}
+.env-seal-wrap.cracking::before, .env-seal-wrap.opened::before{ opacity:0; transition:opacity .3s ease; }
 .env-seal-wrap.cracking{animation:none;}
-.env-seal-wrap.opened{transform:translate(-50%,-50%) scale(0) rotate(50deg); opacity:0;}
+/* the seal no longer shatters and pops out of existence — it melts:
+   it squashes downward like softened wax, then quietly fades once the
+   drips below have finished flowing */
+.env-seal-wrap.opened{ opacity:0; transition:opacity .6s ease .25s; }
 @keyframes sealPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.045);}}
-.seal-svg{width:100%; height:100%; display:block; filter:drop-shadow(0 8px 18px rgba(90,66,10,.45));}
+.seal-svg{width:100%; height:100%; display:block; filter:drop-shadow(0 8px 18px rgba(90,66,10,.45)); transform-origin:50% 22%;}
+.env-seal-wrap.cracking .seal-svg{
+  animation:sealMeltSquash 1.5s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes sealMeltSquash{
+  0%{ transform:scale(1,1); }
+  50%{ transform:scale(1.05,.86) translateY(4%); }
+  100%{ transform:scale(.92,.42) translateY(20%); opacity:.2; }
+}
+/* real-wax drips that stretch downward and sag off the bottom edge of
+   the seal instead of the seal simply vanishing */
 .seal-drip{position:absolute; left:50%; bottom:-9%; transform:translateX(-50%); width:34%; z-index:-1;}
+.wax-drip{
+  position:absolute; top:58%; width:15%; height:0;
+  background:linear-gradient(180deg,#e3ba4c,#a97a16 55%,#6e4f0c);
+  border-radius:0 0 50% 50% / 0 0 65% 65%;
+  transform-origin:top center;
+  opacity:0; z-index:-1;
+  filter:drop-shadow(0 4px 6px rgba(90,66,10,.4));
+}
+.wax-drip-1{ left:24%; }
+.wax-drip-2{ left:44%; width:11%; }
+.wax-drip-3{ left:63%; width:13%; }
+.env-seal-wrap.cracking .wax-drip{
+  animation:waxDripFlow 1.7s cubic-bezier(.3,.6,.35,1) forwards;
+}
+.env-seal-wrap.cracking .wax-drip-2{ animation-delay:.14s; }
+.env-seal-wrap.cracking .wax-drip-3{ animation-delay:.26s; }
+@keyframes waxDripFlow{
+  0%{ height:0; opacity:0; }
+  20%{ opacity:1; }
+  60%{ height:60%; opacity:1; }
+  100%{ height:96%; opacity:0; transform:translateY(10%); }
+}
+@media (prefers-reduced-motion:reduce){
+  .env-seal-wrap.cracking .seal-svg, .env-seal-wrap.cracking .wax-drip{ animation:none !important; }
+  .env-seal-wrap.opened{ opacity:0; }
+}
+
+/* ── a slim ribbon wrapped around the envelope, ahead of the seal —
+   the very first thing to let go the instant you touch the seal ── */
+.env-ribbon{
+  position:absolute; left:50%; top:2%; width:32%; height:96%;
+  transform:translateX(-50%); transform-origin:50% 18%;
+  z-index:4; pointer-events:none;
+}
+.env-ribbon-band{
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, #7a5c10, #d4af37 35%, #f0d97e 50%, #d4af37 65%, #7a5c10 100%);
+  box-shadow:0 2px 6px rgba(60,40,5,.35);
+}
+.env-ribbon-band::before, .env-ribbon-band::after{
+  content:''; position:absolute; top:0; bottom:0; width:2px;
+  background:rgba(90,66,10,.45);
+}
+.env-ribbon-band::before{ left:8%; }
+.env-ribbon-band::after{ right:8%; }
+.env-ribbon-knot{
+  position:absolute; left:50%; top:55%; width:58%; padding-top:58%;
+  transform:translate(-50%,-50%) rotate(45deg);
+  background:linear-gradient(135deg,#f0d97e,#b3821f 60%,#7a5c10);
+  box-shadow:0 3px 7px rgba(60,40,5,.4);
+}
+.envelope-illustration.ribbon-off .env-ribbon{
+  animation:ribbonUnwind 1s cubic-bezier(.5,0,.4,1) forwards;
+}
+@keyframes ribbonUnwind{
+  0%{ transform:translateX(-50%) rotate(0deg) scaleY(1); opacity:1; }
+  35%{ transform:translateX(-50%) rotate(-9deg) scaleY(1.03); opacity:1; }
+  100%{ transform:translateX(-68%) rotate(-42deg) translateY(35%) scaleY(.55); opacity:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .envelope-illustration.ribbon-off .env-ribbon{ animation:none; opacity:0; }
+}
+
+/* ── the real "tap the seal" hint line beneath the envelope now sways
+   word by word once it has faded in, instead of sitting flat ── */
+.env-hint{ display:flex; flex-wrap:wrap; justify-content:center; gap:.32em; }
+.env-hint .hint-w{ display:inline-block; animation:hintWave 2.4s ease-in-out infinite; animation-delay:2.4s; }
+.env-hint .hint-w:nth-child(2){ animation-delay:2.5s; }
+.env-hint .hint-w:nth-child(3){ animation-delay:2.6s; }
+.env-hint .hint-w:nth-child(4){ animation-delay:2.7s; }
+.env-hint .hint-w:nth-child(5){ animation-delay:2.8s; }
+.env-hint .hint-w:nth-child(6){ animation-delay:2.9s; }
+.env-hint .hint-w:nth-child(7){ animation-delay:3s; }
+.env-hint .hint-w:nth-child(8){ animation-delay:3.1s; }
+.env-hint .hint-w:nth-child(9){ animation-delay:3.2s; }
+.env-hint .hint-w:nth-child(10){ animation-delay:3.3s; }
+.env-hint .hint-w:nth-child(11){ animation-delay:3.4s; }
+@keyframes hintWave{
+  0%,100%{ transform:translateY(0) scale(1); opacity:.75; }
+  50%{ transform:translateY(-7px) scale(1.12); opacity:1; text-shadow:0 0 6px rgba(255,214,107,.8); }
+}
+@media (prefers-reduced-motion:reduce){
+  .env-hint .hint-w{ animation:none; opacity:.8; }
+}
+
+/* ── a faint warmth rising just above the seal, as if the wax is still
+   warm — thin wisps that sway and drift, clearly separate from the
+   seal's own steady glow-halo underneath ── */
+.env-seal-mist{ position:absolute; left:-10%; right:-10%; bottom:82%; height:70%; pointer-events:none; z-index:20; overflow:visible; }
+.env-seal-mist span{
+  position:absolute; bottom:0; width:20%; height:100%;
+  border-radius:50%;
+  background:linear-gradient(0deg, rgba(255,240,190,.85), rgba(255,240,190,0) 88%);
+  filter:blur(1.5px);
+  opacity:0;
+  animation:mistRise 2.8s ease-in-out infinite;
+}
+.env-seal-mist span:nth-child(1){ left:20%; animation-delay:0s; }
+.env-seal-mist span:nth-child(2){ left:42%; width:18%; animation-delay:.7s; }
+.env-seal-mist span:nth-child(3){ left:62%; animation-delay:1.4s; }
+@keyframes mistRise{
+  0%{ transform:translate(0,15%) scale(.6); opacity:0; }
+  25%{ opacity:.75; }
+  55%{ transform:translate(5px,-60%) scale(1.1); opacity:.55; }
+  100%{ transform:translate(-5px,-130%) scale(1.4); opacity:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .env-seal-mist span{ animation:none; opacity:0; }
+}
+.env-seal-wrap.cracking .env-seal-mist,
+.env-seal-wrap.opened .env-seal-mist,
+.env-seal-wrap.peeling .env-seal-mist{ display:none; }
+
+/* ── invite-to-touch: two soft rings breathing outward from the seal,
+   plus a tiny fingertip that taps once and fades — a silent nudge that
+   this is meant to be touched, not just looked at ── */
+.env-touch-ripple{position:absolute; inset:-30%; pointer-events:none; z-index:4;}
+.env-touch-ripple span{
+  position:absolute; inset:0; border-radius:50%;
+  border:1.4px solid rgba(179,130,31,.55);
+  opacity:0;
+  animation:touchRipple 2.8s ease-out infinite;
+}
+.env-touch-ripple span:nth-child(2){animation-delay:.9s;}
+@keyframes touchRipple{
+  0%{ transform:scale(.72); opacity:0; }
+  18%{ opacity:.65; }
+  100%{ transform:scale(1.34); opacity:0; }
+}
+.env-tap-hint{
+  position:absolute; left:50%; top:50%; z-index:6; pointer-events:none;
+  font-size:clamp(20px,6vw,26px);
+  transform:translate(-50%,-50%);
+  opacity:0;
+  animation:tapHint 2.8s ease-in-out infinite;
+  animation-delay:1.2s;
+  filter:drop-shadow(0 3px 5px rgba(60,40,5,.35));
+}
+@keyframes tapHint{
+  0%{ opacity:0; transform:translate(-50%,-38%) scale(.85); }
+  10%{ opacity:.95; }
+  28%{ transform:translate(-50%,-50%) scale(1); }
+  40%{ opacity:.95; transform:translate(-50%,-46%) scale(.94); }
+  52%{ opacity:0; transform:translate(-50%,-38%) scale(.85); }
+  100%{ opacity:0; }
+}
+.env-seal-wrap.cracking .env-touch-ripple,
+.env-seal-wrap.opened .env-touch-ripple,
+.env-seal-wrap.cracking .env-tap-hint,
+.env-seal-wrap.opened .env-tap-hint,
+.env-seal-wrap.peeling .env-touch-ripple,
+.env-seal-wrap.peeling .env-tap-hint{ display:none; }
+
+/* ── peel gesture: dragging the seal lifts and tilts it before it lets go ── */
+.env-seal-wrap.peeling{
+  transition:none;
+  transform:translate(-50%,-50%) scale(calc(1 + var(--peel,0) * .1)) rotate(calc(var(--peel,0) * 12deg));
+}
+.env-seal-wrap.peeling::before{ animation:none; opacity:calc(.4 + var(--peel,0) * .6); transform:scale(calc(1 + var(--peel,0) * .3)); }
+@media (prefers-reduced-motion:reduce){
+  .env-touch-ripple span, .env-tap-hint{ animation:none; opacity:0; }
+}
 .crack-svg{
   position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
   opacity:0;
@@ -288,10 +756,7 @@ body{
   fill:none; stroke:#2b2013; stroke-width:1.6; stroke-linecap:round;
   stroke-dasharray:60; stroke-dashoffset:60;
 }
-.env-seal-wrap.cracking .crack-svg{opacity:.85;}
-.env-seal-wrap.cracking .crack-svg path{animation:crackDraw .35s ease forwards;}
-.env-seal-wrap.cracking .crack-svg path:nth-child(2){animation-delay:.06s;}
-.env-seal-wrap.cracking .crack-svg path:nth-child(3){animation-delay:.12s;}
+/* the seal melts now instead of cracking, so the shatter-line artwork stays retired */
 @keyframes crackDraw{to{stroke-dashoffset:0;}}
 .env-ring{
   position:absolute; inset:-16px; border-radius:50%;
@@ -332,17 +797,17 @@ body{
 .env-guest-name{
   display:none;
   font-family:'Aref Ruqaa',serif;
-  font-size:clamp(1rem,4.2vw,1.3rem);
+  font-size:clamp(1.2rem,5.2vw,1.6rem);
   color:var(--gold-deep);
-  margin:-8px auto 24px;
-  padding:9px 24px;
+  margin:0 auto 26px;
+  padding:10px 26px;
   border-top:1px solid var(--line-gold);
   border-bottom:1px solid var(--line-gold);
-  opacity:0; transform:translateY(8px);
-  transition:opacity .7s ease, transform .7s ease;
+  opacity:0; transform:translateY(10px) scale(.8);
+  transition:opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1);
 }
 .env-guest-name.show{display:inline-block;}
-.env-guest-name.visible{opacity:1; transform:translateY(0);}
+.env-guest-name.visible{opacity:1; transform:translateY(0) scale(1);}
 .env-guest-name b{color:var(--gold); font-weight:700;}
 @keyframes fadeUp{ to{opacity:1; transform:translateY(0);} }
 .env-bismillah,.env-title,.env-names,.env-date,.env-hint{transform:translateY(10px);}
@@ -354,11 +819,25 @@ body{
   aspect-ratio:3/4; overflow:hidden;
   background:linear-gradient(160deg,#efe3c2,#d9c48c 60%,#c7ab6a);
 }
-.hero img,.hero video{
+.hero-parallax{
+  position:absolute; inset:-9%; z-index:2;
+  will-change:transform;
+  transition:transform .25s ease-out;
+}
+.hero-parallax img, .hero-parallax video{ width:100%; height:100%; object-fit:cover; }
+.hero::before{
+  content:'';
+  position:absolute; inset:0; z-index:4; pointer-events:none;
+  animation:heroFrameGlow 6s ease-in-out infinite;
+  animation-delay:2s;
+}
+@keyframes heroFrameGlow{
+  0%,100%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.22), inset 0 0 16px rgba(255,246,208,.06); }
+  50%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.48), inset 0 0 32px rgba(255,246,208,.16); }
+}
+.hero img, .hero video{
   width:100%; height:100%; object-fit:cover; display:block;
   -webkit-user-drag:none; user-select:none; pointer-events:none;
-}
-.hero img{
   transform:scale(1.08);
   animation:kenBurns 16s ease-in-out infinite alternate;
 }
@@ -410,6 +889,7 @@ body{
   position:relative; z-index:3;
   padding:0 clamp(24px,6.5vw,40px) clamp(10px,2vw,18px);
   display:flex; flex-direction:column; align-items:center; gap:0; text-align:center;
+  perspective:1400px;
 }
 
 .fi{opacity:0; filter:blur(2px); transform:translateY(10px); animation:revealIn 1.15s cubic-bezier(.22,1,.36,1) forwards; animation-play-state:paused;}
@@ -418,6 +898,43 @@ body{
 .fi.d1{animation-delay:.15s;} .fi.d2{animation-delay:.5s;} .fi.d3{animation-delay:.85s;}
 .fi.d4{animation-delay:1.2s;} .fi.d5{animation-delay:1.55s;} .fi.d6{animation-delay:1.9s;}
 .fi.d7{animation-delay:2.25s;} .fi.d8{animation-delay:2.6s;}
+
+/* ── page-turn: each of these sections lies flat like an unturned page
+   until you scroll down to it, then it turns over into view — a
+   real "reading a book" feel instead of everything already being
+   revealed the moment the invitation opens ── */
+.page-turn{
+  position:relative;
+  width:100%;
+  transform-origin:50% 0%;
+  transform:rotateX(-38deg) translateY(10px);
+  opacity:0;
+  transition:transform 1s cubic-bezier(.22,.68,.2,1), opacity .5s ease;
+  will-change:transform, opacity;
+  transform-style:preserve-3d;
+}
+.page-turn::before{
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:4;
+  background:linear-gradient(180deg, rgba(50,34,8,.4), transparent 50%);
+  opacity:1;
+  border-radius:8px;
+  transition:opacity .9s ease .15s;
+}
+.page-turn.turned{ transform:rotateX(0deg) translateY(0); opacity:1; }
+.page-turn.turned::before{ opacity:0; }
+/* the countdown flip-clock (and the hourglass) already animate their
+   own nested 3D numbers/rings — stacking a second, steep 3D rotation
+   from page-turn on top of that caused their digits to render
+   invisible on some mobile browsers (overflow:hidden + nested 3D
+   transforms is a known rendering conflict). These two widgets get a
+   plain, safe fade-and-rise reveal instead of the paper-flip rotation. */
+.page-turn.page-turn-soft{ transform:translateY(16px); }
+.page-turn.page-turn-soft::before{ display:none; }
+.page-turn.page-turn-soft.turned{ transform:translateY(0); }
+@media (prefers-reduced-motion:reduce){
+  .page-turn{ transform:none; opacity:1; transition:none; }
+  .page-turn::before{ display:none; }
+}
 
 .bismillah{
   font-family:'Scheherazade New',serif;
@@ -439,11 +956,23 @@ body{
   text-transform:uppercase;
   margin-bottom:clamp(10px,2.5vw,16px);
 }
-.guest-name-wrap{display:none; text-align:center; margin-bottom:clamp(10px,2.5vw,16px);}
+.guest-name-wrap{
+  display:none; text-align:center; margin-bottom:clamp(10px,2.5vw,16px);
+  opacity:0; transform:translateY(8px) scale(.8);
+}
 .guest-name-wrap.show{display:block;}
+.card.revealed .guest-name-wrap.show{
+  animation:guestNamePop 1s cubic-bezier(.34,1.56,.64,1) .85s both;
+}
+@keyframes guestNamePop{
+  0%{opacity:0; transform:translateY(8px) scale(.8);}
+  55%{opacity:1; transform:translateY(0) scale(1.07);}
+  75%{transform:scale(.97);}
+  100%{opacity:1; transform:translateY(0) scale(1);}
+}
 .guest-name{
   font-family:'Aref Ruqaa',serif;
-  font-size:clamp(1.05rem,4vw,1.3rem);
+  font-size:clamp(1.25rem,4.8vw,1.55rem);
   color:var(--gold-deep);
   padding:6px 18px;
   display:inline-block;
@@ -456,12 +985,408 @@ body{
   display:flex; align-items:center; justify-content:center; gap:.35em;
   margin-bottom:clamp(8px,2vw,12px);
   line-height:1.15;
+  position:relative;
 }
+.names::before{
+  content:'';
+  position:absolute; inset:-35% -8%;
+  background:radial-gradient(ellipse 60% 70% at 50% 50%, rgba(255,246,208,.4), transparent 70%);
+  z-index:-1; opacity:0; pointer-events:none;
+}
+.card.revealed .names::before{
+  opacity:.75;
+  animation:namesGlow 5s ease-in-out infinite;
+  animation-delay:2.4s;
+}
+@keyframes namesGlow{0%,100%{opacity:.55; transform:scale(1);}50%{opacity:.95; transform:scale(1.1);}}
 .name-amp{font-size:.6em; color:var(--gold-mid); -webkit-text-fill-color:var(--gold-mid);}
-.rings-doodle{width:64px; height:auto; margin:0 auto clamp(14px,3vw,20px); display:block; opacity:.9;}
-.rings-doodle circle{fill:none; stroke:var(--gold); stroke-width:2; stroke-dasharray:150; stroke-dashoffset:150;}
+/* a fine gold thread that quietly links the two names all the time —
+   not just during the butterfly moment — a continuous, gently
+   shimmering line running the width of the name row */
+.names-thread{
+  position:absolute; left:8%; right:8%; top:64%; height:1px; z-index:0;
+  background:linear-gradient(90deg, rgba(179,130,31,0) 0%, rgba(212,175,55,.6) 18%, rgba(255,246,208,.95) 50%, rgba(212,175,55,.6) 82%, rgba(179,130,31,0) 100%);
+  background-size:240% 100%;
+  opacity:0;
+  filter:drop-shadow(0 0 3px rgba(255,246,208,.55));
+  pointer-events:none;
+}
+.card.revealed .names-thread{
+  opacity:.85;
+  animation:namesThreadShimmer 3.8s linear infinite;
+  animation-delay:2.6s;
+}
+@keyframes namesThreadShimmer{
+  0%{background-position:130% 0;}
+  100%{background-position:-30% 0;}
+}
+@media (prefers-reduced-motion:reduce){
+  .names-thread{ animation:none !important; opacity:.55; }
+}
+.rings-doodle{width:64px; height:auto; margin:0 auto clamp(14px,3vw,20px); display:block; opacity:.9; cursor:pointer; overflow:visible; position:relative;}
+.rings-doodle circle{fill:none; stroke:var(--gold); stroke-width:2; stroke-dasharray:150; stroke-dashoffset:150; transform-box:fill-box; transform-origin:center;}
 .card.revealed .rings-doodle circle{animation:drawLine 1.4s ease forwards;}
 .card.revealed .rings-doodle circle:nth-child(2){animation-delay:.25s;}
+/* touch/tap the doodle: the two rings swing together, interlock a little
+   deeper and flare with a golden shine, instead of sitting still forever.
+   NOTE: each rule below re-includes a near-instant "drawLine" alongside
+   the pulse animation — without it, the pulse animation would fully
+   replace the original one and the rings would flash back to their
+   hidden (undrawn) state for a frame, which is what was happening before. */
+.rings-doodle.ring-pulse circle:nth-child(1){
+  animation: drawLine .01s linear forwards, ringLinkL 1s cubic-bezier(.4,0,.2,1);
+}
+.rings-doodle.ring-pulse circle:nth-child(2){
+  animation: drawLine .01s linear forwards, ringLinkR 1s cubic-bezier(.4,0,.2,1);
+}
+.rings-doodle.ring-pulse::after{
+  content:''; position:absolute; inset:-35%; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,246,208,.95), transparent 70%);
+  animation:ringShineFlash 1s ease forwards;
+}
+@keyframes ringLinkL{
+  0%{transform:translateX(0) rotate(0deg) scale(1); stroke:var(--gold); stroke-width:2; filter:drop-shadow(0 0 0 rgba(255,246,208,0));}
+  35%{transform:translateX(7px) rotate(-9deg) scale(1.06); stroke:var(--gold-shine); stroke-width:3.2; filter:drop-shadow(0 0 9px rgba(255,246,208,1));}
+  65%{transform:translateX(-2.5px) rotate(3deg) scale(1.02);}
+  100%{transform:translateX(0) rotate(0deg) scale(1); stroke:var(--gold); stroke-width:2; filter:drop-shadow(0 0 0 rgba(255,246,208,0));}
+}
+@keyframes ringLinkR{
+  0%{transform:translateX(0) rotate(0deg) scale(1); stroke:var(--gold); stroke-width:2; filter:drop-shadow(0 0 0 rgba(255,246,208,0));}
+  35%{transform:translateX(-7px) rotate(9deg) scale(1.06); stroke:var(--gold-shine); stroke-width:3.2; filter:drop-shadow(0 0 9px rgba(255,246,208,1));}
+  65%{transform:translateX(2.5px) rotate(-3deg) scale(1.02);}
+  100%{transform:translateX(0) rotate(0deg) scale(1); stroke:var(--gold); stroke-width:2; filter:drop-shadow(0 0 0 rgba(255,246,208,0));}
+}
+@keyframes ringShineFlash{
+  0%{opacity:0; transform:scale(.6);}
+  32%{opacity:1; transform:scale(1.15);}
+  100%{opacity:0; transform:scale(1.7);}
+}
+@media (prefers-reduced-motion:reduce){
+  .rings-doodle.ring-pulse circle, .rings-doodle.ring-pulse::after{ animation:none !important; }
+}
+
+/* ══ ONE REAL BUTTERFLY — emerges from Rahma's name, follows touch/pointer, then flies off ══ */
+#nameRahma,#nameWaleed{ transition:opacity .5s ease, transform .5s cubic-bezier(.4,0,.2,1); }
+#nameRahma.rl-hidden,#nameWaleed.rl-hidden{ opacity:0; transform:scale(.35) rotate(18deg); pointer-events:none; }
+#nameWaleed::first-letter,#nameRahma::first-letter{
+  font-size:1.32em;
+  color:var(--gold-deep);
+  -webkit-text-fill-color:var(--gold-deep);
+  text-shadow:0 1px 4px rgba(122,92,16,.4), 0 0 14px rgba(255,231,150,.35);
+}
+
+/* ══ WHITE HEART (Waleed) — pops up then cracks open, releasing a butterfly ══ */
+.rl-heart{
+  position:fixed; left:0; top:0; z-index:500;
+  pointer-events:none; will-change:transform,opacity;
+  transform:translate(-50%,-50%) scale(0);
+  opacity:0;
+}
+.rl-heart.show{
+  animation:heartPop 1.1s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes heartPop{
+  0%{ transform:translate(-50%,-50%) scale(0); opacity:0; }
+  45%{ transform:translate(-50%,-50%) scale(1.15); opacity:1; }
+  62%{ transform:translate(-50%,-50%) scale(.95); opacity:1; }
+  80%{ transform:translate(-50%,-50%) scale(1.06); opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+}
+.rl-heart.crack{
+  animation:none;
+  transition:transform .38s ease, opacity .38s ease .05s;
+  transform:translate(-50%,-50%) scale(1.35);
+  opacity:0;
+}
+.rl-heart svg{ width:100%; height:100%; display:block; filter:drop-shadow(0 6px 18px rgba(255,255,255,.55)) drop-shadow(0 0 12px rgba(255,246,230,.7)); }
+.rl-heart .heart-crack-line{ stroke:#e9dcc0; stroke-width:1.4; fill:none; stroke-dasharray:40; stroke-dashoffset:40; opacity:0; }
+.rl-heart.crack .heart-crack-line{ opacity:.8; animation:heartCrackDraw .32s ease forwards; }
+@keyframes heartCrackDraw{ to{ stroke-dashoffset:0; } }
+
+/* ══ GOLD RING (Rahma) — name gathers into a wedding ring, it glows and turns,
+   then opens softly and releases a butterfly ══ */
+.rl-ring{
+  position:fixed; left:0; top:0; z-index:500;
+  pointer-events:none; will-change:transform,opacity;
+  transform:translate(-50%,-50%) scale(0) rotate(-25deg);
+  opacity:0;
+}
+.rl-ring.show{
+  animation:ringPop 1.05s cubic-bezier(.34,1.56,.64,1) forwards, ringTurn 2.2s ease-in-out .55s 1;
+}
+@keyframes ringPop{
+  0%{transform:translate(-50%,-50%) scale(0) rotate(-25deg); opacity:0;}
+  50%{transform:translate(-50%,-50%) scale(1.2) rotate(8deg); opacity:1;}
+  70%{transform:translate(-50%,-50%) scale(.93) rotate(-4deg); opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(1) rotate(0deg); opacity:1;}
+}
+@keyframes ringTurn{
+  0%{filter:brightness(1);}
+  50%{filter:brightness(1.35);}
+  100%{filter:brightness(1);}
+}
+.rl-ring.open{
+  animation:none;
+  transition:transform .42s ease, opacity .42s ease .05s;
+  transform:translate(-50%,-50%) scale(1.55) rotate(14deg);
+  opacity:0;
+}
+.rl-ring svg{ width:100%; height:100%; display:block;
+  filter:drop-shadow(0 6px 16px rgba(179,130,31,.5)) drop-shadow(0 0 14px rgba(255,246,196,.65)); }
+.rl-ring .ring-shine{ animation:ringShine 1.5s ease-in-out infinite; }
+@keyframes ringShine{0%,100%{opacity:.25;}50%{opacity:.95;}}
+.rl-ring .ring-gem{ animation:gemTwinkle 1.7s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 50%; }
+@keyframes gemTwinkle{0%,100%{opacity:.85; transform:scale(1);}50%{opacity:1; transform:scale(1.12);}}
+
+/* small floating heart used in the joint trail when both butterflies fly together */
+.rl-heart-trail{
+  position:fixed; left:0; top:0; z-index:499; pointer-events:none;
+  width:12px; height:12px;
+  animation:heartTrailFade 1.3s ease forwards;
+}
+.rl-heart-trail svg{width:100%;height:100%;display:block;}
+@keyframes heartTrailFade{
+  0%{opacity:.95; transform:translate(-50%,-50%) scale(.5) translateY(0);}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(1.1) translateY(-34px);}
+}
+
+.rl-glitter{
+  position:fixed; left:0; top:0; z-index:499; pointer-events:none;
+  width:5px; height:5px; border-radius:50%;
+  background:radial-gradient(circle,#fff8dd,#d4af37 60%,transparent 75%);
+  animation:glitterFade 1.1s ease forwards;
+}
+@keyframes glitterFade{0%{opacity:.9; transform:scale(1);}100%{opacity:0; transform:scale(.15);}}
+
+.rl-emerge-ring{
+  position:fixed; z-index:495; width:10px; height:10px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  border:2px solid var(--ring-color, rgba(212,175,55,.55));
+  opacity:.9; pointer-events:none;
+  animation:rlRingExpand .85s ease-out forwards;
+}
+@keyframes rlRingExpand{
+  0%{ transform:translate(-50%,-50%) scale(1); opacity:.9; }
+  100%{ transform:translate(-50%,-50%) scale(9); opacity:0; }
+}
+.rl-petal-burst{
+  position:fixed; z-index:496; pointer-events:none;
+  width:9px; height:11px; border-radius:60% 40% 60% 40%;
+  background:linear-gradient(160deg,#ffdbe8,#e78ba1);
+  opacity:0;
+  animation:petalBurst .9s ease-out forwards;
+}
+.rl-petal-burst.pearl{ background:linear-gradient(160deg,#ffffff,#f0e4c8); }
+@keyframes petalBurst{
+  0%{ transform:translate(-50%,-50%) translate(0,0) rotate(0deg) scale(.4); opacity:0; }
+  15%{ opacity:1; }
+  100%{ transform:translate(-50%,-50%) translate(var(--pbx),var(--pby)) rotate(var(--pbr)) scale(1); opacity:0; }
+}
+.rl-glitter.warm{ background:radial-gradient(circle,#fff0f4,#e78ba1 60%,transparent 75%); }
+
+/* ══ UNION MOMENT — a warm golden flash where the two butterflies meet
+   just before flying off together ══ */
+.rl-union-flash{
+  position:fixed; z-index:497; pointer-events:none;
+  width:14px; height:14px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,251,225,.95), rgba(255,231,150,.55) 40%, transparent 72%);
+  opacity:0;
+  animation:unionFlashPop 1.1s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes unionFlashPop{
+  0%{ transform:translate(-50%,-50%) scale(.3); opacity:0; }
+  22%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(11); opacity:0; }
+}
+.rl-union-ring{
+  position:fixed; z-index:497; pointer-events:none;
+  width:10px; height:10px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  border:2px solid rgba(255,246,196,.85);
+  opacity:.95;
+  animation:unionRingPop .95s ease-out forwards;
+}
+@keyframes unionRingPop{
+  0%{ transform:translate(-50%,-50%) scale(1); opacity:.95; }
+  100%{ transform:translate(-50%,-50%) scale(13); opacity:0; }
+}
+
+/* soft glowing thread linking the two butterflies while they dance together */
+.rl-love-beam{
+  position:fixed; left:0; top:0; height:2px; width:0; z-index:498;
+  pointer-events:none; transform-origin:0 50%; opacity:0;
+  background:linear-gradient(90deg, rgba(255,246,196,0), rgba(255,246,196,.85) 50%, rgba(255,246,196,0));
+  filter:drop-shadow(0 0 6px rgba(255,246,196,.55));
+  transition:opacity .25s ease;
+}
+
+/* extra falling rose petals, switched on while a butterfly is out */
+.rl-fall-petal{
+  position:absolute; top:-6%; pointer-events:none;
+  width:10px; height:12px; border-radius:60% 40% 60% 40%;
+  background:linear-gradient(160deg,#ffdbe8,#e78ba1);
+  opacity:0;
+  animation:rlFallPetal linear forwards;
+}
+@keyframes rlFallPetal{
+  0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+  8%{ opacity:.85; }
+  92%{ opacity:.55; }
+  100%{ transform:translateY(112vh) translateX(var(--fpx,0px)) rotate(var(--fpr,320deg)); opacity:0; }
+}
+
+/* closing scene: the two names settle together after the butterflies leave */
+.rl-union-text{
+  position:fixed; left:50%; top:36%; z-index:501; pointer-events:none;
+  transform:translate(-50%,-50%) scale(.6);
+  opacity:0; white-space:nowrap; text-align:center;
+  font-family:'Aref Ruqaa', serif; font-weight:700;
+  font-size:clamp(24px,7vw,38px);
+  transition:opacity .9s ease, transform .9s cubic-bezier(.2,1.4,.4,1);
+}
+.rl-union-text.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+.rl-union-text.hide{ opacity:0; transform:translate(-50%,-50%) scale(1.08); }
+.rl-union-text .ut-name{
+  background:var(--gold-grad); background-size:260% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 10px rgba(122,92,16,.35));
+}
+.rl-union-text .ut-heart{
+  display:inline-block; margin:0 10px; color:#e0556f;
+  animation:utHeartBeat 1s ease-in-out infinite;
+}
+@keyframes utHeartBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+
+/* ══ GRAND FINALE — the moment the names fade, the spot bursts into
+   real-looking flowers and a huge shower of gold sparks ══ */
+.rl-finale-flash{
+  position:fixed; z-index:502; pointer-events:none;
+  width:20px; height:20px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,255,255,.98), rgba(255,231,150,.8) 35%, rgba(212,175,55,.4) 60%, transparent 75%);
+  opacity:0;
+  animation:finaleFlashPop 1.35s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes finaleFlashPop{
+  0%{ transform:translate(-50%,-50%) scale(.2); opacity:0; }
+  16%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(17); opacity:0; }
+}
+.rl-finale-ring{
+  position:fixed; z-index:502; pointer-events:none;
+  width:12px; height:12px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  border:3px solid rgba(255,246,196,.9);
+  opacity:.95;
+  animation:finaleRingPop 1.2s ease-out forwards;
+}
+@keyframes finaleRingPop{
+  0%{ transform:translate(-50%,-50%) scale(1); opacity:.95; }
+  100%{ transform:translate(-50%,-50%) scale(19); opacity:0; }
+}
+.rl-real-flower{
+  position:fixed; z-index:499; pointer-events:none;
+  opacity:0;
+  animation:realFlowerBurst 2.4s cubic-bezier(.16,.8,.24,1) forwards;
+  filter:drop-shadow(0 3px 6px rgba(60,20,20,.28));
+}
+.rl-real-flower svg{width:100%; height:100%; display:block;}
+@keyframes realFlowerBurst{
+  0%{ transform:translate(-50%,-50%) translate(0,0) rotate(0deg) scale(.25); opacity:0; }
+  12%{ opacity:1; }
+  55%{ transform:translate(-50%,-50%) translate(var(--fbx),var(--fby)) rotate(var(--fbr)) scale(1); opacity:1; }
+  100%{ transform:translate(-50%,-50%) translate(var(--fbx2),var(--fby2)) rotate(var(--fbr2)) scale(.8); opacity:0; }
+}
+.rl-mega-spark{
+  position:fixed; z-index:503; pointer-events:none; border-radius:50%;
+  background:radial-gradient(circle, #fff8dd, #ffd76b 55%, transparent 75%);
+  opacity:0;
+  animation:megaSparkBurst 1.6s cubic-bezier(.15,.7,.3,1) forwards;
+}
+@keyframes megaSparkBurst{
+  0%{ transform:translate(-50%,-50%) translate(0,0) scale(1); opacity:0; }
+  10%{ opacity:1; }
+  65%{ transform:translate(-50%,-50%) translate(var(--msx),var(--msy)) scale(.75); opacity:1; }
+  100%{ transform:translate(-50%,-50%) translate(var(--msx2),var(--msy2)) scale(.2); opacity:0; }
+}
+.rl-spark-rain{
+  position:absolute; top:-8%; pointer-events:none; border-radius:50%;
+  background:radial-gradient(circle, #fffceb, #ffd76b 55%, transparent 75%);
+  opacity:0;
+  animation:sparkRainFall linear forwards;
+  box-shadow:0 0 7px rgba(255,214,107,.75);
+}
+@keyframes sparkRainFall{
+  0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+  8%{ opacity:1; }
+  85%{ opacity:.85; }
+  100%{ transform:translateY(115vh) translateX(var(--srx,0px)) rotate(var(--srr,240deg)); opacity:0; }
+}
+
+.rl-butterfly{
+  position:fixed; left:0; top:0; z-index:500;
+  pointer-events:auto;
+  cursor:pointer;
+  will-change:transform, opacity;
+}
+.rl-butterfly svg{width:100%; height:100%; display:block; overflow:visible;
+  filter:drop-shadow(0 8px 16px rgba(30,15,15,.35));}
+.rl-butterfly .wing-l{transform-box:fill-box; transform-origin:100% 42%; animation:flapWing .26s ease-in-out infinite;}
+.rl-butterfly .wing-r{transform-box:fill-box; transform-origin:0% 42%; animation:flapWing .26s ease-in-out infinite;}
+@keyframes flapWing{0%,100%{transform:scaleX(1);}50%{transform:scaleX(.22);}}
+.rl-butterfly .iris{animation:irisShift 3.4s linear infinite; transform-box:fill-box;}
+@keyframes irisShift{0%{filter:hue-rotate(0deg);}50%{filter:hue-rotate(35deg);}100%{filter:hue-rotate(0deg);}}
+
+.rl-butterfly.emerge{animation:emergeIn .55s cubic-bezier(.2,1.4,.4,1) both;}
+@keyframes emergeIn{
+  0%{transform:scale(.05) rotate(-30deg); opacity:0;}
+  60%{opacity:1;}
+  100%{transform:scale(1) rotate(0deg); opacity:1;}
+}
+
+.rl-butterfly.path-a{animation:flyPathA 5.4s cubic-bezier(.36,.05,.2,.98) forwards;}
+.rl-butterfly.path-b{animation:flyPathB 5.8s cubic-bezier(.36,.05,.2,.98) forwards;}
+.rl-butterfly.path-c{animation:flyPathC 6.1s cubic-bezier(.36,.05,.2,.98) forwards;}
+.rl-butterfly.path-d{animation:flyPathD 5.6s cubic-bezier(.36,.05,.2,.98) forwards;}
+
+@keyframes flyPathA{
+  0%{transform:translate(0,0) rotate(0deg) scale(1); opacity:1;}
+  22%{transform:translate(-78px,-120px) rotate(-18deg) scale(1);}
+  45%{transform:translate(-48px,-225px) rotate(7deg) scale(.97);}
+  65%{transform:translate(-135px,-340px) rotate(-13deg) scale(.85);}
+  85%{transform:translate(-95px,-455px) rotate(6deg) scale(.55); opacity:.7;}
+  100%{transform:translate(-160px,-560px) rotate(-8deg) scale(.08); opacity:0;}
+}
+@keyframes flyPathB{
+  0%{transform:translate(0,0) rotate(0deg) scale(1); opacity:1;}
+  22%{transform:translate(96px,-128px) rotate(21deg) scale(1);}
+  45%{transform:translate(52px,-238px) rotate(-9deg) scale(.96);}
+  65%{transform:translate(148px,-352px) rotate(15deg) scale(.8);}
+  85%{transform:translate(92px,-468px) rotate(-7deg) scale(.5); opacity:.65;}
+  100%{transform:translate(174px,-572px) rotate(9deg) scale(.06); opacity:0;}
+}
+@keyframes flyPathC{
+  0%{transform:translate(0,0) rotate(0deg) scale(1); opacity:1;}
+  20%{transform:translate(46px,-94px) rotate(12deg) scale(1);}
+  35%{transform:translate(-30px,-176px) rotate(-17deg) scale(1);}
+  50%{transform:translate(30px,-268px) rotate(10deg) scale(.9);}
+  70%{transform:translate(-42px,-372px) rotate(-12deg) scale(.65);}
+  90%{transform:translate(14px,-476px) rotate(7deg) scale(.32); opacity:.5;}
+  100%{transform:translate(0,-560px) rotate(0deg) scale(.06); opacity:0;}
+}
+@keyframes flyPathD{
+  0%{transform:translate(0,0) rotate(0deg) scale(1); opacity:1;}
+  28%{transform:translate(-10px,-110px) rotate(10deg) scale(1);}
+  46%{transform:translate(-70px,-205px) rotate(-16deg) scale(.95);}
+  64%{transform:translate(-20px,-310px) rotate(9deg) scale(.8);}
+  82%{transform:translate(-90px,-420px) rotate(-10deg) scale(.5); opacity:.6;}
+  100%{transform:translate(-40px,-530px) rotate(0deg) scale(.07); opacity:0;}
+}
+@media (prefers-reduced-motion: reduce){
+  .rl-butterfly{animation:none !important;}
+}
+
 .dua{
   font-family:'Scheherazade New',serif; font-style:italic;
   font-size:clamp(.95rem,3.6vw,1.1rem);
@@ -470,6 +1395,19 @@ body{
 }
 
 .divider{width:100%; max-width:220px; margin:0 auto clamp(16px,3.5vw,22px); position:relative;}
+.divider::after{
+  content:'';
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(45deg);
+  width:7px; height:7px;
+  background:linear-gradient(160deg,#fff6d4,#b3821f);
+  box-shadow:0 0 6px rgba(212,175,55,.65);
+  opacity:0; pointer-events:none;
+}
+.card.revealed .divider::after{
+  animation:dividerGemPop .6s ease forwards 1.9s, dividerGemTwinkle 3s ease-in-out infinite 2.5s;
+}
+@keyframes dividerGemPop{0%{opacity:0; transform:translate(-50%,-50%) rotate(45deg) scale(.3);}100%{opacity:1; transform:translate(-50%,-50%) rotate(45deg) scale(1);}}
+@keyframes dividerGemTwinkle{0%,100%{opacity:.85;}50%{opacity:1; filter:brightness(1.35);}}
 .divider svg{width:100%; height:auto; display:block;}
 .divider path{
   fill:none; stroke:url(#dividerGrad); stroke-width:2.2; stroke-linecap:round;
@@ -486,26 +1424,54 @@ body{
 
 /* hourglass (progress ring — robust cross-browser rendering) */
 .hourglass-wrap{
-  display:flex; flex-direction:column; align-items:center; gap:10px;
-  margin-bottom:clamp(14px,3vw,20px);
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  margin-bottom:clamp(16px,3.5vw,22px);
 }
-.hourglass-ring{
-  width:78px; height:78px; border-radius:50%;
+.hg-stage{
+  position:relative;
+  width:132px; height:132px;
   display:flex; align-items:center; justify-content:center;
-  background:conic-gradient(var(--gold-deep) calc(var(--progress,0)*360deg), rgba(179,130,31,.16) 0deg);
-  box-shadow:0 6px 18px rgba(122,92,16,.3), inset 0 0 0 1px rgba(179,130,31,.25);
+}
+.hg-glow{
+  position:absolute; inset:-6px; border-radius:50%; z-index:0;
+  background:radial-gradient(circle, rgba(255,246,208,.55), rgba(212,175,55,.16) 55%, transparent 75%);
+  filter:blur(7px);
+  animation:hgGlowPulse 3.6s ease-in-out infinite;
+}
+@keyframes hgGlowPulse{0%,100%{opacity:.55; transform:scale(1);}50%{opacity:1; transform:scale(1.12);}}
+.hg-orbit{position:absolute; inset:-4px; width:calc(100% + 8px); height:calc(100% + 8px); z-index:1; pointer-events:none; filter:drop-shadow(0 0 3px rgba(212,175,55,.6));}
+.hg-orbit-spin{transform-origin:70px 70px; animation:hgOrbitSpin 14s linear infinite;}
+@keyframes hgOrbitSpin{to{transform:rotate(360deg);}}
+.hourglass-ring{
+  position:relative; z-index:2;
+  width:104px; height:104px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255,251,225,.5), transparent 60%),
+    conic-gradient(from -90deg, var(--gold-shine) 0deg, var(--gold-deep) calc(var(--progress,0)*360deg), rgba(179,130,31,.16) calc(var(--progress,0)*360deg));
+  box-shadow:0 8px 24px rgba(122,92,16,.32), inset 0 0 0 1.5px rgba(179,130,31,.3), 0 0 22px rgba(212,175,55,.2);
   transition:background 1.4s linear;
 }
 .hourglass-ring-inner{
-  width:62px; height:62px; border-radius:50%;
-  background:var(--paper);
+  width:86px; height:86px; border-radius:50%;
+  background:radial-gradient(circle at 50% 32%, #fffdf6, var(--paper) 75%);
   display:flex; align-items:center; justify-content:center;
-  box-shadow:inset 0 1px 4px rgba(122,92,16,.18);
+  box-shadow:inset 0 2px 6px rgba(122,92,16,.2), inset 0 -2px 5px rgba(255,255,255,.6);
 }
-.hourglass-emoji{font-size:1.9rem; line-height:1; filter:drop-shadow(0 2px 3px rgba(122,92,16,.3));}
-.hourglass-label{font-size:.74rem; color:var(--gold-deep); letter-spacing:.03em; font-weight:500;}
+.sand-canvas{width:62px; height:91px; display:block; filter:drop-shadow(0 4px 7px rgba(122,92,16,.32));}
+.hourglass-label{font-size:.76rem; color:var(--gold-deep); letter-spacing:.03em; font-weight:500; text-align:center;}
+.visit-counter{
+  display:flex; align-items:center; gap:5px;
+  font-size:.7rem; color:var(--ink-soft); letter-spacing:.02em;
+  opacity:0; transform:translateY(4px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.visit-counter.show{opacity:1; transform:translateY(0);}
+.visit-counter .vc-icon{font-size:.8rem;}
+.visit-counter b{color:var(--gold-deep); font-weight:700;}
 .card.revealed .hourglass-ring{animation:hgPulse 3.6s ease-in-out infinite;}
-@keyframes hgPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+@keyframes hgPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.045);}}
+@media (prefers-reduced-motion:reduce){ .hg-orbit-spin{animation:none;} .hg-glow{animation:none;} }
 
 /* countdown — flip style */
 .countdown{display:flex; gap:clamp(8px,2.5vw,14px); justify-content:center; margin-bottom:clamp(18px,4vw,26px); perspective:400px;}
@@ -525,12 +1491,25 @@ body{
 }
 .cd-num.flip{ animation:flipNum .5s cubic-bezier(.4,0,.2,1); }
 @keyframes flipNum{
-  0%{transform:rotateX(0deg);}
-  45%{transform:rotateX(90deg); opacity:.3;}
-  55%{transform:rotateX(-90deg); opacity:.3;}
-  100%{transform:rotateX(0deg);}
+  0%{transform:rotateX(0deg); opacity:1;}
+  45%{transform:rotateX(52deg); opacity:.6;}
+  55%{transform:rotateX(-52deg); opacity:.6;}
+  100%{transform:rotateX(0deg); opacity:1;}
 }
 .cd-lbl{font-size:.62rem; color:var(--ink-soft); letter-spacing:.03em;}
+.cd-ring{
+  width:clamp(38px,11vw,48px); height:clamp(38px,11vw,48px);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:conic-gradient(var(--gold-deep) calc(var(--p,0)*360deg), rgba(179,130,31,.14) 0deg);
+  transition:background .9s linear;
+  margin-bottom:3px;
+}
+.cd-ring > .cd-num{
+  width:78%; height:78%; border-radius:50%;
+  background:linear-gradient(160deg,#fffdf6,#f3e8ca);
+  display:flex; align-items:center; justify-content:center;
+}
 
 /* timing */
 .timing{
@@ -557,6 +1536,21 @@ body{
 .timing-item:nth-child(4){z-index:1;}
 .timing-item:hover{transform:translateY(-4px) scale(1.06); box-shadow:0 10px 22px rgba(122,92,16,.24); z-index:5;}
 .timing-item:active{transform:scale(.97);}
+.timing-item::before{
+  content:'';
+  position:absolute; inset:-7px; border-radius:50%; pointer-events:none;
+  border:1px solid rgba(212,175,55,.5); opacity:0;
+}
+.card.revealed .timing-item::before{ animation:timingPulse 3.6s ease-out infinite; }
+.card.revealed .timing-item:nth-child(1)::before{animation-delay:.3s;}
+.card.revealed .timing-item:nth-child(2)::before{animation-delay:1.15s;}
+.card.revealed .timing-item:nth-child(3)::before{animation-delay:2s;}
+.card.revealed .timing-item:nth-child(4)::before{animation-delay:2.85s;}
+@keyframes timingPulse{
+  0%{opacity:.65; transform:scale(1);}
+  70%{opacity:0; transform:scale(1.32);}
+  100%{opacity:0; transform:scale(1.32);}
+}
 .t-icon{font-size:1.2rem; line-height:1;}
 .t-label{font-family:'Aref Ruqaa',serif; font-size:.72rem; color:var(--ink); line-height:1.15; text-align:center; padding:0 8px;}
 .t-time,.t-venue{font-size:.6rem; color:var(--gold-deep); font-weight:600;}
@@ -573,10 +1567,23 @@ body{
   font-family:'Aref Ruqaa',serif; font-size:1.15rem; margin-bottom:12px; color:var(--ink);
 }
 .map-frame{
-  position:relative; width:100%; aspect-ratio:16/9; max-height:230px; border-radius:18px; overflow:hidden;
+  position:relative; width:100%; aspect-ratio:16/9; max-height:260px; border-radius:18px; overflow:hidden;
   border:1px solid var(--line-gold);
   outline:1px solid rgba(179,130,31,.3); outline-offset:5px;
   box-shadow:0 10px 30px rgba(122,92,16,.2);
+}
+.map-frame::after{
+  content:'';
+  position:absolute; inset:0; z-index:4; pointer-events:none; border-radius:18px;
+  animation:mapFrameGlow 6s ease-in-out infinite; animation-delay:1s;
+}
+@keyframes mapFrameGlow{
+  0%,100%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.22); }
+  50%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.55), inset 0 0 26px rgba(255,246,208,.16); }
+}
+/* warm the map tiles so they sit inside the gold/cream palette instead of a cold generic gray-blue */
+.venue-map .leaflet-tile-pane{
+  filter:sepia(.4) saturate(1.35) hue-rotate(-8deg) brightness(1.04) contrast(.96);
 }
 .map-frame-corner{position:absolute; width:26px; height:26px; z-index:3; pointer-events:none; opacity:.85;}
 .map-frame-corner svg{width:100%;height:100%;}
@@ -634,6 +1641,11 @@ body{
   background:linear-gradient(160deg,#f0d97e,#b3821f);
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 4px 10px rgba(122,92,16,.5);
+  animation:pinDrop .65s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pinDrop{
+  0%{ transform:translateX(-50%) rotate(-45deg) translateY(-26px); opacity:0; }
+  100%{ transform:translateX(-50%) rotate(-45deg) translateY(0); opacity:1; }
 }
 .vm-pin span{transform:rotate(45deg); font-size:.95rem;}
 .vm-ring{
@@ -647,7 +1659,11 @@ body{
 .vm-popup strong{font-family:'Aref Ruqaa',serif; font-size:1rem;}
 .vm-popup span{display:block; font-size:.75rem; color:#5b4a2f; margin:4px 0;}
 .vm-popup a{color:#b3821f; font-size:.75rem; font-weight:700; text-decoration:none;}
-.leaflet-popup-content-wrapper{border-radius:10px; border:1px solid var(--line-gold);}
+.leaflet-popup-content-wrapper{
+  border-radius:14px; border:1px solid var(--line-gold);
+  background:linear-gradient(160deg,#fffdf6,#f7efd8);
+  box-shadow:0 10px 26px rgba(122,92,16,.28);
+}
 .leaflet-popup-tip{background:#fdfbf4;}
 .leaflet-control-attribution{
   font-size:8px !important; line-height:1.2 !important;
@@ -658,21 +1674,45 @@ body{
 
 /* floating buttons */
 .floating-btn{
-  position:fixed; z-index:50; width:46px; height:46px; border-radius:50%;
+  width:46px; height:46px; border-radius:50%;
   display:flex; align-items:center; justify-content:center; font-size:1.2rem;
   background:var(--gold-grad); background-size:220% 100%; border:none; cursor:pointer;
   box-shadow:0 6px 18px rgba(122,92,16,.35);
-  bottom:calc(env(safe-area-inset-bottom) + 18px);
   transition:transform .25s cubic-bezier(.22,1,.36,1);
+  animation:btnBreathe 5.5s ease-in-out infinite;
 }
 .floating-btn:active{transform:scale(.9);}
-#musicBtn{left:18px;}
+@keyframes btnBreathe{
+  0%,100%{box-shadow:0 6px 18px rgba(122,92,16,.35);}
+  50%{box-shadow:0 6px 22px rgba(122,92,16,.5), 0 0 0 5px rgba(212,175,55,.12);}
+}
 #musicBtn.playing{animation:musicPulse 1.6s ease-in-out infinite;}
 @keyframes musicPulse{0%,100%{box-shadow:0 6px 18px rgba(122,92,16,.35);}50%{box-shadow:0 6px 26px rgba(122,92,16,.65),0 0 0 6px rgba(212,175,55,.18);}}
-#themeBtn{left:76px; font-size:1.05rem;}
-#saveImgBtn{right:76px; font-size:1.05rem;}
-#shareBtn{right:18px;}
 #saveImgBtn.busy{animation:musicPulse 1s ease-in-out infinite;}
+#themeBtn,#saveImgBtn{font-size:1.05rem;}
+
+/* magic FAB menu — a single gold button that blooms into the four actions */
+.fab-wrap{
+  position:fixed; z-index:60; right:18px;
+  bottom:calc(env(safe-area-inset-bottom) + 18px);
+  width:46px; height:46px;
+}
+.fab-main{
+  position:relative; z-index:6; font-size:1.3rem;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.fab-wrap.open .fab-main{ transform:rotate(135deg); }
+.fab-item{
+  position:absolute; right:0; bottom:0;
+  opacity:0; transform:scale(.35);
+  pointer-events:none;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+.fab-wrap.open .fab-item{ opacity:1; pointer-events:auto; }
+.fab-wrap.open .fab-item:nth-of-type(1){ transform:scale(1) translateY(-64px); transition-delay:.02s; }
+.fab-wrap.open .fab-item:nth-of-type(2){ transform:scale(1) translateY(-128px); transition-delay:.08s; }
+.fab-wrap.open .fab-item:nth-of-type(3){ transform:scale(1) translateY(-192px); transition-delay:.14s; }
+.fab-wrap.open .fab-item:nth-of-type(4){ transform:scale(1) translateY(-256px); transition-delay:.2s; }
 
 /* QR share modal */
 .qr-modal{
@@ -710,7 +1750,46 @@ body{
 
 /* ambient falling gold flecks (fallback layer, canvas handles main dust) */
 #fallingFxLayer{position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
-#nameFxLayer{position:fixed; inset:0; z-index:120; pointer-events:none; overflow:hidden;}
+
+/* ══ WEDDING-DAY CELEBRATION — shown once the wedding day itself arrives ══ */
+.wedding-day-overlay{
+  position:fixed; inset:0; z-index:500;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  background:radial-gradient(circle at 50% 42%, rgba(212,175,55,.28), rgba(18,14,6,.6) 78%);
+  opacity:0; pointer-events:none;
+  transition:opacity .6s ease;
+}
+.wedding-day-overlay.show{opacity:1; pointer-events:auto;}
+.wdo-card{
+  position:relative;
+  background:linear-gradient(160deg,#fffdf6,#f3e8ca);
+  border:1px solid var(--line-gold);
+  border-radius:16px;
+  padding:36px 30px 30px;
+  text-align:center;
+  max-width:320px; width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.35), 0 0 60px rgba(212,175,55,.35);
+  transform:scale(.85);
+  transition:transform .6s cubic-bezier(.22,1,.36,1);
+}
+.wedding-day-overlay.show .wdo-card{transform:scale(1);}
+.wdo-rings{font-size:2.6rem; margin-bottom:10px;}
+.wedding-day-overlay.show .wdo-rings{animation:wdoRingPulse 1.8s ease-in-out infinite .6s;}
+@keyframes wdoRingPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.wdo-msg{font-family:'Aref Ruqaa',serif; font-size:1.6rem; color:var(--gold-deep); margin-bottom:6px;}
+.wdo-sub{font-size:.9rem; color:var(--ink-soft); letter-spacing:.05em;}
+.wdo-close{
+  position:absolute; top:8px; left:8px;
+  width:28px; height:28px; border-radius:50%;
+  border:1px solid var(--line-gold); background:rgba(255,255,255,.6);
+  color:var(--gold-deep); font-size:.85rem; line-height:1; cursor:pointer;
+}
+@media (prefers-reduced-motion:reduce){
+  .wedding-day-overlay{transition:none;}
+  .wdo-card{transition:none;}
+  .wdo-rings{animation:none !important;}
+}
 .fall-fleck{
   position:absolute; top:-5%; border-radius:50%;
   background:radial-gradient(circle,#fff6d0,#d4af37 60%,transparent 75%);
@@ -778,7 +1857,6 @@ body{
   100%{transform:translate(var(--cdrift,0px),var(--cfall,70vh)) rotate(var(--crot,320deg)); opacity:0;}
 }
 
-
 .toast{
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
   background:#2b2013; color:#f4e2a8; font-size:.82rem; padding:10px 18px; border-radius:20px;
@@ -790,70 +1868,13 @@ body{
   html{scroll-behavior:auto;}
   *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
 }
-/* ══ REAL BUTTERFLY (spawned when the R monogram is tapped) ══ */
-#nameRahma{
-  display:inline-block;
-  cursor:pointer;
-  transition:opacity .55s cubic-bezier(.4,0,.2,1), transform .55s cubic-bezier(.4,0,.2,1), filter .55s ease;
-}
-#nameRahma.letter-vanish{
-  opacity:0;
-  transform:scale(.25) rotate(18deg);
-  filter:blur(2px);
-}
-.paper-butterfly{
-  position:fixed;
-  z-index:9999;
-  width:112px; height:92px;
-  pointer-events:none;
-  will-change:transform, opacity;
-  filter:drop-shadow(0 6px 16px rgba(80,30,60,.35)) drop-shadow(0 0 14px rgba(255,214,140,.35));
-}
-.paper-butterfly svg{ width:100%; height:100%; overflow:visible; display:block; }
-.bfly-wingL{ transform-box:fill-box; transform-origin:100% 50%; animation:bflyFlapL .28s ease-in-out infinite; }
-.bfly-wingR{ transform-box:fill-box; transform-origin:0% 50%; animation:bflyFlapR .28s ease-in-out infinite; }
-@keyframes bflyFlapL{
-  0%,100%{ transform:scaleX(1) rotate(0deg); }
-  50%{ transform:scaleX(.32) rotate(-10deg); }
-}
-@keyframes bflyFlapR{
-  0%,100%{ transform:scaleX(1) rotate(0deg); }
-  50%{ transform:scaleX(.32) rotate(10deg); }
-}
-.bfly-inner{
-  width:100%; height:100%;
-  animation: bflyShimmer 3.4s ease-in-out infinite;
-}
-@keyframes bflyShimmer{
-  0%,100%{ filter:hue-rotate(0deg) saturate(1) brightness(1); }
-  25%{ filter:hue-rotate(14deg) saturate(1.2) brightness(1.05); }
-  50%{ filter:hue-rotate(-10deg) saturate(1.08) brightness(1); }
-  75%{ filter:hue-rotate(18deg) saturate(1.25) brightness(1.08); }
-}
-.bfly-trail{
-  position:fixed; z-index:9998; pointer-events:none; border-radius:50%;
-  background:radial-gradient(circle, rgba(255,232,180,.95), rgba(232,116,154,.55) 55%, transparent 78%);
-  animation: bflyTrailFade .75s ease-out forwards;
-}
-@keyframes bflyTrailFade{
-  0%{ opacity:.9; transform:scale(1); }
-  100%{ opacity:0; transform:scale(.15); }
-}
-.bfly-burst{
-  position:fixed; z-index:9998; pointer-events:none; border-radius:50%;
-  box-shadow:0 0 7px rgba(255,214,140,.85);
-  animation: bflyBurstFly .9s cubic-bezier(.2,.7,.3,1) forwards;
-}
-@keyframes bflyBurstFly{
-  0%{ opacity:1; transform:translate(0,0) scale(1); }
-  100%{ opacity:0; transform:translate(var(--bx),var(--by)) scale(.2); }
-}
 </style>
 </head>
 <body>
 
 <div id="scrollProgress"></div>
 <canvas id="dustCanvas"></canvas>
+<div class="life-shadow" aria-hidden="true"><span>🦋</span></div>
 
 <!-- shared SVG defs -->
 <svg width="0" height="0" style="position:absolute">
@@ -878,9 +1899,27 @@ body{
 
 <!-- ══ ENVELOPE / INTRO ══ -->
 <div id="envelopeScreen">
+  <div class="night-sky" id="nightSky" aria-hidden="true"></div>
   <div class="env-wrap">
+    <span class="travel-star" aria-hidden="true"></span>
+    <div class="env-monogram" aria-hidden="true">
+      <svg viewBox="0 0 100 100">
+        <defs>
+          <radialGradient id="monoGrad" cx="35%" cy="28%" r="80%">
+            <stop offset="0%" stop-color="#fff6d4"/>
+            <stop offset="45%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#7a5c10"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="47" fill="none" stroke="url(#monoGrad)" stroke-width="1.3"/>
+        <circle cx="50" cy="50" r="40" fill="none" stroke="url(#monoGrad)" stroke-width=".7" stroke-dasharray="1.2 3.2" opacity=".7"/>
+        <path d="M20 62 Q28 30 40 58 Q46 72 50 50" fill="none" stroke="url(#monoGrad)" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M80 62 Q72 30 60 58 Q54 72 50 50" fill="none" stroke="url(#monoGrad)" stroke-width="3.2" stroke-linecap="round"/>
+        <circle cx="50" cy="50" r="3.4" fill="url(#monoGrad)"/>
+        <path d="M50 12 L52 20 L50 27 L48 20 Z" fill="url(#monoGrad)"/>
+      </svg>
+    </div>
     <p class="env-bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-
     <p class="env-guest-name" id="envGuestName"></p>
 
     <div class="envelope-illustration" id="envelopeIllustration">
@@ -888,10 +1927,26 @@ body{
         <div class="env-fold left"></div>
         <div class="env-fold right"></div>
       </div>
+      <div class="envelope-letter" aria-hidden="true">
+        <div class="letter-inner">
+          <span class="letter-line"></span>
+          <p class="letter-names">وليد<span class="amp">&amp;</span>𝓡</p>
+        </div>
+      </div>
       <div class="envelope-flap"></div>
+      <div class="env-ribbon" aria-hidden="true">
+        <span class="env-ribbon-band"></span>
+        <span class="env-ribbon-knot"></span>
+      </div>
 
       <div class="env-seal-wrap" id="envelope" role="button" tabindex="0" aria-label="افتح الدعوة">
         <span class="env-ring"></span>
+        <div class="env-touch-ripple" aria-hidden="true"><span></span><span></span></div>
+        <span class="env-tap-hint" aria-hidden="true">👆</span>
+        <div class="env-seal-mist" aria-hidden="true"><span></span><span></span><span></span></div>
+        <span class="wax-drip wax-drip-1" aria-hidden="true"></span>
+        <span class="wax-drip wax-drip-2" aria-hidden="true"></span>
+        <span class="wax-drip wax-drip-3" aria-hidden="true"></span>
         <svg class="seal-svg" viewBox="0 0 160 160">
           <defs>
             <radialGradient id="waxGrad" cx="35%" cy="28%" r="78%">
@@ -906,7 +1961,7 @@ body{
           <circle cx="80" cy="82" r="65" fill="none" stroke="#5f430a" stroke-width="1" stroke-dasharray="1.5 3.5" opacity=".5"/>
           <circle cx="80" cy="82" r="59" fill="none" stroke="#fff6d8" stroke-width="1" opacity=".4"/>
           <text font-family="'Aref Ruqaa', serif" font-size="13.5" fill="#3c2c05" letter-spacing="1.5">
-            <textPath href="#arcPath" startOffset="50%" text-anchor="middle">Waled &amp; ​𝓡</textPath>
+            <textPath href="#arcPath" startOffset="50%" text-anchor="middle">وليد &amp; 𝓡</textPath>
           </text>
           <g transform="translate(80,96)">
             <circle cx="-9" cy="0" r="14" fill="none" stroke="#3c2c05" stroke-width="3"/>
@@ -923,20 +1978,32 @@ body{
     </div>
 
     <h1 class="env-title">دعوة حفل زفاف</h1>
-    <p class="env-names">Waled &amp; ​𝓡</p>
+    <p class="env-names">وليد &amp; 𝓡</p>
     <p class="env-date">11 / 9 / 2026</p>
-    <p class="env-hint" id="envHint">✦ &nbsp; المسي على الختم لفتح بطاقة الدعوة &nbsp; ✦</p>
+    <p class="env-hint" id="envHint"><span class="hint-w">✦</span><span class="hint-w">المسي</span><span class="hint-w">الختم</span><span class="hint-w">أو</span><span class="hint-w">اسحبيه</span><span class="hint-w">برفق،</span><span class="hint-w">لتتكشف</span><span class="hint-w">لك</span><span class="hint-w">بطاقة</span><span class="hint-w">الفرح</span><span class="hint-w">✦</span></p>
   </div>
 </div>
 
 <div id="fallingFxLayer"></div>
-<div id="nameFxLayer"></div>
+
+<div class="wedding-day-overlay" id="weddingDayOverlay" role="dialog" aria-live="polite">
+  <div class="wdo-card">
+    <button class="wdo-close" id="wdoClose" aria-label="إغلاق">✕</button>
+    <div class="wdo-rings">💍</div>
+    <p class="wdo-msg">اليوم يوم فرحتنا</p>
+    <p class="wdo-sub">وليد &amp; 𝓡</p>
+  </div>
+</div>
 
 <div class="outer">
   <div class="card" id="card">
     <div class="card-sheen"></div>
+    <div class="card-grand-sweep"></div>
     <svg class="frame-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
       <rect x="0.5" y="0.5" width="99" height="99" rx="1.5"/>
+      <path id="frameMotionPath" d="M2,0.5 H98 A1.5,1.5 0 0 1 99.5,2 V98 A1.5,1.5 0 0 1 98,99.5 H2 A1.5,1.5 0 0 1 0.5,98 V2 A1.5,1.5 0 0 1 2,0.5 Z" fill="none" stroke="none" opacity="0"/>
+      <circle id="frameBrushHalo" class="frame-brush-halo" r="4.2" cx="2" cy="0.5"/>
+      <circle id="frameBrushTip" class="frame-brush-tip" r="2.6" cx="2" cy="0.5"/>
     </svg>
 
     <div class="corner-flourish tl"><svg viewBox="0 0 40 40"><path d="M2 2 Q2 20 20 20 M2 2 Q20 2 20 20" fill="none" stroke="#b3821f" stroke-width="1.4"/><circle cx="2" cy="2" r="2.2" fill="#b3821f"/></svg></div>
@@ -947,44 +2014,45 @@ body{
     <!-- HERO -->
     <div class="hero" id="heroWrap">
       <div class="hero-fallback" id="heroFallback">
-        <span class="monogram gold-flow shine-sweep">Waled&amp;​𝓡</span>
-        <span class="monogram-sub">WALED &amp; ​𝓡</span>
+        <span class="monogram gold-flow shine-sweep">وليد&amp;𝓡</span>
+        <span class="monogram-sub">WALEED &amp; 𝓡</span>
       </div>
-      <video id="heroImg" src="video.mp4" autoplay muted loop playsinline webkit-playsinline="true" preload="auto" fetchpriority="high" disablepictureinpicture controlslist="nodownload noplaybackrate" draggable="false" onerror="this.style.display='none'" style="position:relative; z-index:2;"></video>
+      <div class="hero-parallax" id="heroParallax">
+        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:cover;">
+          <source src="video.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="hero-veil"></div>
       <div class="hero-lightbar"></div>
       <div class="hero-overlay"></div>
-      <div class="img-watermark">Waled &amp; ​𝓡 ✦ 11.09.2026</div>
+      <div class="img-watermark">وليد &amp; 𝓡 ✦ 11.09.2026</div>
       <div class="img-protect" oncontextmenu="return false"></div>
     </div>
 
     <!-- CONTENT -->
     <div class="content">
-      <p class="bismillah fi d1">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+      <p class="bismillah fi d1">لحظاتُ الفرح اختارت من عمري أسعد موعد</p>
 
       <p class="verse fi d2">
-        وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا<br>
-        لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
-      </p>
+       وبعد العقد المتين، نسأل الله حسن الختام.. يسعدنا أن تكونوا شهودًا على فرحة العمر، وليلةٍ نجتمع فيها على الخير والمحبة</p>
 
-      <div class="guest-name-wrap fi d3" id="guestNameWrap">
+      <div class="guest-name-wrap" id="guestNameWrap">
         <p class="guest-name" id="guestName"></p>
       </div>
 
       <p class="subtitle fi d3">ونتشرف بدعوتكم &nbsp;|&nbsp; حفل الزفاف</p>
 
       <div class="names fi d3">
-        <span class="gold-flow shine-sweep" id="nameWaleed">Waled</span>
+        <span class="names-thread" aria-hidden="true"></span>
+        <span class="gold-flow shine-sweep ink-reveal ink-d1" id="nameWaleed">وليد<span class="ink-pen" aria-hidden="true">🖋️</span></span>
         <span class="name-amp">&amp;</span>
-        <span class="gold-flow shine-sweep" id="nameRahma">​𝓡</span>
+        <span class="gold-flow shine-sweep ink-reveal ink-d2" id="nameRahma">𝓡<span class="ink-pen" aria-hidden="true">🖋️</span></span>
       </div>
 
       <svg class="rings-doodle fi d3" viewBox="0 0 64 34">
         <circle cx="24" cy="17" r="13"/>
         <circle cx="40" cy="17" r="13"/>
       </svg>
-
-      <p class="dua fi d4">اللهم اجعله عقداً متيناً وارزقنا التمام الجميل</p>
 
       <div class="divider fi d4">
         <svg viewBox="0 0 220 20" preserveAspectRatio="none"><path d="M2 10 Q55 -2 110 10 T218 10"/></svg>
@@ -995,27 +2063,42 @@ body{
         <strong>11.09.2026</strong> الموافق <strong>29 ربيع الأول 1448</strong>
       </div>
 
-      <div class="hourglass-wrap fi d5" id="hourglassWrap">
-        <div class="hourglass-ring" id="hourglassRing" style="--progress:0">
-          <div class="hourglass-ring-inner">
-            <span class="hourglass-emoji">⏳</span>
+      <div class="hourglass-wrap page-turn page-turn-soft" id="hourglassWrap">
+        <div class="hg-stage">
+          <div class="hg-glow"></div>
+          <svg class="hg-orbit" viewBox="0 0 140 140">
+            <g class="hg-orbit-spin">
+              <path d="M70 6 L73 13 L70 20 L67 13 Z" fill="var(--gold-mid)"/>
+              <path d="M134 70 L127 73 L120 70 L127 67 Z" fill="var(--gold-mid)"/>
+              <path d="M70 134 L67 127 L70 120 L73 127 Z" fill="var(--gold-mid)"/>
+              <path d="M6 70 L13 67 L20 70 L13 73 Z" fill="var(--gold-mid)"/>
+            </g>
+          </svg>
+          <div class="hourglass-ring" id="hourglassRing" style="--progress:0">
+            <div class="hourglass-ring-inner">
+              <canvas class="sand-canvas" id="sandCanvas" width="150" height="220"></canvas>
+            </div>
           </div>
         </div>
-        <span class="hourglass-label">الوقت يمضي حتى الفرح ✨</span>
+        <span class="hourglass-label">تبقّى القليل حتى تكتمل الفرحة ✨</span>
+        <div class="visit-counter" id="visitCounter">
+          <span class="vc-icon">🕊️</span>
+          <span class="vc-text">شاركنا الفرحة حتى الآن <b id="vcNum">0</b> من أحبائنا</span>
+        </div>
       </div>
 
-      <div class="countdown fi d5" id="cd">
-        <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">يوم</span></div>
-        <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">ساعة</span></div>
-        <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">دقيقة</span></div>
-        <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">ثانية</span></div>
+      <div class="countdown page-turn page-turn-soft" id="cd">
+        <div class="cd-box shine-sweep"><div class="cd-ring" id="cd-ring-d" style="--p:0"><span class="cd-num" id="cd-d">--</span></div><span class="cd-lbl">يوم</span></div>
+        <div class="cd-box shine-sweep"><div class="cd-ring" id="cd-ring-h" style="--p:0"><span class="cd-num" id="cd-h">--</span></div><span class="cd-lbl">ساعة</span></div>
+        <div class="cd-box shine-sweep"><div class="cd-ring" id="cd-ring-m" style="--p:0"><span class="cd-num" id="cd-m">--</span></div><span class="cd-lbl">دقيقة</span></div>
+        <div class="cd-box shine-sweep"><div class="cd-ring" id="cd-ring-s" style="--p:0"><span class="cd-num" id="cd-s">--</span></div><span class="cd-lbl">ثانية</span></div>
       </div>
 
       <div class="divider fi d5" style="max-width:120px;">
         <svg viewBox="0 0 220 20" preserveAspectRatio="none"><path d="M2 10 Q55 -2 110 10 T218 10"/></svg>
       </div>
 
-      <div class="timing fi d6">
+      <div class="timing page-turn" id="timingRow">
         <a href="https://maps.app.goo.gl/Ch4MWxL4tpXymiGR8" target="_blank" rel="noopener" class="timing-item">
           <span class="t-icon">🕌</span>
           <span class="t-label">القاعة</span>
@@ -1036,9 +2119,9 @@ body{
           <span class="t-time">7:30</span>
         </div>
       </div>
-      <p class="blessings fi d7">✨ وبحضوركم يتم لنا الفرح والسرور ✨</p>
+      <p class="blessings fi d7">✨ وبحضوركم تكتمل فرحتنا ويغمرنا السرور ✨</p>
 
-      <div class="map-section fi d8">
+      <div class="map-section page-turn">
         <div class="map-heading"><span>📍</span><span>موقع حفل الزفاف</span></div>
         <div class="map-frame" id="venueMapFrame">
           <div id="venueMap" class="venue-map" role="img" aria-label="خريطة موقع قاعة أسياد القلعة، مركز قفط، محافظة قنا"></div>
@@ -1059,16 +2142,21 @@ body{
         </div>
       </div>
 
-      <p class="notice-text fi d7">ملحوظة: يمنع التصوير نهائيًا داخل القاعة لأي أسباب 🤳📵</p>
-      <p class="blessings2 fi d7">وجعل الله بينكم مودةً ورحمةً</p>
+      <p class="notice-text page-turn page-turn-soft">نرجو من ضيوفنا الكرام عدم التصوير داخل القاعة، حفاظًا على خصوصية الحفل 🤳📵</p>
+      <p class="blessings2 page-turn page-turn-soft">دامت لنا ولكم الأفراح، وأدامكم الله لنا أحبابًا أعزاء</p>
     </div>
   </div>
 </div>
 
-<button id="musicBtn" class="floating-btn" aria-label="كتم/تشغيل الموسيقى">🔈</button>
-<button id="themeBtn" class="floating-btn" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع الليلي/النهاري">🌙</button>
-<button id="saveImgBtn" class="floating-btn" aria-label="حفظ الدعوة كصورة" title="حفظ الدعوة كصورة">💾</button>
-<button id="shareBtn" class="floating-btn" aria-label="مشاركة الدعوة" title="مشاركة الدعوة">🔗</button>
+<div class="fab-wrap" id="fabWrap">
+  <div class="fab-menu">
+    <button id="musicBtn" class="floating-btn fab-item" aria-label="كتم/تشغيل الموسيقى">🔈</button>
+    <button id="themeBtn" class="floating-btn fab-item" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع الليلي/النهاري">🌙</button>
+    <button id="saveImgBtn" class="floating-btn fab-item" aria-label="حفظ الدعوة كصورة" title="حفظ الدعوة كصورة">💾</button>
+    <button id="shareBtn" class="floating-btn fab-item" aria-label="مشاركة الدعوة" title="مشاركة الدعوة">🔗</button>
+  </div>
+  <button id="fabMain" class="floating-btn fab-main" aria-label="قائمة الخيارات" aria-expanded="false" title="قائمة الخيارات">✦</button>
+</div>
 
 <div class="qr-modal" id="qrModal">
   <div class="qr-modal-inner">
@@ -1091,6 +2179,17 @@ body{
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 if(isFinePointer) document.body.classList.add('pointer-fine');
+
+/* ══ SHARED TOAST HELPER — used by share/copy-link, save-as-image, and
+   copy-address, so the show/hide logic lives in one place only ══ */
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  if(!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+}
 
 /* ══ PERSONALIZED GUEST NAME (?name=... or ?to=...) ══ */
 const GUEST_LOG_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwbCZMrCrQaHK2DSzJA9VHIBcJJoeOscXFjnmsm_oGcdDVLsfuz7C2kN6x90tW_f1mo/exec';
@@ -1130,6 +2229,69 @@ function logGuestOpen(guestName){
   }catch(e){}
 }
 
+/* ══ VISIT COUNTER — "كام حد فتح الدعوة" — asks the same Google Sheet
+   for a total count. IMPORTANT: this needs the Apps Script's doGet to
+   also handle a `?action=count` request and return JSON like
+   {"count": 128} (e.g. by reading the sheet's last row number). If the
+   script doesn't support that yet, this silently does nothing — it
+   never shows a wrong number, it just stays hidden. ══ */
+function loadVisitCounter(){
+  const wrap = document.getElementById('visitCounter');
+  const numEl = document.getElementById('vcNum');
+  if(!wrap || !numEl) return;
+  fetch(GUEST_LOG_SHEET_URL + '?action=count')
+    .then(function(r){ if(!r.ok) throw new Error('bad response'); return r.json(); })
+    .then(function(data){
+      const count = parseInt(data && data.count, 10);
+      if(!isFinite(count) || count < 0) return;
+      wrap.classList.add('show');
+      if(reduceMotion){ numEl.textContent = count; return; }
+      const start = performance.now(), dur = 1100;
+      (function step(now){
+        const t = Math.min(1, (now-start)/dur);
+        numEl.textContent = Math.round((1-Math.pow(1-t,3)) * count);
+        if(t < 1) requestAnimationFrame(step);
+      })(start);
+    })
+    .catch(function(){ /* backend doesn't support ?action=count yet — stay hidden, no error shown to the guest */ });
+}
+loadVisitCounter();
+
+function playGuestNameChime(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    const ctx = new AC();
+    function fire(){
+      [660, 880, 1108].forEach(function(f, i){
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        o.connect(g); g.connect(ctx.destination);
+        const t = ctx.currentTime + i*0.11;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.05, t+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+0.55);
+        o.start(t); o.stop(t+0.6);
+      });
+      setTimeout(function(){ ctx.close(); }, 900);
+    }
+    if(ctx.state === 'suspended'){
+      /* most mobile browsers block sound before any tap — play it on the
+         very first touch/click instead, so it's never silently lost */
+      const resumeAndFire = function(){
+        ctx.resume().then(fire).catch(function(){});
+        document.removeEventListener('touchstart', resumeAndFire);
+        document.removeEventListener('click', resumeAndFire);
+      };
+      document.addEventListener('touchstart', resumeAndFire, {once:true});
+      document.addEventListener('click', resumeAndFire, {once:true});
+    } else {
+      fire();
+    }
+  }catch(e){}
+}
+
 (function(){
   try{
     const params = new URLSearchParams(window.location.search);
@@ -1149,13 +2311,29 @@ function logGuestOpen(guestName){
     }
     const envNameEl = document.getElementById('envGuestName');
     if(envNameEl){
-      envNameEl.innerHTML = 'دعوة خاصة إلى<br><b>' + safe + '</b>';
+      envNameEl.innerHTML = 'دعوة خاصة إلى<br><b id="envGuestNameTyped"></b>';
       envNameEl.classList.add('show');
       requestAnimationFrame(function(){
         requestAnimationFrame(function(){ envNameEl.classList.add('visible'); });
       });
+      /* type the guest's name letter by letter, like it's being written just for them */
+      const typedEl = document.getElementById('envGuestNameTyped');
+      if(typedEl){
+        if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+          typedEl.textContent = safe;
+        } else {
+          let i = 0;
+          const speed = 70;
+          (function typeStep(){
+            typedEl.textContent = safe.slice(0, i);
+            i++;
+            if(i <= safe.length) setTimeout(typeStep, speed);
+          })();
+        }
+      }
     }
-    document.title = 'دعوة زفاف Waled & ​𝓡 | ' + safe;
+    document.title = 'دعوة زفاف وليد & 𝓡 | ' + safe;
+    playGuestNameChime();
     logGuestOpen(safe);
   }catch(e){}
 })();
@@ -1203,34 +2381,181 @@ function playSealSound(){
   const illustration = document.getElementById('envelopeIllustration');
   const screen = document.getElementById('envelopeScreen');
   const card = document.getElementById('card');
-  const heroVideo = document.getElementById('heroImg');
+  const music = document.getElementById('video');
   const musicBtn = document.getElementById('musicBtn');
+  const reduceMo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened = false;
+
+  /* once the envelope has drifted in and settled, let it sway gently
+     until it's touched — a quiet invitation to interact */
+  illustration.addEventListener('animationend', function onDropEnd(e){
+    if(e.animationName === 'envDrop'){
+      illustration.classList.add('env-idle');
+      illustration.removeEventListener('animationend', onDropEnd);
+    }
+  });
+
+  /* two little stars break off the seal and streak up toward each name,
+     arriving right as the ink starts writing it — timed to line up with
+     the ink-reveal delays (1.9s / 2.25s) on the card itself */
+  function spawnNameStars(originRect){
+    if(reduceMo || !originRect) return;
+    const startX = originRect.left + originRect.width/2;
+    const startY = originRect.top + originRect.height/2;
+    [
+      {id:'nameWaleed', delay:500, dur:1450},
+      {id:'nameRahma', delay:850, dur:1450}
+    ].forEach(function(t){
+      setTimeout(function(){
+        const el = document.getElementById(t.id);
+        if(!el) return;
+        const r = el.getBoundingClientRect();
+        const endX = r.left + r.width/2, endY = r.top + r.height/2;
+        const star = document.createElement('span');
+        star.className = 'rl-name-star';
+        star.textContent = '✦';
+        star.style.left = startX + 'px';
+        star.style.top = startY + 'px';
+        star.style.opacity = '0';
+        document.body.appendChild(star);
+        const start = performance.now();
+        (function step(now){
+          const p = Math.min(1, (now - start) / t.dur);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const x = startX + (endX - startX) * ease;
+          const y = startY + (endY - startY) * ease - Math.sin(p * Math.PI) * 78;
+          const scale = 1 - 0.4 * ease;
+          const opacity = p < 0.1 ? p / 0.1 : (p < 0.82 ? 1 : Math.max(0, 1 - (p - 0.82) / 0.18));
+          star.style.left = x + 'px';
+          star.style.top = y + 'px';
+          star.style.opacity = opacity;
+          star.style.transform = 'translate(-50%,-50%) scale(' + scale + ') rotate(' + (p * 220) + 'deg)';
+          if(p < 1){ requestAnimationFrame(step); } else { star.remove(); }
+        })(performance.now());
+      }, t.delay);
+    });
+  }
 
   function openInvite(){
     if(opened) return;
     opened = true;
     playSealSound();
+    if(navigator.vibrate) navigator.vibrate([14,26,14]);
+    /* NOTE: we deliberately do NOT remove 'env-idle' here — doing so let the
+       base envDrop animation re-apply and restart (briefly hiding the
+       envelope again). The .opening rule below already forces
+       animation:none !important, which cleanly overrides the idle sway
+       the moment it's added, with no flicker in between. */
     /* gyro tilt disabled for a calmer, smoother feel — card stays still while reading */
+    const sealRect = wrap.getBoundingClientRect();
     wrap.classList.add('cracking');
+    illustration.classList.add('ribbon-off');
     setTimeout(function(){
       wrap.classList.add('opened');
       illustration.classList.add('opening');
       screen.classList.add('flash');
       burstGoldFlecks();
-    }, 330);
+    }, 1550);
     setTimeout(function(){
       screen.classList.add('hide');
       document.body.style.overflow = 'auto';
       card.classList.add('revealed');
-      if(heroVideo){
-        heroVideo.muted = false;
-        heroVideo.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
-      }
-    }, 1250);
+      spawnNameStars(sealRect);
+      runFrameBrush();
+      startPageTurnWatch();
+      music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+    }, 2500);
+  }
+
+  /* moves the glowing brush-tip circle along the frame's outline, timed
+     to match the drawFrame stroke animation (2.6s, .1s delay), so the
+     border looks hand-painted rather than just fading into view */
+  function runFrameBrush(){
+    if(reduceMo) return;
+    const path = document.getElementById('frameMotionPath');
+    const tip = document.getElementById('frameBrushTip');
+    const halo = document.getElementById('frameBrushHalo');
+    if(!path || !tip || typeof path.getTotalLength !== 'function') return;
+    let total;
+    try{ total = path.getTotalLength(); }catch(e){ return; }
+    const DUR = 2600, DELAY = 100;
+    const start = performance.now() + DELAY;
+    (function step(now){
+      const p = Math.min(1, Math.max(0, (now - start) / DUR));
+      const pt = path.getPointAtLength(p * total);
+      tip.setAttribute('cx', pt.x);
+      tip.setAttribute('cy', pt.y);
+      if(halo){ halo.setAttribute('cx', pt.x); halo.setAttribute('cy', pt.y); }
+      if(now < start + DUR){ requestAnimationFrame(step); }
+    })(performance.now());
   }
   wrap.addEventListener('click', openInvite);
   wrap.addEventListener('keypress', function(e){ if(e.key==='Enter'||e.key===' ') openInvite(); });
+
+  /* ── peel gesture: drag the seal a little and it lifts & tilts in your
+     hand; let go past the threshold and it opens, like peeling real wax ── */
+  if(!reduceMo){
+    let dragging = false, startX = 0, startY = 0;
+    const THRESHOLD = 46;
+
+    function pointFrom(e){
+      if(e.touches && e.touches[0]) return e.touches[0];
+      if(e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+      return e;
+    }
+    function onDown(e){
+      if(opened) return;
+      dragging = true;
+      const p = pointFrom(e);
+      startX = p.clientX; startY = p.clientY;
+      wrap.classList.add('peeling');
+    }
+    function onMove(e){
+      if(!dragging || opened) return;
+      const p = pointFrom(e);
+      const dx = p.clientX - startX, dy = p.clientY - startY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const progress = Math.min(1, dist / THRESHOLD);
+      wrap.style.setProperty('--peel', progress.toFixed(3));
+      if(dist > THRESHOLD){
+        dragging = false;
+        wrap.classList.remove('peeling');
+        wrap.style.removeProperty('--peel');
+        openInvite();
+      }
+    }
+    function onUp(){
+      if(!dragging) return;
+      dragging = false;
+      wrap.classList.remove('peeling');
+      wrap.style.removeProperty('--peel');
+    }
+    wrap.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove, {passive:true});
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+  }
+})();
+
+/* ══ RINGS DOODLE — tap the two rings under the names to make them
+   swing together, interlock a touch deeper and flash with gold shine ══ */
+(function(){
+  const rings = document.querySelector('.rings-doodle');
+  if(!rings) return;
+  let lastPulse = 0;
+  function pulse(){
+    /* mobile fires both 'touchstart' and a synthetic 'click' for the same
+       tap; without this guard the two calls landed on top of each other
+       and cancelled the restart, so only the very first tap ever worked */
+    const now = Date.now();
+    if(now - lastPulse < 400) return;
+    lastPulse = now;
+    rings.classList.remove('ring-pulse');
+    void rings.getBoundingClientRect(); /* force reflow so it can restart every time */
+    rings.classList.add('ring-pulse');
+  }
+  rings.addEventListener('click', pulse);
+  rings.addEventListener('touchstart', function(e){ e.stopPropagation(); pulse(); }, {passive:true});
 })();
 
 /* ══ COUNTDOWN (with flip effect) ══ */
@@ -1241,6 +2566,10 @@ function playSealSound(){
   const els = {
     d: document.getElementById('cd-d'), h: document.getElementById('cd-h'),
     m: document.getElementById('cd-m'), s: document.getElementById('cd-s')
+  };
+  const ringEls = {
+    d: document.getElementById('cd-ring-d'), h: document.getElementById('cd-ring-h'),
+    m: document.getElementById('cd-ring-m'), s: document.getElementById('cd-ring-s')
   };
   const hgRing = document.getElementById('hourglassRing');
   const prev = { d:null, h:null, m:null, s:null };
@@ -1254,10 +2583,10 @@ function playSealSound(){
     }
   }
   function updateHourglass(now){
-    if(!hgRing) return;
     let progress = (now - hgStart) / (target - hgStart);
     progress = Math.max(0, Math.min(1, progress));
-    hgRing.style.setProperty('--progress', progress.toFixed(3));
+    if(hgRing) hgRing.style.setProperty('--progress', progress.toFixed(3));
+    return progress;
   }
   function tick(){
     const now = Date.now();
@@ -1270,9 +2599,382 @@ function playSealSound(){
     setVal(els.h,'h', String(hrs).padStart(2,'0'));
     setVal(els.m,'m', String(mins).padStart(2,'0'));
     setVal(els.s,'s', String(secs).padStart(2,'0'));
-    updateHourglass(now);
+    const dayProgress = updateHourglass(now);
+    window.RL_WEDDING_PROGRESS = dayProgress;
+    /* each ring fills up as its own unit counts down toward the next rollover */
+    if(ringEls.d) ringEls.d.style.setProperty('--p', dayProgress.toFixed(3));
+    if(ringEls.h) ringEls.h.style.setProperty('--p', (1 - hrs/24).toFixed(3));
+    if(ringEls.m) ringEls.m.style.setProperty('--p', (1 - mins/60).toFixed(3));
+    if(ringEls.s) ringEls.s.style.setProperty('--p', (1 - secs/60).toFixed(3));
   }
   tick(); setInterval(tick, 1000);
+})();
+
+/* ══ REAL SAND HOURGLASS — a small canvas draws a jeweled, ornate hourglass:
+   faceted brass finials with a gem, curved baroque glass bulbs with soft
+   shine, a sloped sand pile, and a flowing stream of grains trickling
+   down as the wedding nears ══ */
+(function(){
+  const canvas = document.getElementById('sandCanvas');
+  if(!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+
+  const capH = 13;                /* ornate brass base thickness, top & bottom */
+  const neckY = h/2;
+  const neckHalf = 4.6;
+  const topY = capH + 8;          /* glass bulb starts just under the cap */
+  const bottomY = h - capH - 8;   /* glass bulb ends just above the cap */
+  const outerL = 12, outerR = w-12; /* glass width at the cap line */
+  const pillarL = 6, pillarR = w-6;
+  const bulge = 6;                /* how far the curved glass bulges outward */
+
+  const grains = [];
+  for(let i=0;i<12;i++){
+    grains.push({ y: neckY + Math.random()*14, dx:(Math.random()-0.5)*3, speed:0.7+Math.random()*0.65, r:0.9+Math.random()*0.9 });
+  }
+  const puffs = []; /* little dust puffs where the stream lands */
+  let puffTimer = 0;
+  const sparkles = [0.15, 0.4, 0.62, 0.85].map(function(t){ return { t: t, phase: Math.random()*Math.PI*2, side: Math.random()>0.5?1:-1 }; });
+
+  function pileTopY(progress){ return bottomY - (bottomY-neckY)*progress*0.88; }
+
+  function roundRect(x, y, ww, hh, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+ww, y, x+ww, y+hh, r);
+    ctx.arcTo(x+ww, y+hh, x, y+hh, r);
+    ctx.arcTo(x, y+hh, x, y, r);
+    ctx.arcTo(x, y, x+ww, y, r);
+    ctx.closePath();
+  }
+
+  /* ornate baroque base/cap: a wide fluted plate plus a small domed finial with a gem */
+  function drawCap(y0, isTop){
+    const plateY = isTop ? y0 : y0 + capH - 7;
+    const grad = ctx.createLinearGradient(0, plateY, 0, plateY+7);
+    grad.addColorStop(0, '#fef3c7'); grad.addColorStop(.45, '#e3bd52'); grad.addColorStop(1, '#8d6414');
+    ctx.fillStyle = grad;
+    roundRect(2, plateY, w-4, 7, 3);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(122,92,16,.45)'; ctx.lineWidth = 1;
+    ctx.stroke();
+    /* fluted reeding lines on the plate */
+    ctx.strokeStyle = 'rgba(122,92,16,.3)'; ctx.lineWidth = .7;
+    for(let x=8; x<w-8; x+=5){
+      ctx.beginPath(); ctx.moveTo(x, plateY+1.2); ctx.lineTo(x, plateY+5.8); ctx.stroke();
+    }
+    /* small domed finial with a gem, pointing away from the glass */
+    const domeCy = isTop ? y0 - 3 : y0 + capH + 3;
+    const domeGrad = ctx.createRadialGradient(w/2-2, domeCy-2, 1, w/2, domeCy, 8);
+    domeGrad.addColorStop(0, '#fff6d4'); domeGrad.addColorStop(.5, '#d4af37'); domeGrad.addColorStop(1, '#8a6511');
+    ctx.fillStyle = domeGrad;
+    ctx.beginPath(); ctx.ellipse(w/2, domeCy, 7, 5, 0, 0, Math.PI*2); ctx.fill();
+    const gemGrad = ctx.createRadialGradient(w/2-1.2, domeCy-1.2, .4, w/2, domeCy, 3.2);
+    gemGrad.addColorStop(0, '#fff'); gemGrad.addColorStop(.5, '#bfe3ff'); gemGrad.addColorStop(1, '#5a8fc4');
+    ctx.fillStyle = gemGrad;
+    ctx.beginPath(); ctx.ellipse(w/2, domeCy, 2.6, 2.2, 0, 0, Math.PI*2); ctx.fill();
+  }
+
+  function drawPillars(){
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, '#f3da85'); grad.addColorStop(.5, '#d4af37'); grad.addColorStop(1, '#9c711f');
+    [pillarL, pillarR].forEach(function(px){
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      roundRect(px-2.1, capH+3, 4.2, h-(capH+3)*2, 2);
+      ctx.fill();
+      /* thin bright highlight down the middle of each pillar */
+      ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.moveTo(px-0.6, capH+6); ctx.lineTo(px-0.6, h-capH-6); ctx.stroke();
+      /* small brass collar rings top & bottom of each pillar */
+      ctx.fillStyle = '#9c711f';
+      ctx.fillRect(px-3, capH+2, 6, 2.2);
+      ctx.fillRect(px-3, h-capH-4.2, 6, 2.2);
+    });
+  }
+
+  /* curved (baroque) glass bulb — bulges outward like a real hand-blown hourglass */
+  function glassBulbPath(isTop){
+    ctx.beginPath();
+    if(isTop){
+      ctx.moveTo(outerL, topY);
+      ctx.quadraticCurveTo(w/2, topY - bulge*0.6, outerR, topY);
+      ctx.quadraticCurveTo(outerR - bulge, (topY+neckY)/2, w/2+neckHalf, neckY);
+      ctx.quadraticCurveTo(w/2, neckY - 3, w/2-neckHalf, neckY);
+      ctx.quadraticCurveTo(outerL + bulge, (topY+neckY)/2, outerL, topY);
+    } else {
+      ctx.moveTo(w/2-neckHalf, neckY);
+      ctx.quadraticCurveTo(w/2, neckY + 3, w/2+neckHalf, neckY);
+      ctx.quadraticCurveTo(outerR - bulge, (neckY+bottomY)/2, outerR, bottomY);
+      ctx.quadraticCurveTo(w/2, bottomY + bulge*0.6, outerL, bottomY);
+      ctx.quadraticCurveTo(outerL + bulge, (neckY+bottomY)/2, w/2-neckHalf, neckY);
+    }
+    ctx.closePath();
+  }
+
+  function drawGlass(){
+    [true, false].forEach(function(isTop){
+      glassBulbPath(isTop);
+      const grad = ctx.createLinearGradient(0, isTop?topY:neckY, 0, isTop?neckY:bottomY);
+      grad.addColorStop(0, 'rgba(255,255,255,.26)');
+      grad.addColorStop(.55, 'rgba(255,250,235,.09)');
+      grad.addColorStop(1, 'rgba(200,180,140,.06)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(179,130,31,.65)';
+      ctx.lineWidth = 1.7;
+      ctx.stroke();
+    });
+    /* a soft diagonal shine across each bulb, like light on curved glass */
+    ctx.save();
+    glassBulbPath(true); ctx.clip();
+    const shineGrad1 = ctx.createLinearGradient(outerL, topY, w/2, neckY);
+    shineGrad1.addColorStop(0, 'rgba(255,255,255,0)');
+    shineGrad1.addColorStop(.5, 'rgba(255,255,255,.4)');
+    shineGrad1.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = shineGrad1;
+    ctx.fillRect(outerL+5, topY, 8, neckY-topY);
+    ctx.restore();
+    ctx.save();
+    glassBulbPath(false); ctx.clip();
+    ctx.fillStyle = shineGrad1;
+    ctx.fillRect(outerL+5, neckY, 8, bottomY-neckY);
+    ctx.restore();
+  }
+
+  function sandGradient(y0, y1){
+    const g = ctx.createLinearGradient(0, y0, 0, y1);
+    g.addColorStop(0, '#fff2c2'); g.addColorStop(.5, '#f0c968'); g.addColorStop(1, '#c9962f');
+    return g;
+  }
+
+  function drawSand(progress){
+    /* remaining sand up top, its lower edge sagging gently toward the neck */
+    const topRemain = 1 - progress;
+    if(topRemain > 0.015){
+      const yLevel = neckY - (neckY-topY)*topRemain;
+      const t = (yLevel-topY)/(neckY-topY);
+      const leftAtTop = outerL + ((w/2-neckHalf)-outerL)*t;
+      const rightAtTop = outerR - (outerR-(w/2+neckHalf))*t;
+      ctx.fillStyle = sandGradient(yLevel, neckY);
+      ctx.beginPath();
+      ctx.moveTo(leftAtTop, yLevel);
+      ctx.quadraticCurveTo(w/2, yLevel+3.5, rightAtTop, yLevel);
+      ctx.lineTo(w/2+neckHalf, neckY); ctx.lineTo(w/2-neckHalf, neckY);
+      ctx.closePath(); ctx.fill();
+    }
+    /* the growing pile below, domed on top like real settled sand */
+    if(progress > 0.015){
+      const yLevel = pileTopY(progress);
+      const t = (bottomY-yLevel)/(bottomY-neckY);
+      const leftAtBottom = (w/2-neckHalf) - ((w/2-neckHalf)-outerL)*t;
+      const rightAtBottom = (w/2+neckHalf) + (outerR-(w/2+neckHalf))*t;
+      const domeH = Math.min(7, (bottomY-yLevel)*0.22);
+      ctx.fillStyle = sandGradient(yLevel, bottomY);
+      ctx.beginPath();
+      ctx.moveTo(w/2-neckHalf, neckY); ctx.lineTo(w/2+neckHalf, neckY);
+      ctx.lineTo(rightAtBottom, yLevel);
+      ctx.quadraticCurveTo(w/2, yLevel-domeH, leftAtBottom, yLevel);
+      ctx.closePath(); ctx.fill();
+      /* soft shadow where the pile meets the glass, for a little volume */
+      ctx.fillStyle = 'rgba(122,92,16,.12)';
+      ctx.beginPath();
+      ctx.moveTo(leftAtBottom, yLevel); ctx.lineTo(rightAtBottom, yLevel);
+      ctx.lineTo(outerR, bottomY); ctx.lineTo(outerL, bottomY);
+      ctx.closePath(); ctx.fill();
+    }
+  }
+
+  function drawStream(progress, limit){
+    if(progress >= 0.99) return;
+    /* a thin continuous thread of falling sand */
+    const grad = ctx.createLinearGradient(0, neckY, 0, limit);
+    grad.addColorStop(0, 'rgba(255,246,208,.75)');
+    grad.addColorStop(1, 'rgba(255,246,208,.15)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(w/2, neckY); ctx.lineTo(w/2, limit);
+    ctx.stroke();
+    /* bright individual grains catching the light as they fall */
+    ctx.fillStyle = '#fff8db';
+    grains.forEach(function(g){
+      ctx.beginPath();
+      ctx.arc(w/2+g.dx, g.y, g.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    /* little puffs of dust where the stream lands */
+    for(let i=puffs.length-1;i>=0;i--){
+      const p = puffs[i];
+      p.age += 1;
+      if(p.age > p.life){ puffs.splice(i,1); continue; }
+      const k = p.age/p.life;
+      ctx.fillStyle = 'rgba(255,246,208,'+((1-k)*0.5).toFixed(2)+')';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y - k*4, 1.5 + k*3, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drawSparkles(progress){
+    /* a few quiet glints of light drifting across the glass, on both sides */
+    const now = Date.now()/1000;
+    sparkles.forEach(function(s){
+      const y = topY + (bottomY-topY)*s.t;
+      const twinkle = (Math.sin(now*1.3 + s.phase) + 1) / 2;
+      if(twinkle < 0.55) return;
+      const x = s.side > 0 ? outerR-10 : outerL+10;
+      ctx.fillStyle = 'rgba(255,255,255,'+((twinkle-0.55)*1.6).toFixed(2)+')';
+      ctx.beginPath();
+      ctx.arc(x, y, 1.15, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  function draw(progress){
+    ctx.clearRect(0,0,w,h);
+    drawPillars();
+    drawGlass();
+    drawSand(progress);
+    drawStream(progress, pileTopY(progress));
+    drawSparkles(progress);
+    drawCap(0, true);
+    drawCap(h-capH, false);
+  }
+
+  function frame(){
+    const progress = window.RL_WEDDING_PROGRESS || 0;
+    if(progress < 0.99){
+      const limit = pileTopY(progress);
+      grains.forEach(function(g){
+        g.y += g.speed;
+        if(g.y > limit){
+          g.y = neckY + Math.random()*4;
+          g.dx = (Math.random()-0.5)*2.2;
+        }
+      });
+      puffTimer++;
+      if(puffTimer > 26){
+        puffTimer = 0;
+        puffs.push({ x:w/2+(Math.random()-0.5)*4, y:limit, age:0, life:18 });
+      }
+    }
+    draw(progress);
+    if(!reduceMotion) requestAnimationFrame(frame);
+  }
+  if(reduceMotion){ draw(window.RL_WEDDING_PROGRESS || 0); }
+  else { requestAnimationFrame(frame); }
+})();
+
+/* ══ SCROLL PETALS — a soft shower of petals greets the guest the first
+   time they scroll down into a new section of the invitation ══ */
+(function(){
+  if(reduceMotion || !('IntersectionObserver' in window)) return;
+  function spawnScrollPetal(){
+    const layer = document.getElementById('fallingFxLayer');
+    if(!layer) return;
+    const el = document.createElement('div');
+    el.className = 'rl-fall-petal';
+    const size = 8 + Math.random()*7;
+    const dur = 6 + Math.random()*4;
+    el.style.left = (Math.random()*96) + '%';
+    el.style.width = size + 'px';
+    el.style.height = (size*1.2) + 'px';
+    el.style.setProperty('--fpx', (-60 + Math.random()*120) + 'px');
+    el.style.setProperty('--fpr', ((Math.random()>0.5?1:-1) * (240+Math.random()*260)) + 'deg');
+    el.style.animationDuration = dur + 's';
+    layer.appendChild(el);
+    setTimeout(function(){ el.remove(); }, dur*1000 + 300);
+  }
+  function petalGreeting(count){
+    for(let i=0;i<count;i++){ setTimeout(spawnScrollPetal, i*140); }
+  }
+  const obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        petalGreeting(7);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold:.35 });
+  ['hourglassWrap','timingRow','venueMapFrame'].forEach(function(id){
+    const el = document.getElementById(id);
+    if(el) obs.observe(el);
+  });
+})();
+
+/* ══ PAGE-TURN — the lower sections of the invitation lie flat like
+   unturned pages and flip into place one by one as you scroll down to
+   them, instead of all revealing at once the moment the card opens.
+   NOTE: this only starts watching once the card is actually revealed —
+   otherwise these sections (still sitting within the first screenful,
+   just hidden behind the envelope overlay) were being measured as
+   "already in view" before the envelope even opened, so by the time
+   you actually saw them there was nothing left to animate. */
+function startPageTurnWatch(){
+  const pages = Array.prototype.slice.call(document.querySelectorAll('.page-turn'));
+  if(!pages.length) return;
+  if(reduceMotion){
+    pages.forEach(function(p){ p.classList.add('turned'); });
+    return;
+  }
+  function reveal(el){
+    if(el.classList.contains('turned')) return;
+    el.classList.add('turned');
+  }
+  /* primary: IntersectionObserver */
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          reveal(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold:.15, rootMargin:'0px 0px -5% 0px' });
+    pages.forEach(function(p){ obs.observe(p); });
+  }
+  /* fallback: some in-app browsers (e.g. chat-app webviews) can be
+     inconsistent with IntersectionObserver, so also check scroll
+     position directly — whichever mechanism fires first wins */
+  function checkScrollFallback(){
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    pages.forEach(function(p){
+      if(p.classList.contains('turned')) return;
+      const r = p.getBoundingClientRect();
+      if(r.top < vh * 0.92 && r.bottom > 0){ reveal(p); }
+    });
+  }
+  window.addEventListener('scroll', checkScrollFallback, {passive:true});
+  window.addEventListener('resize', checkScrollFallback);
+  checkScrollFallback();
+  setTimeout(checkScrollFallback, 400);
+  /* final safety net: if something above still missed any section
+     (e.g. an unusual viewport/webview), don't leave it hidden forever */
+  setTimeout(function(){ pages.forEach(reveal); }, 4000);
+}
+
+/* ══ MAGIC FAB MENU — one gold button blooms into the four page actions ══ */
+(function(){
+  const fabWrap = document.getElementById('fabWrap');
+  const fabMain = document.getElementById('fabMain');
+  if(!fabWrap || !fabMain) return;
+  function closeFab(){
+    fabWrap.classList.remove('open');
+    fabMain.setAttribute('aria-expanded','false');
+  }
+  fabMain.addEventListener('click', function(e){
+    e.stopPropagation();
+    const isOpen = fabWrap.classList.toggle('open');
+    fabMain.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(fabWrap.classList.contains('open') && !fabWrap.contains(e.target)) closeFab();
+  });
+  fabWrap.querySelectorAll('.fab-item').forEach(function(btn){
+    btn.addEventListener('click', function(){ setTimeout(closeFab, 450); });
+  });
 })();
 
 /* ══ NIGHT MODE — auto by local time (6PM–6AM), overridable via toggle button ══ */
@@ -1303,9 +3005,46 @@ function playSealSound(){
   });
 })();
 
+/* ══ NIGHT SKY — a quiet field of twinkling stars behind the envelope,
+   visible only in night mode; every so often one star glows brighter
+   for a moment, as if making a wish ══ */
+(function(){
+  const sky = document.getElementById('nightSky');
+  if(!sky) return;
+  const reduceMo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COUNT = 46;
+  const stars = [];
+  for(let i = 0; i < COUNT; i++){
+    const s = document.createElement('span');
+    s.className = 'sky-star';
+    const size = (Math.random() * 1.6 + 1).toFixed(2);
+    s.style.left = (Math.random() * 100).toFixed(2) + '%';
+    s.style.top = (Math.random() * 92).toFixed(2) + '%';
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.setProperty('--tw-min', (Math.random() * .2 + .15).toFixed(2));
+    s.style.setProperty('--tw-max', (Math.random() * .35 + .65).toFixed(2));
+    s.style.animationDuration = (Math.random() * 3 + 2.6).toFixed(2) + 's';
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    sky.appendChild(s);
+    stars.push(s);
+  }
+  if(reduceMo || !stars.length) return;
+  /* every few seconds, pick a random star and let it shine like a wish */
+  function wishOnAStar(){
+    const s = stars[Math.floor(Math.random() * stars.length)];
+    s.classList.remove('wishing');
+    void s.getBoundingClientRect();
+    s.classList.add('wishing');
+    setTimeout(function(){ s.classList.remove('wishing'); }, 2300);
+    setTimeout(wishOnAStar, 3200 + Math.random() * 3200);
+  }
+  setTimeout(wishOnAStar, 1800 + Math.random() * 2000);
+})();
+
 /* ══ NAME TAP FX: sparks + butterflies (Rahma) / sparks + white hearts (Waleed) ══ */
 function spawnNameFx(el, emojis, count){
-  const layer = document.getElementById('nameFxLayer');
+  const layer = document.getElementById('fallingFxLayer');
   if(!layer || !el) return;
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width/2;
@@ -1330,16 +3069,18 @@ function spawnNameFx(el, emojis, count){
     setTimeout(function(){ span.remove(); }, 2000);
   }
 }
-/* (big-butterfly emoji effect removed — replaced by the realistic SVG butterfly) */
 (function(){
   const rahma = document.getElementById('nameRahma');
   const waleed = document.getElementById('nameWaleed');
   if(rahma) rahma.addEventListener('click', function(){
-    spawnNameFx(this, ['✨','⚡'], 8);
+    if(typeof window.releaseRahmaButterfly === 'function'){
+      window.releaseRahmaButterfly(this);
+    }
   });
   if(waleed) waleed.addEventListener('click', function(){
-    spawnNameFx(this, ['✨','⚡'], 8);
-    spawnNameFx(this, ['🤍'], 8);
+    if(typeof window.releaseWaleedHeartButterfly === 'function'){
+      window.releaseWaleedHeartButterfly(this);
+    }
   });
 })();
 
@@ -1366,19 +3107,82 @@ function celebrateBurst(count){
   }
 }
 
+/* ══ WEDDING-DAY CELEBRATION — once the wedding day itself begins, the
+   guest gets a full-screen moment: bells, a burst of confetti, and a
+   warm little message ══ */
+(function(){
+  const WEDDING_TARGET = new Date('2026-09-11T19:15:00+03:00').getTime();
+  const overlay = document.getElementById('weddingDayOverlay');
+  const closeBtn = document.getElementById('wdoClose');
+  if(!overlay) return;
+  if(closeBtn) closeBtn.addEventListener('click', function(){ overlay.classList.remove('show'); });
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) overlay.classList.remove('show'); });
+
+  function playBellChime(){
+    try{
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      const ctx = new AC();
+      function fire(){
+        [523.25, 659.25, 784.0, 1046.5].forEach(function(f, i){
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'sine'; o.frequency.value = f;
+          o.connect(g); g.connect(ctx.destination);
+          const t = ctx.currentTime + i*0.16;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(0.06, t+0.04);
+          g.gain.exponentialRampToValueAtTime(0.0001, t+1.1);
+          o.start(t); o.stop(t+1.2);
+        });
+        setTimeout(function(){ ctx.close(); }, 1600);
+      }
+      if(ctx.state === 'suspended'){
+        const resume = function(){
+          ctx.resume().then(fire).catch(function(){});
+          document.removeEventListener('touchstart', resume);
+          document.removeEventListener('click', resume);
+        };
+        document.addEventListener('touchstart', resume, {once:true});
+        document.addEventListener('click', resume, {once:true});
+      } else { fire(); }
+    }catch(e){}
+  }
+
+  function showCelebration(){
+    overlay.classList.add('show');
+    playBellChime();
+    if(!reduceMotion){
+      celebrateBurst(70);
+      let bursts = 0;
+      const burstTimer = setInterval(function(){
+        celebrateBurst(45);
+        bursts++;
+        if(bursts >= 3) clearInterval(burstTimer);
+      }, 900);
+    }
+  }
+
+  let fired = false;
+  function check(){
+    if(fired) return;
+    const now = Date.now();
+    /* only on the wedding day itself, not indefinitely after */
+    if(now >= WEDDING_TARGET && now < WEDDING_TARGET + 86400000){
+      fired = true;
+      showCelebration();
+    }
+  }
+  check();
+  setInterval(check, 30000); /* in case the page stays open past midnight into the big day */
+})();
+
 /* ══ MUSIC TOGGLE ══ */
 (function(){
   const btn = document.getElementById('musicBtn');
-  const video = document.getElementById('heroImg');
+  const audio = document.getElementById('video');
   btn.addEventListener('click', function(){
-    if(!video) return;
-    if(video.muted || video.paused){
-      video.muted = false;
-      video.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){});
-    } else {
-      video.muted = true;
-      btn.textContent='🔈'; btn.classList.remove('playing');
-    }
+    if(audio.paused){ audio.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){}); }
+    else { audio.pause(); btn.textContent='🔈'; btn.classList.remove('playing'); }
   });
 })();
 
@@ -1390,11 +3194,8 @@ function celebrateBurst(count){
   const nativeBtn = document.getElementById('qrNativeShare');
   const copyBtn = document.getElementById('qrCopyLink');
   const qrWrap = document.getElementById('qrCodeWrap');
-  const toast = document.getElementById('toast');
-  const shareData = { title:'حفل زفاف Waled & ​𝓡', text:'يسعدنا مشاركتكم فرحتنا ❤', url:location.href };
+  const shareData = { title:'حفل زفاف وليد & 𝓡', text:'يسعدنا مشاركتكم فرحتنا ❤', url:location.href };
   let qrBuilt = false;
-
-  function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2600); }
 
   function buildQR(){
     if(qrBuilt || typeof QRCode === 'undefined') return;
@@ -1440,8 +3241,6 @@ function celebrateBurst(count){
 (function(){
   const btn = document.getElementById('saveImgBtn');
   const card = document.getElementById('card');
-  const toast = document.getElementById('toast');
-  function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2600); }
   if(!btn) return;
   btn.addEventListener('click', function(){
     if(typeof html2canvas === 'undefined'){ showToast('تعذر إنشاء الصورة، حاول لاحقًا'); return; }
@@ -1458,10 +3257,10 @@ function celebrateBurst(count){
       btn.classList.remove('busy');
       canvas.toBlob(function(blob){
         if(!blob){ showToast('تعذر إنشاء الصورة'); return; }
-        const fileName = 'دعوة-زفاف-Waled-و𝓡.png';
+        const fileName = 'دعوة-زفاف-وليد-و𝓡.png';
         const file = new File([blob], fileName, { type:'image/png' });
         if(navigator.canShare && navigator.canShare({ files:[file] })){
-          navigator.share({ files:[file], title:'دعوة زفاف Waled & ​𝓡', text:'يسعدنا مشاركتكم فرحتنا ❤' })
+          navigator.share({ files:[file], title:'دعوة زفاف وليد & 𝓡', text:'يسعدنا مشاركتكم فرحتنا ❤' })
             .then(function(){ celebrateBurst(20); }).catch(function(){});
         } else {
           const url = URL.createObjectURL(blob);
@@ -1484,16 +3283,14 @@ function celebrateBurst(count){
 /* ══ COPY ADDRESS ══ */
 (function(){
   const btn = document.getElementById('copyAddressBtn');
-  const toast = document.getElementById('toast');
   const ADDRESS = 'قاعة أسياد القلعة - مركز قفط، محافظة قنا';
   if(!btn) return;
   btn.addEventListener('click', function(){
-    function show(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},2600); }
-    if(navigator.clipboard){ navigator.clipboard.writeText(ADDRESS).then(function(){ show('تم نسخ العنوان ✓'); celebrateBurst(24); }).catch(function(){ show(ADDRESS); }); }
+    if(navigator.clipboard){ navigator.clipboard.writeText(ADDRESS).then(function(){ showToast('تم نسخ العنوان ✓'); celebrateBurst(24); }).catch(function(){ showToast(ADDRESS); }); }
     else{
       const ta = document.createElement('textarea'); ta.value = ADDRESS; ta.style.position='fixed'; ta.style.opacity='0';
       document.body.appendChild(ta); ta.focus(); ta.select();
-      try{ document.execCommand('copy'); show('تم نسخ العنوان ✓'); celebrateBurst(24); }catch(e){}
+      try{ document.execCommand('copy'); showToast('تم نسخ العنوان ✓'); celebrateBurst(24); }catch(e){}
       document.body.removeChild(ta);
     }
   });
@@ -1567,6 +3364,7 @@ function celebrateBurst(count){
   if(reduceMotion) return;
   const outer = document.querySelector('.outer');
   const card = document.getElementById('card');
+  const heroParallax = document.getElementById('heroParallax');
   let touching = false;
   let gyroActive = false;
 
@@ -1587,6 +3385,11 @@ function celebrateBurst(count){
     card.style.setProperty('--my', (curY*100)+'%');
     document.body.style.setProperty('--mx', (curX*100)+'%');
     document.body.style.setProperty('--my', (curY*100)+'%');
+    if(heroParallax){
+      const px = (curX-0.5) * -22;
+      const py = (curY-0.5) * -16;
+      heroParallax.style.transform = 'translate3d('+px.toFixed(1)+'px,'+py.toFixed(1)+'px,0)';
+    }
     if(Math.abs(targetX-curX) > 0.001 || Math.abs(targetY-curY) > 0.001 || active){
       raf = requestAnimationFrame(loop);
     } else {
@@ -1709,15 +3512,7 @@ function celebrateBurst(count){
     }, {passive:true});
   }
 
-  let isScrolling = false, scrollTO;
-  document.addEventListener('scroll', function(){
-    isScrolling = true;
-    clearTimeout(scrollTO);
-    scrollTO = setTimeout(function(){ isScrolling = false; }, 120);
-  }, { passive:true });
-
   function draw(){
-    if(isScrolling){ if(!reduceMotion) requestAnimationFrame(draw); return; }
     ctx.clearRect(0,0,w,h);
     const parallaxX = (pointerX - 0.5) * 18;
     const parallaxY = (pointerY - 0.5) * 10;
@@ -1773,9 +3568,9 @@ function celebrateBurst(count){
   function spawnFleck(){
     const el = document.createElement('div');
     el.className = 'fall-fleck';
-    const size = 3 + Math.random()*5;
-    const dur = 8 + Math.random()*6;
-    const drift = -40 + Math.random()*80;
+    const size = 2.5 + Math.random()*4;
+    const dur = 9 + Math.random()*7;
+    const drift = -35 + Math.random()*70;
     el.style.left = (Math.random()*98) + '%';
     el.style.width = size+'px'; el.style.height = size+'px';
     el.style.setProperty('--fdrift', drift+'px');
@@ -1783,239 +3578,799 @@ function celebrateBurst(count){
     layer.appendChild(el);
     setTimeout(function(){ el.remove(); }, dur*1000+300);
   }
-  setInterval(spawnFleck, 2100);
+  setInterval(spawnFleck, 1300);
   spawnFleck();
 })();
 
-/* ══ TAP THE R MONOGRAM → A REAL BUTTERFLY FLIES AWAY ══ */
+/* ══ ONE REAL BUTTERFLY — emerges from Rahma's name, follows the finger/cursor, then flies away ══ */
 (function(){
-  const rEl = document.getElementById('nameRahma');
-  if(!rEl) return;
+  const PALETTES = [
+    {band1:'#fff3c4', band2:'#d4af37', iris:'#3fa9c9', spot:'#c9403f'},
+    {band1:'#ffe9f2', band2:'#c9558b', iris:'#5fd0c8', spot:'#e8862f'},
+    {band1:'#eaf7ff', band2:'#4a7fb3', iris:'#e8c34a', spot:'#c9403f'},
+    {band1:'#fff6e6', band2:'#e07a2f', iris:'#3fa9c9', spot:'#7a1f4d'},
+    {band1:'#f3ffe8', band2:'#5f9e4a', iris:'#e8c34a', spot:'#c9403f'}
+  ];
+  const PEARL_PALETTE = {band1:'#ffffff', band2:'#f2e6c4', iris:'#d9b64a', spot:'#e9c9cf'};
+  const EXIT_DUR = {'path-a':5400,'path-b':5800,'path-c':6100,'path-d':5600};
+  let busyRahma = false, busyWaleed = false;
+  /* registry of the butterflies currently on screen, so a Waleed butterfly
+     and a Rahma butterfly that happen to be out at the same time can find
+     each other and fly together as a pair */
+  const activeHandles = [];
 
-  function buildButterflyMarkup(uid){
-    return '<svg viewBox="0 0 120 100">'
-      + '<defs>'
-      + '<linearGradient id="'+uid+'a" x1="0" y1="0" x2="1" y2="1">'
-      + '<stop offset="0%" stop-color="#fff6d8"/>'
-      + '<stop offset="24%" stop-color="#ffcf6e"/>'
-      + '<stop offset="50%" stop-color="#f2827f"/>'
-      + '<stop offset="75%" stop-color="#a862c4"/>'
-      + '<stop offset="100%" stop-color="#6a3fa8"/>'
-      + '</linearGradient>'
-      + '<linearGradient id="'+uid+'b" x1="0" y1="1" x2="1" y2="0">'
-      + '<stop offset="0%" stop-color="#5f3aa0"/>'
-      + '<stop offset="42%" stop-color="#e8749a"/>'
-      + '<stop offset="75%" stop-color="#ffb37a"/>'
-      + '<stop offset="100%" stop-color="#fff3c8"/>'
-      + '</linearGradient>'
-      + '<radialGradient id="'+uid+'eye" cx="50%" cy="50%" r="50%">'
-      + '<stop offset="0%" stop-color="#241636"/>'
-      + '<stop offset="45%" stop-color="#7c4aa8"/>'
-      + '<stop offset="75%" stop-color="#ffcf6b"/>'
-      + '<stop offset="100%" stop-color="#3b2712"/>'
-      + '</radialGradient>'
-      + '<linearGradient id="'+uid+'body" x1="0" y1="0" x2="0" y2="1">'
-      + '<stop offset="0%" stop-color="#5a3a1c"/>'
-      + '<stop offset="100%" stop-color="#2a1a0d"/>'
-      + '</linearGradient>'
-      + '<radialGradient id="'+uid+'gloss" cx="35%" cy="30%" r="65%">'
-      + '<stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/>'
-      + '<stop offset="55%" stop-color="#ffffff" stop-opacity=".18"/>'
-      + '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>'
-      + '</radialGradient>'
-      + '</defs>'
-      + '<path d="M60 30 Q52 12 43 4" stroke="#3b2712" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
-      + '<path d="M60 30 Q68 12 77 4" stroke="#3b2712" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
-      + '<circle cx="43" cy="4" r="2.1" fill="#3b2712"/>'
-      + '<circle cx="77" cy="4" r="2.1" fill="#3b2712"/>'
-
-      + '<g class="bfly-wingL">'
-      + '<path d="M58 40 C34 4 -2 6 -5 36 C-7 60 22 70 58 48 Z" fill="url(#'+uid+'a)" stroke="#3b2712" stroke-width="1.2"/>'
-      + '<path d="M58 40 C34 4 -2 6 -5 36 C-7 60 22 70 58 48 Z" fill="url(#'+uid+'gloss)" style="mix-blend-mode:screen"/>'
-      + '<path d="M18 20 Q30 24 36 36" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
-      + '<path d="M6 32 Q22 36 34 44" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
-      + '<path d="M0 46 Q18 48 32 52" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".45"/>'
-      + '<circle cx="10" cy="24" r="3.4" fill="#fff6df" opacity=".92"/>'
-      + '<circle cx="22" cy="16" r="2.1" fill="#fff6df" opacity=".85"/>'
-      + '<circle cx="25" cy="40" r="2.3" fill="#2b1b40" opacity=".55"/>'
-      + '<circle cx="8" cy="42" r="2" fill="#fff6df" opacity=".7"/>'
-
-      + '<path d="M56 52 C30 42 -8 50 -12 74 C-14 90 6 96 24 90 C22 86 26 82 30 84 C34 78 30 70 36 68 C46 64 52 58 56 60 Z" fill="url(#'+uid+'b)" stroke="#3b2712" stroke-width="1.2"/>'
-      + '<circle cx="10" cy="72" r="5.2" fill="url(#'+uid+'eye)" stroke="#3b2712" stroke-width="1"/>'
-      + '<circle cx="30" cy="66" r="1.8" fill="#fff6df" opacity=".75"/>'
-      + '</g>'
-
-      + '<g class="bfly-wingR">'
-      + '<path d="M62 40 C86 4 122 6 125 36 C127 60 98 70 62 48 Z" fill="url(#'+uid+'a)" stroke="#3b2712" stroke-width="1.2"/>'
-      + '<path d="M62 40 C86 4 122 6 125 36 C127 60 98 70 62 48 Z" fill="url(#'+uid+'gloss)" style="mix-blend-mode:screen" transform="scale(-1,1) translate(-120,0)"/>'
-      + '<path d="M102 20 Q90 24 84 36" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
-      + '<path d="M114 32 Q98 36 86 44" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".5"/>'
-      + '<path d="M120 46 Q102 48 88 52" stroke="#3b2712" stroke-width=".7" fill="none" opacity=".45"/>'
-      + '<circle cx="110" cy="24" r="3.4" fill="#fff6df" opacity=".92"/>'
-      + '<circle cx="98" cy="16" r="2.1" fill="#fff6df" opacity=".85"/>'
-      + '<circle cx="95" cy="40" r="2.3" fill="#2b1b40" opacity=".55"/>'
-      + '<circle cx="112" cy="42" r="2" fill="#fff6df" opacity=".7"/>'
-
-      + '<path d="M64 52 C90 42 128 50 132 74 C134 90 114 96 96 90 C98 86 94 82 90 84 C86 78 90 70 84 68 C74 64 68 58 64 60 Z" fill="url(#'+uid+'b)" stroke="#3b2712" stroke-width="1.2"/>'
-      + '<circle cx="110" cy="72" r="5.2" fill="url(#'+uid+'eye)" stroke="#3b2712" stroke-width="1"/>'
-      + '<circle cx="90" cy="66" r="1.8" fill="#fff6df" opacity=".75"/>'
-      + '</g>'
-
-      + '<ellipse cx="60" cy="48" rx="3.2" ry="21" fill="url(#'+uid+'body)"/>'
-      + '<ellipse cx="60" cy="40" rx="2.2" ry="6" fill="#7a5228" opacity=".7"/>';
+  /* a detailed swallowtail-style butterfly: charcoal-black wings, a warm inner
+     colour band, iridescent blue-shifting accents, a vivid eyespot near the
+     tail, fine wing veins, a segmented body and clubbed antennae */
+  function butterflySVG(uid, c){
+    return '<svg viewBox="0 0 200 200">' +
+      '<defs>' +
+      '<linearGradient id="dk'+uid+'" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="#3a3a3a"/><stop offset="55%" stop-color="#181818"/><stop offset="100%" stop-color="#050505"/>' +
+      '</linearGradient>' +
+      '<linearGradient id="bd'+uid+'" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="'+c.band1+'"/><stop offset="100%" stop-color="'+c.band2+'"/>' +
+      '</linearGradient>' +
+      '<radialGradient id="sp'+uid+'" cx="35%" cy="30%" r="75%">' +
+        '<stop offset="0%" stop-color="#fff3d6"/><stop offset="55%" stop-color="'+c.spot+'"/><stop offset="100%" stop-color="#3c1010"/>' +
+      '</radialGradient>' +
+      '<radialGradient id="bdy'+uid+'" cx="40%" cy="15%" r="90%">' +
+        '<stop offset="0%" stop-color="#4a3a28"/><stop offset="100%" stop-color="#0e0a06"/>' +
+      '</radialGradient>' +
+      '</defs>' +
+      '<g class="wing-l">' +
+        '<path d="M100,95 C70,50 30,28 10,45 C-3,58 2,88 25,102 C50,117 85,108 100,95 Z" fill="url(#dk'+uid+')" stroke="#000" stroke-width=".5"/>' +
+        '<path d="M97,90 C74,58 45,42 28,54 C17,63 20,84 38,94 C58,105 82,98 97,90 Z" fill="url(#bd'+uid+')" opacity=".92"/>' +
+        '<g class="iris">' +
+          '<ellipse cx="18" cy="58" rx="5" ry="3" fill="'+c.iris+'" opacity=".85"/>' +
+          '<ellipse cx="22" cy="74" rx="4.5" ry="3" fill="'+c.iris+'" opacity=".8"/>' +
+          '<ellipse cx="32" cy="88" rx="4" ry="2.6" fill="'+c.iris+'" opacity=".75"/>' +
+        '</g>' +
+        '<path d="M97,90 L20,50 M95,92 L18,68 M92,98 L28,90" stroke="#000" stroke-width=".5" opacity=".3" fill="none"/>' +
+        '<path d="M100,100 C82,125 55,140 38,130 C24,122 24,102 42,96 C62,89 88,93 100,100 Z" fill="url(#dk'+uid+')" stroke="#000" stroke-width=".5"/>' +
+        '<path d="M48,128 L40,155 L52,132 Z" fill="url(#dk'+uid+')"/>' +
+        '<path d="M97,102 C82,120 62,130 48,122 C38,116 39,102 52,98 C68,94 87,96 97,102 Z" fill="url(#bd'+uid+')" opacity=".88"/>' +
+        '<circle cx="46" cy="116" r="6.5" fill="url(#sp'+uid+')" stroke="#000" stroke-width=".4"/>' +
+        '<g class="iris">' +
+          '<path d="M40,108 Q46,116 40,124" stroke="'+c.iris+'" stroke-width="1.6" fill="none" opacity=".85"/>' +
+          '<path d="M52,100 Q58,108 54,116" stroke="'+c.iris+'" stroke-width="1.4" fill="none" opacity=".75"/>' +
+        '</g>' +
+        '<path d="M97,102 L45,100 M95,108 L42,118" stroke="#000" stroke-width=".5" opacity=".28" fill="none"/>' +
+      '</g>' +
+      '<g class="wing-r">' +
+        '<path d="M100,95 C130,50 170,28 190,45 C203,58 198,88 175,102 C150,117 115,108 100,95 Z" fill="url(#dk'+uid+')" stroke="#000" stroke-width=".5"/>' +
+        '<path d="M103,90 C126,58 155,42 172,54 C183,63 180,84 162,94 C142,105 118,98 103,90 Z" fill="url(#bd'+uid+')" opacity=".92"/>' +
+        '<g class="iris">' +
+          '<ellipse cx="182" cy="58" rx="5" ry="3" fill="'+c.iris+'" opacity=".85"/>' +
+          '<ellipse cx="178" cy="74" rx="4.5" ry="3" fill="'+c.iris+'" opacity=".8"/>' +
+          '<ellipse cx="168" cy="88" rx="4" ry="2.6" fill="'+c.iris+'" opacity=".75"/>' +
+        '</g>' +
+        '<path d="M103,90 L180,50 M105,92 L182,68 M108,98 L172,90" stroke="#000" stroke-width=".5" opacity=".3" fill="none"/>' +
+        '<path d="M100,100 C118,125 145,140 162,130 C176,122 176,102 158,96 C138,89 112,93 100,100 Z" fill="url(#dk'+uid+')" stroke="#000" stroke-width=".5"/>' +
+        '<path d="M152,128 L160,155 L148,132 Z" fill="url(#dk'+uid+')"/>' +
+        '<path d="M103,102 C118,120 138,130 152,122 C162,116 161,102 148,98 C132,94 113,96 103,102 Z" fill="url(#bd'+uid+')" opacity=".88"/>' +
+        '<circle cx="154" cy="116" r="6.5" fill="url(#sp'+uid+')" stroke="#000" stroke-width=".4"/>' +
+        '<g class="iris">' +
+          '<path d="M160,108 Q154,116 160,124" stroke="'+c.iris+'" stroke-width="1.6" fill="none" opacity=".85"/>' +
+          '<path d="M148,100 Q142,108 146,116" stroke="'+c.iris+'" stroke-width="1.4" fill="none" opacity=".75"/>' +
+        '</g>' +
+        '<path d="M103,102 L155,100 M105,108 L158,118" stroke="#000" stroke-width=".5" opacity=".28" fill="none"/>' +
+      '</g>' +
+      '<path d="M100,58 C93,80 93,132 100,152 C107,132 107,80 100,58 Z" fill="url(#bdy'+uid+')"/>' +
+      '<ellipse cx="100" cy="76" rx="6.5" ry="4.5" fill="#5a4a34" opacity=".4"/>' +
+      '<ellipse cx="100" cy="96" rx="5.5" ry="4" fill="#5a4a34" opacity=".32"/>' +
+      '<ellipse cx="100" cy="115" rx="5" ry="3.6" fill="#5a4a34" opacity=".26"/>' +
+      '<path d="M96,62 C88,48 76,38 68,40" stroke="#0e0a06" stroke-width="1.4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M104,62 C112,48 124,38 132,40" stroke="#0e0a06" stroke-width="1.4" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="68" cy="40" r="2.6" fill="#0e0a06"/>' +
+      '<circle cx="132" cy="40" r="2.6" fill="#0e0a06"/>' +
+      '</svg>';
   }
 
-  function playButterflyChime(){
-    if(reduceMotion) return;
-    try{
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if(!AC) return;
-      const ctx = new AC();
-      const notes = [880, 1108.7, 1318.5, 1760];
-      notes.forEach(function(freq, i){
-        const t = ctx.currentTime + i*0.085;
-        const osc = ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        const g = ctx.createGain();
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.linearRampToValueAtTime(0.055, t+0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, t+0.5);
-        osc.connect(g).connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t+0.55);
-      });
-    }catch(e){}
-  }
-
-  const SPARKLE_PALETTE = ['#ffe6aa','#e8749a','#c68be0','#fff3c8','#ffcf6e'];
-
-  function sparkleBurst(x, y, count){
-    if(reduceMotion) return;
-    count = count || 14;
+  function burstSparkles(x, y, count){
     for(let i=0;i<count;i++){
-      const el = document.createElement('div');
-      el.className = 'bfly-burst';
-      const size = 3 + Math.random()*5;
-      const angle = Math.random()*Math.PI*2;
-      const dist = 26 + Math.random()*54;
-      el.style.left = (x - size/2) + 'px';
-      el.style.top = (y - size/2) + 'px';
-      el.style.width = size+'px';
-      el.style.height = size+'px';
-      el.style.background = SPARKLE_PALETTE[Math.floor(Math.random()*SPARKLE_PALETTE.length)];
-      el.style.setProperty('--bx', (Math.cos(angle)*dist)+'px');
-      el.style.setProperty('--by', (Math.sin(angle)*dist - 22)+'px');
-      document.body.appendChild(el);
-      setTimeout(function(){ el.remove(); }, 900);
+      const s = document.createElement('div');
+      s.className = 'cursor-spark';
+      const ang = (Math.PI*2)*(i/count) + Math.random()*.4;
+      const dist = 16 + Math.random()*30;
+      s.style.left = (x + Math.cos(ang)*dist) + 'px';
+      s.style.top = (y + Math.sin(ang)*dist) + 'px';
+      document.body.appendChild(s);
+      setTimeout(function(){ s.remove(); }, 950);
     }
   }
 
-  function spawnTrailDot(x, y){
-    const dot = document.createElement('div');
-    dot.className = 'bfly-trail';
-    const size = 4 + Math.random()*4;
-    dot.style.left = (x - size/2) + 'px';
-    dot.style.top = (y - size/2) + 'px';
-    dot.style.width = size+'px';
-    dot.style.height = size+'px';
-    document.body.appendChild(dot);
-    setTimeout(function(){ dot.remove(); }, 750);
+  function playMelody(freqs, opts){
+    opts = opts || {};
+    try{
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      const gap = opts.gap || 0.08;
+      const peak = opts.peak || 0.045;
+      const noteLen = opts.noteLen || 0.5;
+      freqs.forEach(function(f, i){
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = opts.type || 'sine'; o.frequency.value = f;
+        o.connect(g); g.connect(ctx.destination);
+        const t = ctx.currentTime + i*gap;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(peak, t+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+noteLen);
+        o.start(t); o.stop(t+noteLen+0.05);
+      });
+      setTimeout(function(){ ctx.close(); }, freqs.length*gap*1000 + noteLen*1000 + 400);
+    }catch(e){}
+  }
+  function playChime(){
+    playMelody([880, 1174, 1568, 2093], {gap:0.08, peak:0.045, noteLen:0.5});
+  }
+  /* a fuller, more romantic ascending run used the moment the two
+     butterflies meet and fly off together */
+  function playUnionChime(){
+    playMelody([659, 784, 988, 1318, 1568, 2093], {gap:0.1, peak:0.05, noteLen:0.6});
   }
 
-  const BF_W = 112, BF_H = 92;
+  /* leaves a faint trail of glitter behind the butterfly — mixes warm gold
+     with a softer rose glint for a richer, more alive trail */
+  function trailGlitter(el, durationMs, warm){
+    const start = performance.now();
+    let lastSpawn = 0;
+    function step(now){
+      const elapsed = now - start;
+      if(elapsed > durationMs - 250 || !el.isConnected){ return; }
+      if(now - lastSpawn > 85){
+        lastSpawn = now;
+        const rect = el.getBoundingClientRect();
+        const g = document.createElement('div');
+        g.className = 'rl-glitter' + ((warm && Math.random() < 0.4) ? ' warm' : '');
+        g.style.left = (rect.left + rect.width*0.5 + (Math.random()*10-5)) + 'px';
+        g.style.top = (rect.top + rect.height*0.55 + (Math.random()*10-5)) + 'px';
+        document.body.appendChild(g);
+        setTimeout(function(){ g.remove(); }, 1150);
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 
-  function animateFlight(el){
-    const startX = parseFloat(el.style.left);
-    const startY = parseFloat(el.style.top);
+  /* a soft expanding ring of light at the moment of emergence */
+  function spawnGlowRing(x, y, color){
+    const ring = document.createElement('div');
+    ring.className = 'rl-emerge-ring';
+    ring.style.left = x + 'px';
+    ring.style.top = y + 'px';
+    if(color) ring.style.setProperty('--ring-color', color);
+    document.body.appendChild(ring);
+    setTimeout(function(){ ring.remove(); }, 900);
+  }
+
+  /* a light burst of petals radiating outward from the emergence point */
+  function burstPetals(x, y, count, pearl){
+    for(let i=0;i<count;i++){
+      const p = document.createElement('div');
+      p.className = 'rl-petal-burst' + (pearl ? ' pearl' : '');
+      const ang = Math.random()*Math.PI*2;
+      const dist = 30 + Math.random()*55;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.setProperty('--pbx', (Math.cos(ang)*dist) + 'px');
+      p.style.setProperty('--pby', (Math.sin(ang)*dist - 22) + 'px');
+      p.style.setProperty('--pbr', ((Math.random()>0.5?1:-1)*(120+Math.random()*160)) + 'deg');
+      document.body.appendChild(p);
+      setTimeout(function(){ p.remove(); }, 950);
+    }
+  }
+
+  /* a richer double burst of gold light at the moment the two butterflies
+     meet, just before they fly off together */
+  function spawnUnionFlash(x, y){
+    const flash = document.createElement('div');
+    flash.className = 'rl-union-flash';
+    flash.style.left = x + 'px'; flash.style.top = y + 'px';
+    document.body.appendChild(flash);
+    setTimeout(function(){ flash.remove(); }, 1150);
+
+    const ring = document.createElement('div');
+    ring.className = 'rl-union-ring';
+    ring.style.left = x + 'px'; ring.style.top = y + 'px';
+    document.body.appendChild(ring);
+    setTimeout(function(){ ring.remove(); }, 1000);
+
+    burstSparkles(x, y, 26);
+    burstPetals(x, y, 10, true);
+  }
+
+  /* positions and fades the glowing thread that links two dancing butterflies */
+  function updateLoveBeam(el, x1, y1, x2, y2){
+    const dx = x2 - x1, dy = y2 - y1;
+    const dist = Math.hypot(dx, dy);
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    el.style.left = x1 + 'px';
+    el.style.top = y1 + 'px';
+    el.style.width = dist + 'px';
+    el.style.transform = 'translateY(-50%) rotate(' + angle + 'deg)';
+    el.style.opacity = 0.55;
+  }
+
+  /* an extra shower of falling rose petals that switches on for as long as
+     a butterfly is out on screen, and switches off once the last one has
+     flown away */
+  let petalBoostTimer = null;
+  function spawnFallPetal(){
+    const layer = document.getElementById('fallingFxLayer');
+    if(!layer) return;
+    const el = document.createElement('div');
+    el.className = 'rl-fall-petal';
+    const size = 8 + Math.random()*7;
+    const dur = 7 + Math.random()*5;
+    el.style.left = (Math.random()*96) + '%';
+    el.style.width = size + 'px';
+    el.style.height = (size*1.2) + 'px';
+    el.style.setProperty('--fpx', (-60 + Math.random()*120) + 'px');
+    el.style.setProperty('--fpr', ((Math.random()>0.5?1:-1) * (240+Math.random()*260)) + 'deg');
+    el.style.animationDuration = dur + 's';
+    layer.appendChild(el);
+    setTimeout(function(){ el.remove(); }, dur*1000 + 300);
+  }
+  function startPetalBoost(){
+    if(petalBoostTimer || reduceMotion) return;
+    spawnFallPetal();
+    petalBoostTimer = setInterval(spawnFallPetal, 900);
+  }
+  function stopPetalBoost(){
+    if(petalBoostTimer){ clearInterval(petalBoostTimer); petalBoostTimer = null; }
+  }
+
+  /* a fuller, more festive melody used for the big finale burst */
+  function playFinaleChime(){
+    playMelody([523, 659, 784, 988, 1174, 1568, 2093, 2637], {gap:0.07, peak:0.05, noteLen:0.55});
+  }
+
+  const FLOWER_COLORS = [
+    {p1:'#ffd1de', p2:'#e0556f', c:'#ffe9a8'},
+    {p1:'#fff6d4', p2:'#d4af37', c:'#ffffff'},
+    {p1:'#ffe1ec', p2:'#ff8fa8', c:'#fff3c4'},
+    {p1:'#ffffff', p2:'#f0e2bb', c:'#e0556f'},
+    {p1:'#ffd9a0', p2:'#e07a2b', c:'#fff3c4'},
+    {p1:'#f6e3ff', p2:'#b06fd1', c:'#fff6d4'}
+  ];
+  /* a small, real-looking five-petal blossom (rose/cherry-blossom style)
+     used to fill the finale burst with something prettier than plain dots */
+  function realFlowerSVG(uid, colors){
+    let petals = '';
+    for(let a = 0; a < 360; a += 72){
+      petals += '<ellipse cx="20" cy="9" rx="6.4" ry="10.6" fill="url(#fpg'+uid+')" ' +
+                 'stroke="rgba(0,0,0,.05)" stroke-width=".4" transform="rotate('+a+' 20 20)"/>';
+    }
+    return '<svg viewBox="0 0 40 40">' +
+      '<defs><linearGradient id="fpg'+uid+'" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="'+colors.p1+'"/><stop offset="100%" stop-color="'+colors.p2+'"/>' +
+      '</linearGradient></defs>' +
+      petals +
+      '<circle cx="20" cy="20" r="5.4" fill="'+colors.c+'" stroke="rgba(122,92,16,.25)" stroke-width=".6"/>' +
+    '</svg>';
+  }
+  /* one flower launched outward from the burst point, tumbling as it flies,
+     then drifting further down as if gravity finally catches it */
+  function spawnRealFlower(x, y){
+    const el = document.createElement('div');
+    el.className = 'rl-real-flower';
+    const uid = Date.now() + Math.floor(Math.random()*9999);
+    const colors = FLOWER_COLORS[Math.floor(Math.random()*FLOWER_COLORS.length)];
+    el.innerHTML = realFlowerSVG(uid, colors);
+    const size = 20 + Math.random()*22;
+    el.style.width = size + 'px'; el.style.height = size + 'px';
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    const ang = Math.random()*Math.PI*2;
+    const dist1 = 55 + Math.random()*130;
+    const fallExtra = 130 + Math.random()*200;
+    el.style.setProperty('--fbx', (Math.cos(ang)*dist1) + 'px');
+    el.style.setProperty('--fby', (Math.sin(ang)*dist1 - 30) + 'px');
+    el.style.setProperty('--fbr', ((Math.random()>0.5?1:-1)*(160+Math.random()*360)) + 'deg');
+    el.style.setProperty('--fbx2', (Math.cos(ang)*dist1*1.15) + 'px');
+    el.style.setProperty('--fby2', (Math.sin(ang)*dist1 - 30 + fallExtra) + 'px');
+    el.style.setProperty('--fbr2', ((Math.random()>0.5?1:-1)*(360+Math.random()*360)) + 'deg');
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 2500);
+  }
+
+  /* a heavy shower of bright sparks falling from above the whole screen —
+     used to make the finale feel like a real fireworks fall of light */
+  function sparkRainBurst(count){
+    const layer = document.getElementById('fallingFxLayer') || document.body;
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'rl-spark-rain';
+      const size = 4 + Math.random()*7;
+      el.style.left = (Math.random()*100) + '%';
+      el.style.top = (-10 - Math.random()*25) + '%';
+      el.style.width = size + 'px'; el.style.height = size + 'px';
+      el.style.setProperty('--srx', (-70 + Math.random()*140) + 'px');
+      el.style.setProperty('--srr', ((Math.random()>0.5?1:-1)*(300+Math.random()*300)) + 'deg');
+      const dur = 2.3 + Math.random()*2.3;
+      el.style.animationDuration = dur + 's';
+      el.style.animationDelay = (Math.random()*0.6) + 's';
+      layer.appendChild(el);
+      setTimeout(function(){ el.remove(); }, (dur+0.7)*1000 + 300);
+    }
+  }
+
+  /* THE GRAND FINALE — a big, dazzling, joyful explosion at the exact spot
+     the names were, made of a bright flash, real-looking flowers flying
+     outward in every direction, a burst of bright sparks, and then a huge
+     shower of sparks raining down over the whole screen */
+  function grandFinaleExplosion(x, y){
+    if(reduceMotion){ burstSparkles(x, y, 14); return; }
+
+    const flash = document.createElement('div');
+    flash.className = 'rl-finale-flash';
+    flash.style.left = x + 'px'; flash.style.top = y + 'px';
+    document.body.appendChild(flash);
+    setTimeout(function(){ flash.remove(); }, 1400);
+
+    ['0s', '.15s'].forEach(function(delay){
+      const ring = document.createElement('div');
+      ring.className = 'rl-finale-ring';
+      ring.style.left = x + 'px'; ring.style.top = y + 'px';
+      ring.style.animationDelay = delay;
+      document.body.appendChild(ring);
+      setTimeout(function(){ ring.remove(); }, 1400);
+    });
+
+    playFinaleChime();
+
+    /* a big bloom of real flowers, launched in quick succession so they
+       don't all pop on the exact same frame */
+    for(let i=0;i<30;i++){
+      setTimeout(function(){ spawnRealFlower(x, y); }, i*10);
+    }
+
+    /* a bright burst of sparks right at the explosion point */
+    for(let i=0;i<44;i++){
+      const s = document.createElement('div');
+      s.className = 'rl-mega-spark';
+      const size = 5 + Math.random()*7;
+      s.style.width = size + 'px'; s.style.height = size + 'px';
+      s.style.left = x + 'px'; s.style.top = y + 'px';
+      const ang = Math.random()*Math.PI*2;
+      const d1 = 40 + Math.random()*100;
+      const d2 = d1*0.75;
+      s.style.setProperty('--msx', (Math.cos(ang)*d1) + 'px');
+      s.style.setProperty('--msy', (Math.sin(ang)*d1) + 'px');
+      s.style.setProperty('--msx2', (Math.cos(ang)*d2) + 'px');
+      s.style.setProperty('--msy2', (Math.sin(ang)*d1 + 110 + Math.random()*130) + 'px');
+      document.body.appendChild(s);
+      setTimeout(function(){ s.remove(); }, 1700);
+    }
+
+    /* then the heavy, very large shower of sparks falling down the screen */
+    sparkRainBurst(75);
+    setTimeout(function(){ sparkRainBurst(55); }, 450);
+    setTimeout(function(){ sparkRainBurst(35); }, 950);
+  }
+
+  /* closing scene: once both butterflies have flown off together, their
+     names settle back on screen for a moment as a keepsake, then the whole
+     spot bursts into flowers and a big shower of sparks as it fades */
+  let pairedFlightHappened = false;
+  function showUnionText(){
+    const wrap = document.createElement('div');
+    wrap.className = 'rl-union-text';
+    wrap.innerHTML = '<span class="ut-name">وليد</span><span class="ut-heart">❤</span><span class="ut-name">𝓡</span>';
+    document.body.appendChild(wrap);
+    const r = wrap.getBoundingClientRect();
+    burstSparkles(r.left + r.width/2, r.top + r.height/2, 20);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ wrap.classList.add('show'); }); });
+    setTimeout(function(){
+      const cx = r.left + r.width/2, cy = r.top + r.height/2;
+      wrap.classList.add('hide');
+      grandFinaleExplosion(cx, cy);
+      setTimeout(function(){ wrap.remove(); }, 950);
+    }, 2600);
+  }
+
+  /* one shared pointer tracker used by every butterfly on screen — this is what
+     lets a Waleed butterfly and a Rahma butterfly, spawned separately, dance
+     around the exact same point together instead of chasing two different
+     internal pointer readings */
+  const sharedPointer = {x:0, y:0, has:false};
+  let pointerTrackingReady = false;
+  function ensurePointerTracking(){
+    if(pointerTrackingReady) return;
+    pointerTrackingReady = true;
+    function onMove(e){
+      const t = e.touches && e.touches[0] ? e.touches[0] : e;
+      sharedPointer.x = t.clientX; sharedPointer.y = t.clientY; sharedPointer.has = true;
+    }
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, {passive:true});
+  }
+
+  /* a little trail of soft pink hearts drifting up behind a butterfly —
+     used while the two butterflies are flying together, so their shared
+     path leaves something pretty behind it */
+  function heartTrail(el, durationMs){
+    const start = performance.now();
+    let lastSpawn = 0;
+    function step(now){
+      const elapsed = now - start;
+      if(elapsed > durationMs || !el.isConnected){ return; }
+      if(now - lastSpawn > 260){
+        lastSpawn = now;
+        const rect = el.getBoundingClientRect();
+        const h = document.createElement('div');
+        h.className = 'rl-heart-trail';
+        h.style.left = (rect.left + rect.width*0.5 + (Math.random()*16-8)) + 'px';
+        h.style.top = (rect.top + rect.height*0.6 + (Math.random()*16-8)) + 'px';
+        h.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 17 C3 12 0 8 0 5 C0 2 2 0 5 0 C7.5 0 9 1.5 10 3 C11 1.5 12.5 0 15 0 C18 0 20 2 20 5 C20 8 17 12 10 17 Z" fill="#e78ba1" opacity=".9"/></svg>';
+        document.body.appendChild(h);
+        setTimeout(function(){ h.remove(); }, 1400);
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* core flight logic shared by both names: creates a butterfly at (originX,originY),
+     lets it hover near the finger/cursor for a while, then sends it off on a random
+     exit path. `opts.palette` lets the caller pick a custom colour scheme, and
+     `opts.onDone` is called once the butterfly has fully left the screen.
+     If another butterfly (from the other name) is already out and unpaired,
+     the two automatically pair up: they orbit the same point together like a
+     little dance, leave a joint trail of hearts and gold glitter, and fly
+     away together at the end. */
+  /* keeps any point safely within the visible phone screen, with a margin
+     equal to roughly half the butterfly's size so the whole sprite (not
+     just its center) stays on screen */
+  function clampToScreen(x, y, margin){
+    margin = margin || 40;
+    const minX = margin, maxX = Math.max(margin, window.innerWidth - margin);
+    const minY = margin, maxY = Math.max(margin, window.innerHeight - margin);
+    return { x: Math.min(maxX, Math.max(minX, x)), y: Math.min(maxY, Math.max(minY, y)) };
+  }
+
+  function spawnFlyingButterfly(originX, originY, opts){
+    opts = opts || {};
+    ensurePointerTracking();
+    const size = opts.size || 130;
+    const b = document.createElement('div');
+    b.className = 'rl-butterfly emerge';
+    const uid = Date.now() + Math.floor(Math.random()*9999);
+    const palette = opts.palette || PALETTES[Math.floor(Math.random()*PALETTES.length)];
+    b.innerHTML = butterflySVG(uid, palette);
+    b.style.width = size + 'px';
+    b.style.height = size + 'px';
+    let curX = originX - size/2, curY = originY - size/2;
+    b.style.left = curX + 'px';
+    b.style.top = curY + 'px';
+    document.body.appendChild(b);
+
+    startPetalBoost();
+
+    const handle = {owner: opts.owner || null, partner:null, exited:false, requestExit:null,
+                     pairFlashed:false, cx: originX, cy: originY};
+    for(let i=0;i<activeHandles.length;i++){
+      const other = activeHandles[i];
+      if(!other.partner && !other.exited){
+        handle.partner = other; other.partner = handle;
+        handle.orbitOffset = Math.PI; other.orbitOffset = 0;
+        break;
+      }
+    }
+    activeHandles.push(handle);
+
+    let beamEl = null;
+    if(handle.partner){
+      heartTrail(b, 16000);
+      beamEl = document.createElement('div');
+      beamEl.className = 'rl-love-beam';
+      document.body.appendChild(beamEl);
+    }
+
+    let following = true;
+    let phase = 'emerge';
+    let velX = 0, velY = 0;
+    let idleTargetX = originX, idleTargetY = originY - 130, idleTimer = 0;
+    const followStart = performance.now();
+    const FOLLOW_MS = 6000;
+    let exitInitiated = false;
+
+    setTimeout(function(){ phase = 'follow'; }, 580);
+    setTimeout(function(){ b.classList.remove('emerge'); }, 600);
+
+    function removeBeam(){
+      if(beamEl){ beamEl.remove(); beamEl = null; }
+    }
+
+    /* the actual flight-away animation, used both for solo butterflies and
+       for the pair once their union moment has played — the butterfly
+       drifts to a resting point that is always inside the visible screen,
+       then shrinks and fades there, so nothing ever leaves the phone
+       screen's bounds */
+    function doExit(forced){
+      removeBeam();
+      b.classList.remove('emerge');
+      const margin = size*0.5 + 40;
+      const startX = curX, startY = curY;
+      let targetX, targetY, DUR;
+      if(forced && typeof forced.x === 'number'){
+        const clamped = clampToScreen(forced.x, forced.y, margin);
+        targetX = clamped.x - size/2;
+        targetY = clamped.y - size/2;
+        DUR = forced.dur || (2000 + Math.random()*300);
+      } else {
+        const restSpot = clampToScreen(
+          margin + Math.random()*Math.max(10, window.innerWidth - margin*2 - size),
+          margin + Math.random()*Math.max(10, window.innerHeight*0.42 - margin),
+          margin
+        );
+        targetX = restSpot.x - size/2;
+        targetY = restSpot.y - size/2;
+        DUR = 2300 + Math.random()*500;
+      }
+      const exitStart = performance.now();
+      trailGlitter(b, DUR, opts.warmTrail || !!handle.partner);
+      (function step(now){
+        const p = Math.min(1, (now - exitStart) / DUR);
+        const ease = 1 - Math.pow(1 - p, 3);
+        curX = startX + (targetX - startX) * ease;
+        curY = startY + (targetY - startY) * ease;
+        b.style.left = curX + 'px';
+        b.style.top = curY + 'px';
+        const scale = Math.max(0.12, 1 - 0.85*ease);
+        const spin = -20 + ease*40;
+        const fadeFrom = 0.6;
+        const opacity = p < fadeFrom ? 1 : Math.max(0, 1 - (p - fadeFrom) / (1 - fadeFrom));
+        b.style.transform = 'rotate(' + spin + 'deg) scale(' + scale + ')';
+        b.style.opacity = opacity;
+        if(p < 1){
+          requestAnimationFrame(step);
+        } else {
+          b.remove();
+          const idx = activeHandles.indexOf(handle);
+          if(idx > -1) activeHandles.splice(idx, 1);
+          if(activeHandles.length === 0){
+            stopPetalBoost();
+            if(pairedFlightHappened){
+              pairedFlightHappened = false;
+              showUnionText();
+            }
+          }
+          if(typeof opts.onDone === 'function') opts.onDone();
+        }
+      })(performance.now());
+    }
+
+    /* called when it's time to leave — either the follow timer ran out or
+       the butterfly was tapped. If a partner is still dancing with us, the
+       two meet for a brief golden flash first, then fly off together. */
+    function startExit(forcedTarget){
+      if(exitInitiated) return;
+      exitInitiated = true;
+      following = false;
+      handle.exited = true;
+
+      /* if a partner already handled the pairing and is telling us where
+         to go, just head there directly — no need to re-check pairing */
+      if(forcedTarget){
+        doExit(forcedTarget);
+        return;
+      }
+
+      if(handle.partner && !handle.partner.exited && !handle.pairFlashed && !handle.partner.pairFlashed){
+        handle.pairFlashed = true;
+        handle.partner.pairFlashed = true;
+        pairedFlightHappened = true;
+        const px = handle.partner.cx, py = handle.partner.cy;
+        const midX = ((curX + size/2) + px) / 2;
+        const midY = ((curY + size/2) + py) / 2;
+        spawnUnionFlash(midX, midY);
+        playUnionChime();
+        /* the two meet in the middle, then rise upward together side by
+           side — a real union — instead of each drifting off alone */
+        const riseY = Math.max(70, midY - Math.min(window.innerHeight * 0.6, 320));
+        const riseDur = 2000 + Math.random() * 300;
+        setTimeout(function(){
+          doExit({ x: midX - 30, y: riseY, dur: riseDur });
+          if(typeof handle.partner.requestExit === 'function'){
+            handle.partner.requestExit({ x: midX + 30, y: riseY, dur: riseDur });
+          }
+        }, 300);
+      } else {
+        doExit();
+      }
+    }
+    handle.requestExit = startExit;
+
+    function loop(now){
+      if(!following) return;
+      if(phase === 'follow'){
+        const cx0 = curX + size/2, cy0 = curY + size/2;
+        if(handle.partner && !handle.partner.exited){
+          /* dance together: trace a heart shape in the air around the same
+             shared point (the finger/cursor when present), each butterfly
+             on its own side of the loop */
+          const centerX = sharedPointer.has ? sharedPointer.x : cx0;
+          const centerY = (sharedPointer.has ? sharedPointer.y : cy0) - 78;
+          const s = 3.4;
+          const t = (now/1000)*1.05 + handle.orbitOffset;
+          const hx = 16*Math.pow(Math.sin(t),3);
+          const hy = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+          idleTargetX = centerX + hx*s;
+          idleTargetY = centerY - hy*s;
+        } else {
+          idleTimer -= 16;
+          if(idleTimer <= 0){
+            idleTimer = 850 + Math.random()*850;
+            const baseX = sharedPointer.has ? sharedPointer.x : cx0;
+            const baseY = sharedPointer.has ? sharedPointer.y : cy0;
+            idleTargetX = baseX + (Math.random()*100 - 50);
+            idleTargetY = baseY - 55 - Math.random()*45;
+          }
+        }
+        const clampedTarget = clampToScreen(idleTargetX, idleTargetY, size*0.55 + 40);
+        idleTargetX = clampedTarget.x;
+        idleTargetY = clampedTarget.y;
+
+        const cx = curX + size/2, cy = curY + size/2;
+        const ax = (idleTargetX - cx) * 0.0026;
+        const ay = (idleTargetY - cy) * 0.0026;
+        velX = (velX + ax) * 0.9;
+        velY = (velY + ay) * 0.9;
+        curX += velX * 16;
+        curY += velY * 16 + Math.sin(now/230) * 0.5;
+        const clampedCur = clampToScreen(curX + size/2, curY + size/2, size*0.5 + 40);
+        curX = clampedCur.x - size/2;
+        curY = clampedCur.y - size/2;
+        b.style.left = curX + 'px';
+        b.style.top = curY + 'px';
+        handle.cx = curX + size/2;
+        handle.cy = curY + size/2;
+        const angle = Math.max(-26, Math.min(26, velX * 9));
+        b.style.transform = 'rotate(' + angle + 'deg)';
+
+        if(beamEl){
+          if(handle.partner && !handle.partner.exited){
+            updateLoveBeam(beamEl, handle.cx, handle.cy, handle.partner.cx, handle.partner.cy);
+          } else {
+            beamEl.style.opacity = 0;
+          }
+        }
+
+        if(now - followStart > FOLLOW_MS){ startExit(); return; }
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    /* tap the butterfly to set it free right away */
+    b.addEventListener('click', function(){ startExit(); });
+    b.addEventListener('touchstart', function(e){ e.stopPropagation(); startExit(); }, {passive:true});
+  }
+
+  /* ── Rahma: her name gathers itself into a gold wedding ring, the ring
+     glows and turns once, then opens softly and a butterfly rises out of it ── */
+  function releaseButterfly(originEl){
+    if(busyRahma || !originEl) return;
+    busyRahma = true;
+
+    const rect = originEl.getBoundingClientRect();
+    const originX = rect.left + rect.width/2;
+    const originY = rect.top + rect.height/2;
+
+    originEl.classList.add('rl-hidden');
 
     if(reduceMotion){
-      const t0 = performance.now();
-      const duration = 900;
-      function reducedFrame(now){
-        const t = Math.min(1, (now - t0) / duration);
-        el.style.opacity = String(1 - t);
-        el.style.transform = 'translateY(-'+(t*40)+'px) scale('+(1-t*0.3)+')';
-        if(t < 1) requestAnimationFrame(reducedFrame);
-        else el.remove();
-      }
-      requestAnimationFrame(reducedFrame);
+      burstSparkles(originX, originY, 10);
+      setTimeout(function(){ originEl.classList.remove('rl-hidden'); busyRahma = false; }, 1500);
       return;
     }
 
-    const heartDur = 2100;
-    const exitDur = 2500;
-    const totalDur = heartDur + exitDur;
-    const heartScale = 3.4;
-    const hy0 = 5; /* value of the heart curve's y-component at t=0, used to zero the start offset */
-    const dirX = Math.random() > 0.5 ? 1 : -1;
-    const distX = 210 + Math.random()*260;
-    const distY = 250 + Math.random()*320;
-    const t0 = performance.now();
-    let lastTrail = 0;
+    burstSparkles(originX, originY, 10);
 
-    function frame(now){
-      const elapsed = now - t0;
-      let ox, oy, rot;
+    const size = 74;
+    const ring = document.createElement('div');
+    ring.className = 'rl-ring';
+    ring.style.width = size + 'px';
+    ring.style.height = size + 'px';
+    ring.style.left = originX + 'px';
+    ring.style.top = originY + 'px';
+    ring.innerHTML =
+      '<svg viewBox="0 0 100 100">' +
+        '<defs>' +
+          '<linearGradient id="ringBand" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#fff6d4"/><stop offset="45%" stop-color="#d4af37"/><stop offset="100%" stop-color="#7a5c10"/>' +
+          '</linearGradient>' +
+          '<radialGradient id="ringGem" cx="35%" cy="30%" r="75%">' +
+            '<stop offset="0%" stop-color="#ffffff"/><stop offset="45%" stop-color="#bfe8ff"/><stop offset="100%" stop-color="#4a7fb3"/>' +
+          '</radialGradient>' +
+        '</defs>' +
+        '<circle cx="50" cy="60" r="29" fill="none" stroke="url(#ringBand)" stroke-width="10"/>' +
+        '<path class="ring-shine" d="M28 42 A30 30 0 0 1 50 30" stroke="#fff8dd" stroke-width="3" fill="none" opacity=".7" stroke-linecap="round"/>' +
+        '<path class="ring-gem" d="M50 18 L61 33 L50 43 L39 33 Z" fill="url(#ringGem)" stroke="#e9cd7d" stroke-width="1.2"/>' +
+      '</svg>';
+    document.body.appendChild(ring);
+    playChime();
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ ring.classList.add('show'); }); });
 
-      if(elapsed <= heartDur){
-        const t2 = (elapsed / heartDur) * Math.PI * 2;
-        const hx = 16 * Math.pow(Math.sin(t2), 3);
-        const hy = 13*Math.cos(t2) - 5*Math.cos(2*t2) - 2*Math.cos(3*t2) - Math.cos(4*t2);
-        ox = hx * heartScale;
-        oy = (hy0 - hy) * heartScale;
-        rot = 6 * Math.sin(t2*2);
-      } else {
-        const t3 = Math.min(1, (elapsed - heartDur) / exitDur);
-        ox = dirX*distX*t3 + Math.sin(t3*Math.PI*4)*32;
-        oy = -distY*t3 + Math.cos(t3*Math.PI*3)*16;
-        rot = dirX * (12*Math.sin(t3*Math.PI*4));
-        if(t3 > 0.65){
-          el.style.opacity = String(Math.max(0, 1 - (t3-0.65)/0.35));
-        }
-      }
-
-      el.style.transform = 'translate('+ox+'px,'+oy+'px) rotate('+rot+'deg)';
-
-      if(now - lastTrail > 55){
-        lastTrail = now;
-        spawnTrailDot(startX + ox + BF_W/2, startY + oy + BF_H/2);
-      }
-
-      if(elapsed < totalDur){
-        requestAnimationFrame(frame);
-      } else {
-        sparkleBurst(startX + ox + BF_W/2, startY + oy + BF_H/2, 14);
-        el.remove();
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  function spawnButterfly(rect){
-    const uid = 'bf' + Date.now() + Math.floor(Math.random()*1000);
-    const b = document.createElement('div');
-    b.className = 'paper-butterfly';
-    b.style.left = (rect.left + rect.width/2 - BF_W/2) + 'px';
-    b.style.top = (rect.top + rect.height/2 - BF_H/2) + 'px';
-    b.innerHTML = '<div class="bfly-inner">' + buildButterflyMarkup(uid) + '</div>';
-    document.body.appendChild(b);
-    animateFlight(b);
-  }
-
-  rEl.addEventListener('click', function(){
-    if(rEl.dataset.busy) return;
-    rEl.dataset.busy = '1';
-    const rect = rEl.getBoundingClientRect();
-    rEl.classList.add('letter-vanish');
-    sparkleBurst(rect.left + rect.width/2, rect.top + rect.height/2, 10);
-    spawnButterfly(rect);
-    playButterflyChime();
     setTimeout(function(){
-      rEl.classList.remove('letter-vanish');
-      delete rEl.dataset.busy;
-    }, reduceMotion ? 1400 : 5300);
-  });
+      ring.classList.add('open');
+      spawnGlowRing(originX, originY, 'rgba(212,175,55,.8)');
+      burstPetals(originX, originY, 8);
+      burstSparkles(originX, originY, 16);
+      setTimeout(function(){
+        ring.remove();
+        spawnFlyingButterfly(originX, originY - 6, {
+          owner: 'rahma',
+          warmTrail: true,
+          onDone: function(){ originEl.classList.remove('rl-hidden'); busyRahma = false; }
+        });
+      }, 380);
+    }, 1450);
+  }
+
+  /* ── Waleed: name folds into a big white heart, which beats once, then
+     cracks softly open and releases a pearl-white butterfly ── */
+  function releaseWaleedHeartButterfly(originEl){
+    if(busyWaleed || !originEl) return;
+    busyWaleed = true;
+
+    const rect = originEl.getBoundingClientRect();
+    const originX = rect.left + rect.width/2;
+    const originY = rect.top + rect.height/2;
+
+    originEl.classList.add('rl-hidden');
+
+    if(reduceMotion){
+      burstSparkles(originX, originY, 10);
+      setTimeout(function(){ originEl.classList.remove('rl-hidden'); busyWaleed = false; }, 1500);
+      return;
+    }
+
+    burstSparkles(originX, originY, 12);
+
+    const size = 92;
+    const heart = document.createElement('div');
+    heart.className = 'rl-heart';
+    heart.style.width = size + 'px';
+    heart.style.height = size + 'px';
+    heart.style.left = originX + 'px';
+    heart.style.top = originY + 'px';
+    heart.innerHTML =
+      '<svg viewBox="0 0 100 100">' +
+        '<defs>' +
+          '<radialGradient id="heartGrad" cx="35%" cy="28%" r="80%">' +
+            '<stop offset="0%" stop-color="#ffffff"/>' +
+            '<stop offset="55%" stop-color="#fdf8ec"/>' +
+            '<stop offset="100%" stop-color="#eddcae"/>' +
+          '</radialGradient>' +
+        '</defs>' +
+        '<path d="M50 88 C18 64 4 44 4 26 C4 10 16 1 30 1 C40 1 47 7 50 15 C53 7 60 1 70 1 C84 1 96 10 96 26 C96 44 82 64 50 88 Z" fill="url(#heartGrad)" stroke="#f0e2bb" stroke-width="1"/>' +
+        '<path class="heart-crack-line" d="M50 20 L44 42 L54 52 L42 66 L50 80"/>' +
+      '</svg>';
+    document.body.appendChild(heart);
+    playChime();
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ heart.classList.add('show'); }); });
+
+    setTimeout(function(){
+      heart.classList.add('crack');
+      spawnGlowRing(originX, originY, 'rgba(255,255,255,.7)');
+      burstPetals(originX, originY, 8, true);
+      burstSparkles(originX, originY, 16);
+      setTimeout(function(){
+        heart.remove();
+        spawnFlyingButterfly(originX, originY - 6, {
+          owner: 'waleed',
+          palette: PEARL_PALETTE,
+          onDone: function(){ originEl.classList.remove('rl-hidden'); busyWaleed = false; }
+        });
+      }, 360);
+    }, 1150);
+  }
+
+  window.releaseRahmaButterfly = releaseButterfly;
+  window.releaseWaleedHeartButterfly = releaseWaleedHeartButterfly;
 })();
 
 function burstGoldFlecks(){
