@@ -838,7 +838,7 @@ body.night .envelope-letter{
   will-change:transform;
   transition:transform .25s ease-out;
 }
-.hero-parallax img, .hero-parallax video{ width:100%; height:100%; object-fit:cover; }
+.hero-parallax img, .hero-parallax video{ width:100%; height:100%; object-fit:contain; }
 .hero::before{
   content:'';
   position:absolute; inset:0; z-index:4; pointer-events:none;
@@ -850,12 +850,12 @@ body.night .envelope-letter{
   50%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.48), inset 0 0 32px rgba(255,246,208,.16); }
 }
 .hero img, .hero video{
-  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+  width:100%; height:100%; object-fit:contain; object-position:center; display:block;
   -webkit-user-drag:none; user-select:none; pointer-events:none;
-  transform:scale(1.03);
+  transform:scale(1);
   animation:kenBurns 18s ease-in-out infinite alternate;
 }
-@keyframes kenBurns{0%{transform:scale(1.03) translate(0,0);}100%{transform:scale(1.07) translate(-1%,-.6%);}}
+@keyframes kenBurns{0%{transform:scale(1) translate(0,0);}100%{transform:scale(1.02) translate(-.5%,-.3%);}}
 .hero .hero-fallback{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
   background:
@@ -2061,7 +2061,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
         <span class="monogram-sub">WALEED &amp; 𝓡</span>
       </div>
       <div class="hero-parallax" id="heroParallax">
-        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:cover; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
+        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:contain; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
           <source src="video.mp4" type="video/mp4">
         </video>
       </div>
@@ -2074,7 +2074,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
 
     <!-- CONTENT -->
     <div class="content">
-      <p class="bismillah fi d1">لحظاتُ الفرح اختارت من عمري موعدآ</p>
+      <p class="bismillah fi d1">لحظاتُ الفرح اختارت من عمري موعدًا</p>
 
       <p class="verse fi d2">
        وبعد العقد المتين، نسأل الله حسن الختام.. يسعدنا أن تكونوا شهودًا على فرحة العمر، وليلةٍ نجتمع فيها على الخير والمحبة</p>
@@ -2185,7 +2185,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
         </div>
       </div>
 
-      <p class="notice-text page-turn page-turn-soft">نرجو من ضيوفنا الكرام عدم التصوير داخل القاعة، حفاظًا على خصوصية الحفل منعا للاحراج 🤳📵</p>
+      <p class="notice-text page-turn page-turn-soft">نرجو من ضيوفنا الكرام عدم التصوير داخل القاعة، حفاظًا على خصوصية الحفل ومنعًا للإحراج 🤳📵</p>
       <p class="blessings2 page-turn page-turn-soft">دامت لنا ولكم الأفراح، وأدامكم الله لنا أحبابًا أعزاء</p>
     </div>
   </div>
