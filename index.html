@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>حفل زفاف | وليد &amp; 𝓡</title>
+<link rel="preload" as="video" href="video.mp4" type="video/mp4" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="preload" as="video" href="video.mp4" type="video/mp4">
 <meta property="og:title" content="حفل زفاف وليد &amp; 𝓡">
 <meta property="og:description" content="يسعدنا مشاركتكم فرحتنا، افتح الرابط لمعرفة التفاصيل والمكان ❤">
 <meta property="og:image" content="https://waledoweida.com/aaass.jpg?v=3">
@@ -108,7 +108,7 @@ body{
 
 /* ambient canvas */
 #dustCanvas{position:fixed; inset:0; z-index:1; pointer-events:none;}
-/* ── a faint shadow of a butterfly drifting far in the background — a
+/* ── two faint shadows of butterflies drifting far in the background — a
    quiet hint of life stirring, before the real, tappable butterflies
    ever appear inside the card ── */
 .life-shadow{ position:fixed; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
@@ -120,12 +120,26 @@ body{
   animation:lifeDrift 16s linear infinite;
   will-change:transform;
 }
+.life-shadow span.ls-2{
+  left:-16%; top:22%;
+  font-size:clamp(36px,11vw,60px);
+  opacity:.12;
+  animation:lifeDrift2 21s linear infinite;
+  animation-delay:6.5s;
+}
 @keyframes lifeDrift{
   0%{ transform:translate(0,0) rotate(0deg) scale(1); }
   22%{ transform:translate(34vw,-20vh) rotate(14deg) scale(1.08); }
   48%{ transform:translate(66vw,2vh) rotate(-9deg) scale(.94); }
   74%{ transform:translate(92vw,-26vh) rotate(11deg) scale(1.05); }
   100%{ transform:translate(122vw,-4vh) rotate(0deg) scale(1); }
+}
+@keyframes lifeDrift2{
+  0%{ transform:translate(0,0) rotate(0deg) scale(1); }
+  26%{ transform:translate(30vw,24vh) rotate(-12deg) scale(.92); }
+  52%{ transform:translate(58vw,4vh) rotate(10deg) scale(1.04); }
+  78%{ transform:translate(88vw,30vh) rotate(-8deg) scale(.9); }
+  100%{ transform:translate(118vw,10vh) rotate(0deg) scale(1); }
 }
 @media (prefers-reduced-motion:reduce){
   .life-shadow{ display:none; }
@@ -820,7 +834,7 @@ body.night .envelope-letter{
   background:linear-gradient(160deg,#efe3c2,#d9c48c 60%,#c7ab6a);
 }
 .hero-parallax{
-  position:absolute; inset:-9%; z-index:2;
+  position:absolute; inset:-4%; z-index:2;
   will-change:transform;
   transition:transform .25s ease-out;
 }
@@ -836,12 +850,12 @@ body.night .envelope-letter{
   50%{ box-shadow: inset 0 0 0 1px rgba(255,246,208,.48), inset 0 0 32px rgba(255,246,208,.16); }
 }
 .hero img, .hero video{
-  width:100%; height:100%; object-fit:cover; display:block;
+  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
   -webkit-user-drag:none; user-select:none; pointer-events:none;
-  transform:scale(1.08);
-  animation:kenBurns 16s ease-in-out infinite alternate;
+  transform:scale(1.03);
+  animation:kenBurns 18s ease-in-out infinite alternate;
 }
-@keyframes kenBurns{0%{transform:scale(1.08) translate(0,0);}100%{transform:scale(1.16) translate(-1.5%,-1%);}}
+@keyframes kenBurns{0%{transform:scale(1.03) translate(0,0);}100%{transform:scale(1.07) translate(-1%,-.6%);}}
 .hero .hero-fallback{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
   background:
@@ -1383,6 +1397,35 @@ body.night .envelope-letter{
   82%{transform:translate(-90px,-420px) rotate(-10deg) scale(.5); opacity:.6;}
   100%{transform:translate(-40px,-530px) rotate(0deg) scale(.07); opacity:0;}
 }
+.rl-butterfly.ambient-butterfly{ opacity:.97; }
+.rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 8px 16px rgba(30,15,15,.32)) drop-shadow(0 0 14px rgba(255,230,160,.22)); }
+body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba(230,196,101,.4)) drop-shadow(0 8px 14px rgba(0,0,0,.42)); }
+.rl-butterfly.mini-butterfly{ z-index:501; }
+.rl-butterfly.mini-butterfly.mini-exit{
+  transition:transform 2s cubic-bezier(.3,.6,.4,1), opacity 2s ease;
+  transform:scale(.1) translateY(-46px);
+  opacity:0;
+}
+/* soft glowing thread that shows the bond between the two paired ambient
+   butterflies — same look as the name-butterflies' beam, just its own
+   instance so the two systems stay independent */
+.ambient-love-beam{ z-index:497; }
+/* tap-burst for the ambient butterflies: sits above the artwork itself
+   (z-index 600, higher than .rl-butterfly's 500) and travels well past
+   the wingspan, so it is always clearly visible and never hidden behind
+   the wings */
+.ambient-spark{
+  position:fixed; left:0; top:0; z-index:600; pointer-events:none;
+  font-size:var(--assize,16px); line-height:1;
+  transform:translate(var(--asx),var(--asy)) scale(.3);
+  animation:ambientSparkFly var(--asdur,1.1s) ease-out forwards;
+  filter:drop-shadow(0 0 5px rgba(255,215,120,.6));
+}
+@keyframes ambientSparkFly{
+  0%{ transform:translate(var(--asx),var(--asy)) scale(.3) rotate(0deg); opacity:0; }
+  16%{ opacity:1; }
+  100%{ transform:translate(calc(var(--asx) + var(--asdx)),calc(var(--asy) + var(--asdy))) scale(1) rotate(160deg); opacity:0; }
+}
 @media (prefers-reduced-motion: reduce){
   .rl-butterfly{animation:none !important;}
 }
@@ -1749,7 +1792,7 @@ body.night .envelope-letter{
 .qr-modal-actions{display:flex; flex-direction:column; gap:10px;}
 
 /* ambient falling gold flecks (fallback layer, canvas handles main dust) */
-#fallingFxLayer{position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+#fallingFxLayer{position:fixed; inset:0; z-index:15; pointer-events:none; overflow:hidden;}
 
 /* ══ WEDDING-DAY CELEBRATION — shown once the wedding day itself arrives ══ */
 .wedding-day-overlay{
@@ -1874,7 +1917,7 @@ body.night .envelope-letter{
 
 <div id="scrollProgress"></div>
 <canvas id="dustCanvas"></canvas>
-<div class="life-shadow" aria-hidden="true"><span>🦋</span></div>
+<div class="life-shadow" aria-hidden="true"><span>🦋</span><span class="ls-2">🦋</span></div>
 
 <!-- shared SVG defs -->
 <svg width="0" height="0" style="position:absolute">
@@ -2018,7 +2061,7 @@ body.night .envelope-letter{
         <span class="monogram-sub">WALEED &amp; 𝓡</span>
       </div>
       <div class="hero-parallax" id="heroParallax">
-        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:cover;">
+        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:cover; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
           <source src="video.mp4" type="video/mp4">
         </video>
       </div>
@@ -2464,6 +2507,7 @@ function playSealSound(){
       runFrameBrush();
       startPageTurnWatch();
       music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+      if(typeof window.startAmbientButterflies === 'function') window.startAmbientButterflies();
     }, 2500);
   }
 
@@ -2922,6 +2966,14 @@ function startPageTurnWatch(){
   function reveal(el){
     if(el.classList.contains('turned')) return;
     el.classList.add('turned');
+    /* force the final visible state directly on the element as well as
+       via the class — some mobile browsers, when this section sits
+       inside several nested 3D transform contexts, fail to actually
+       paint the CSS-transition end state even though the class was
+       added correctly. Setting the inline style guarantees the text
+       is visible regardless of whether the transition itself rendered. */
+    el.style.opacity = '1';
+    el.style.transform = el.classList.contains('page-turn-soft') ? 'translateY(0)' : 'rotateX(0deg) translateY(0)';
   }
   /* primary: IntersectionObserver */
   if('IntersectionObserver' in window){
@@ -2948,11 +3000,23 @@ function startPageTurnWatch(){
   }
   window.addEventListener('scroll', checkScrollFallback, {passive:true});
   window.addEventListener('resize', checkScrollFallback);
+  window.addEventListener('touchmove', checkScrollFallback, {passive:true});
   checkScrollFallback();
   setTimeout(checkScrollFallback, 400);
+  setTimeout(checkScrollFallback, 1200);
+  setTimeout(checkScrollFallback, 2500);
   /* final safety net: if something above still missed any section
-     (e.g. an unusual viewport/webview), don't leave it hidden forever */
-  setTimeout(function(){ pages.forEach(reveal); }, 4000);
+     (e.g. an unusual viewport/webview), don't leave it hidden forever.
+     Two extra passes at different times in case the first one lands
+     while the tab/webview is backgrounded and timers get delayed. */
+  setTimeout(function(){ pages.forEach(reveal); }, 3000);
+  setTimeout(function(){ pages.forEach(reveal); }, 6000);
+  /* if the page is restored from the back/forward cache (common on
+     mobile Safari after switching apps), re-run the safety net so
+     nothing is left stuck invisible from an earlier, interrupted run */
+  window.addEventListener('pageshow', function(e){
+    if(e.persisted){ pages.forEach(reveal); }
+  });
 }
 
 /* ══ MAGIC FAB MENU — one gold button blooms into the four page actions ══ */
@@ -4368,6 +4432,272 @@ function celebrateBurst(count){
       }, 360);
     }, 1150);
   }
+
+  /* ══ AMBIENT BUTTERFLIES — two bigger, prettier butterflies that live on
+     the page on their own, completely separate from the name-release ones
+     above. They're paired with each other: a soft glowing thread links
+     them whenever they're near, with little hearts drifting up between
+     them — a small visible bond of "love". A third, smaller butterfly
+     pops in to play with them every 20s, then shrinks away over 2s. Taps
+     give a guaranteed-visible burst that renders above the artwork itself
+     (never hidden behind the wings), and they steer clear of the couple's
+     names and verses so nothing important is ever covered. ══ */
+  (function(){
+    if(reduceMotion) return;
+    const AMBIENT_COUNT = 2;
+    const ambHandles = [];
+    let miniStarted = false;
+
+    const CRITICAL_SEL = '#nameWaleed, #nameRahma, .guest-name-wrap.show, .bismillah, .verse, .env-names';
+    function criticalZones(){
+      return Array.prototype.slice.call(document.querySelectorAll(CRITICAL_SEL))
+        .map(function(el){ return el.getBoundingClientRect(); })
+        .filter(function(r){ return r.width > 0 && r.bottom > 0 && r.top < window.innerHeight; });
+    }
+    /* nudges a candidate point out of any critical text zone, so the
+       butterflies never sit still on top of the names or the verses */
+    function avoidCriticalZones(x, y){
+      const zones = criticalZones();
+      for(let i=0;i<zones.length;i++){
+        const r = zones[i], pad = 36;
+        if(x > r.left - pad && x < r.right + pad && y > r.top - pad && y < r.bottom + pad){
+          const below = r.bottom + pad + 34;
+          const above = r.top - pad - 34;
+          y = (below < window.innerHeight - 40) ? below : Math.max(40, above);
+        }
+      }
+      return {x:x, y:y};
+    }
+
+    function restSpots(){
+      return Array.prototype.slice.call(
+        document.querySelectorAll('.corner-flourish, .cd-box, .timing-item, .map-action-btn')
+      );
+    }
+
+    /* a burst that sits ABOVE the butterfly artwork and travels well past
+       its wingspan, so it's always clearly visible, never hidden behind
+       the (now bigger) wings the way a burst right at the center would be */
+    function spawnAmbientSpark(x, y){
+      const glyphs = ['✨','💛','🌟'];
+      for(let i=0;i<9;i++){
+        const el = document.createElement('span');
+        el.className = 'ambient-spark';
+        el.textContent = glyphs[Math.floor(Math.random()*glyphs.length)];
+        const angle = Math.random()*Math.PI*2;
+        const dist = 55 + Math.random()*85;
+        el.style.setProperty('--asx', x+'px');
+        el.style.setProperty('--asy', y+'px');
+        el.style.setProperty('--asdx', (Math.cos(angle)*dist)+'px');
+        el.style.setProperty('--asdy', (Math.sin(angle)*dist - 40)+'px');
+        el.style.setProperty('--assize', (14+Math.random()*10)+'px');
+        el.style.setProperty('--asdur', (0.9+Math.random()*0.5)+'s');
+        document.body.appendChild(el);
+        setTimeout(function(){ el.remove(); }, 1500);
+      }
+    }
+    function spawnAmbientHeart(x, y){
+      const h = document.createElement('div');
+      h.className = 'rl-heart-trail';
+      h.style.left = x+'px'; h.style.top = y+'px';
+      h.style.zIndex = 600;
+      h.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 17 C3 12 0 8 0 5 C0 2 2 0 5 0 C7.5 0 9 1.5 10 3 C11 1.5 12.5 0 15 0 C18 0 20 2 20 5 C20 8 17 12 10 17 Z" fill="#e78ba1" opacity=".92"/></svg>';
+      document.body.appendChild(h);
+      setTimeout(function(){ h.remove(); }, 1400);
+    }
+
+    function spawnAmbient(delayMs, idx){
+      setTimeout(function(){
+        if(document.hidden){ spawnAmbient(1200, idx); return; }
+        ensurePointerTracking();
+        const size = 80 + Math.random()*24;
+        const b = document.createElement('div');
+        b.className = 'rl-butterfly ambient-butterfly emerge';
+        const uid = 'amb' + Date.now() + Math.floor(Math.random()*9999);
+        const palette = PALETTES[idx % PALETTES.length];
+        b.innerHTML = butterflySVG(uid, palette);
+        b.style.width = size + 'px';
+        b.style.height = size + 'px';
+        let curX = 24 + Math.random() * Math.max(20, window.innerWidth - 48);
+        let curY = window.innerHeight*0.22 + Math.random()*window.innerHeight*0.45;
+        b.style.left = curX + 'px';
+        b.style.top = curY + 'px';
+        document.body.appendChild(b);
+        setTimeout(function(){ b.classList.remove('emerge'); }, 600);
+
+        const handle = {size:size, cx:curX+size/2, cy:curY+size/2, partner:null, beamEl:null, lastHeart:0};
+        for(let i=0;i<ambHandles.length;i++){
+          if(!ambHandles[i].partner){ handle.partner = ambHandles[i]; ambHandles[i].partner = handle; break; }
+        }
+        ambHandles.push(handle);
+        if(handle.partner && !handle.partner.beamEl){
+          const beam = document.createElement('div');
+          beam.className = 'rl-love-beam ambient-love-beam';
+          document.body.appendChild(beam);
+          handle.beamEl = beam;
+          handle.partner.beamEl = beam;
+        }
+
+        let velX = 0, velY = 0;
+        let idleTargetX = curX, idleTargetY = curY, idleTimer = 500 + Math.random()*600;
+        let resting = false, restUntil = 0;
+
+        function pickTarget(){
+          let tx, ty;
+          if(handle.partner && Math.random() < 0.4){
+            tx = handle.partner.cx + (Math.random()*160 - 80);
+            ty = handle.partner.cy + (Math.random()*120 - 60);
+          } else {
+            const spots = restSpots();
+            if(spots.length && Math.random() < 0.3){
+              const el = spots[Math.floor(Math.random()*spots.length)];
+              const r = el.getBoundingClientRect();
+              if(r.width && r.bottom > 0 && r.top < window.innerHeight){
+                tx = r.left + r.width/2 + (Math.random()*26-13);
+                ty = r.top + r.height/2 + (Math.random()*26-13);
+              }
+            }
+          }
+          if(tx === undefined){
+            tx = 26 + Math.random() * Math.max(20, window.innerWidth - 52);
+            ty = window.innerHeight*0.1 + Math.random() * window.innerHeight*0.72;
+          }
+          const safe = avoidCriticalZones(tx, ty);
+          idleTargetX = safe.x; idleTargetY = safe.y;
+        }
+        pickTarget();
+
+        function onTap(e){
+          if(e) e.stopPropagation();
+          const rect = b.getBoundingClientRect();
+          spawnAmbientSpark(rect.left + rect.width/2, rect.top + rect.height/2);
+          resting = false;
+          velX += (Math.random()*2 - 1) * 0.7;
+          velY -= 0.5 + Math.random()*0.4;
+          pickTarget();
+        }
+        b.addEventListener('click', onTap);
+        b.addEventListener('touchstart', onTap, {passive:true});
+
+        function loop(now){
+          if(document.hidden){ requestAnimationFrame(loop); return; }
+          if(resting){
+            if(now > restUntil){ resting = false; pickTarget(); }
+          } else {
+            idleTimer -= 16;
+            if(idleTimer <= 0){
+              idleTimer = 1300 + Math.random()*1300;
+              if(Math.random() < 0.2){
+                resting = true;
+                restUntil = now + 900 + Math.random()*1000;
+              } else {
+                pickTarget();
+              }
+            }
+            const margin = size*0.6 + 26;
+            const clampedTarget = clampToScreen(idleTargetX, idleTargetY, margin);
+            idleTargetX = clampedTarget.x; idleTargetY = clampedTarget.y;
+            const cx = curX + size/2, cy = curY + size/2;
+            const ax = (idleTargetX - cx) * 0.0018;
+            const ay = (idleTargetY - cy) * 0.0018;
+            velX = (velX + ax) * 0.92;
+            velY = (velY + ay) * 0.92;
+            curX += velX * 16;
+            curY += velY * 16 + Math.sin(now/260) * 0.5;
+            const clampedCur = clampToScreen(curX + size/2, curY + size/2, size*0.5 + 18);
+            curX = clampedCur.x - size/2;
+            curY = clampedCur.y - size/2;
+            b.style.left = curX + 'px';
+            b.style.top = curY + 'px';
+            const angle = Math.max(-22, Math.min(22, velX * 10));
+            b.style.transform = 'rotate(' + angle + 'deg)';
+          }
+          handle.cx = curX + size/2;
+          handle.cy = curY + size/2;
+
+          if(handle.beamEl && handle.partner){
+            const dist = Math.hypot(handle.cx - handle.partner.cx, handle.cy - handle.partner.cy);
+            if(dist < 260){
+              updateLoveBeam(handle.beamEl, handle.cx, handle.cy, handle.partner.cx, handle.partner.cy);
+              if(dist < 150 && now - handle.lastHeart > 650){
+                handle.lastHeart = now;
+                spawnAmbientHeart((handle.cx+handle.partner.cx)/2, (handle.cy+handle.partner.cy)/2);
+              }
+            } else {
+              handle.beamEl.style.opacity = 0;
+            }
+          }
+
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+
+        if(!miniStarted && ambHandles.length >= AMBIENT_COUNT){
+          miniStarted = true;
+          setTimeout(spawnMiniButterfly, 6000);
+          setInterval(spawnMiniButterfly, 30000);
+        }
+      }, delayMs);
+    }
+
+    /* a little extra butterfly that pops in between the pair every 30s,
+       flutters playfully near them for a moment, then shrinks and fades
+       away completely within 5 seconds */
+    function spawnMiniButterfly(){
+      if(document.hidden || reduceMotion) return;
+      const a = ambHandles[0], c = ambHandles[1];
+      const midX = (a && c) ? (a.cx + c.cx)/2 : window.innerWidth/2;
+      const midY = (a && c) ? (a.cy + c.cy)/2 : window.innerHeight*0.4;
+      const size = 34 + Math.random()*8;
+      const b = document.createElement('div');
+      b.className = 'rl-butterfly ambient-butterfly mini-butterfly emerge';
+      const uid = 'mini' + Date.now();
+      const palette = PALETTES[Math.floor(Math.random()*PALETTES.length)];
+      b.innerHTML = butterflySVG(uid, palette);
+      b.style.width = size+'px'; b.style.height = size+'px';
+      let curX = midX - size/2, curY = midY - size/2;
+      b.style.left = curX+'px'; b.style.top = curY+'px';
+      document.body.appendChild(b);
+      setTimeout(function(){ b.classList.remove('emerge'); }, 400);
+      spawnAmbientSpark(midX, midY);
+
+      const start = performance.now();
+      const PLAY_MS = 3000;
+      let targetX = curX, targetY = curY, timer = 0;
+      (function playLoop(now){
+        const elapsed = now - start;
+        if(elapsed > PLAY_MS){
+          b.classList.add('mini-exit');
+          setTimeout(function(){ b.remove(); }, 2000);
+          return;
+        }
+        timer -= 16;
+        if(timer <= 0){
+          timer = 220 + Math.random()*220;
+          const p1 = ambHandles[0] ? {x:ambHandles[0].cx, y:ambHandles[0].cy} : {x:midX,y:midY};
+          const p2 = ambHandles[1] ? {x:ambHandles[1].cx, y:ambHandles[1].cy} : {x:midX,y:midY};
+          const pick = Math.random() < 0.5 ? p1 : p2;
+          const t = avoidCriticalZones(pick.x + (Math.random()*80-40), pick.y + (Math.random()*80-40));
+          targetX = t.x - size/2;
+          targetY = t.y - size/2;
+        }
+        curX += (targetX - curX) * 0.18;
+        curY += (targetY - curY) * 0.18;
+        const clamped = clampToScreen(curX+size/2, curY+size/2, size*0.5+16);
+        curX = clamped.x - size/2; curY = clamped.y - size/2;
+        b.style.left = curX+'px'; b.style.top = curY+'px';
+        requestAnimationFrame(playLoop);
+      })(performance.now());
+    }
+
+    window.startAmbientButterflies = function(){
+      if(window.__ambientButterfliesOn) return;
+      window.__ambientButterfliesOn = true;
+      for(let i=0;i<AMBIENT_COUNT;i++){
+        spawnAmbient(700 + i*1500 + Math.random()*400, i);
+      }
+    };
+  })();
 
   window.releaseRahmaButterfly = releaseButterfly;
   window.releaseWaleedHeartButterfly = releaseWaleedHeartButterfly;
