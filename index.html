@@ -3243,35 +3243,54 @@ function celebrateBurst(count){
   setInterval(check, 30000); /* in case the page stays open past midnight into the big day */
 })();
 
-/* ══ VIDEO WARM-UP ══
-   Mobile browsers (especially on cellular) often ignore preload="auto"
-   and don't actually start fetching the video's data until it receives
-   a real play() call from a user gesture. That means the moment the
-   guest opens the envelope, the video may still be nearly empty and
-   takes a visible moment to catch up. To avoid that, we play it muted
-   (autoplay-muted is allowed everywhere) the instant the page is ready,
-   which forces real buffering to begin early, then immediately pause
-   it. By the time the envelope is opened the video is already warmed
-   up and starts instantly — we just unmute it there. */
+/* ══ VIDEO FULL PRELOAD (BLOB) ══
+   The video is small (a few MB), so instead of relying on the browser's
+   normal progressive/streamed playback — which stalls if the hosting
+   server doesn't support HTTP range requests, or the network hiccups —
+   we fetch the entire file into memory ourselves while the guest is
+   still looking at the envelope, then hand the video element a local
+   blob: URL. Once that's done, playback is served entirely from memory
+   with zero network involved, so there's no buffering/stalling at all.
+   If the fetch fails for any reason (offline, CORS, etc.) we silently
+   fall back to the original <source src="video.mp4"> that's already
+   in the markup, so nothing breaks. */
 (function(){
   const v = document.getElementById('video');
   if(!v) return;
+  const ORIGINAL_SRC = 'video.mp4';
   v.muted = true;
-  let warmed = false;
-  function warmUp(){
-    if(warmed) return;
-    warmed = true;
+
+  function warmUpNative(){
+    /* fallback warm-up (same trick as before) in case the blob fetch
+       hasn't finished yet or fails outright */
     const p = v.play();
     if(p && p.then){
-      p.then(function(){
-        setTimeout(function(){ v.pause(); }, 60);
-      }).catch(function(){ warmed = false; });
+      p.then(function(){ setTimeout(function(){ v.pause(); }, 60); }).catch(function(){});
     }
   }
-  if(document.readyState === 'complete') warmUp();
-  else window.addEventListener('load', warmUp);
-  /* safety retry in case the first attempt was blocked */
-  setTimeout(warmUp, 1200);
+
+  fetch(ORIGINAL_SRC)
+    .then(function(res){
+      if(!res.ok) throw new Error('bad response');
+      return res.blob();
+    })
+    .then(function(blob){
+      const blobUrl = URL.createObjectURL(blob);
+      const wasPlaying = !v.paused;
+      const t = v.currentTime;
+      v.src = blobUrl;
+      v.load();
+      if(wasPlaying || window.__videoUserPaused === false){
+        v.currentTime = t;
+        v.play().catch(function(){});
+      }
+    })
+    .catch(function(){
+      /* network/CORS issue — just rely on native streaming + warm-up */
+      if(document.readyState === 'complete') warmUpNative();
+      else window.addEventListener('load', warmUpNative);
+      setTimeout(warmUpNative, 1200);
+    });
 })();
 
 /* ══ MUSIC TOGGLE ══ */
