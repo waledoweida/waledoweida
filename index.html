@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>حفل زفاف | وليد &amp; 𝓡</title>
-<link rel="preload" as="video" href="video.mp4" type="video/mp4" fetchpriority="high">
+<link rel="preload" as="video" href="video.mp4?v=2" type="video/mp4" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Scheherazade+New:wght@400;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -2064,7 +2064,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
       </div>
       <div class="hero-parallax" id="heroParallax">
         <video id="video" playsinline muted loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:contain; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
-          <source src="video.mp4" type="video/mp4">
+          <source src="video.mp4?v=2" type="video/mp4">
         </video>
       </div>
       <div class="hero-veil"></div>
@@ -2514,8 +2514,21 @@ function playSealSound(){
       runFrameBrush();
       startPageTurnWatch();
       window.__inviteOpened = true;
-      music.muted = false;
-      music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+      /* wait for the fully-downloaded local copy of the video before
+         ever starting playback — that's what removes network buffering/
+         stalling as a possible cause of stutter during playback. On a
+         normal connection this resolves almost instantly since the
+         video is small and was already downloading in the background;
+         worst case there's a 6s safety cap so nobody gets stuck. */
+      const startPlayback = function(){
+        music.muted = false;
+        music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
+      };
+      if(window.__videoReady && typeof window.__videoReady.then === 'function'){
+        window.__videoReady.then(startPlayback);
+      } else {
+        startPlayback();
+      }
       if(typeof window.startAmbientButterflies === 'function') window.startAmbientButterflies();
     }, 2500);
   }
@@ -3267,8 +3280,18 @@ function celebrateBurst(count){
 (function(){
   const v = document.getElementById('video');
   if(!v) return;
-  const ORIGINAL_SRC = 'video.mp4';
+  const ORIGINAL_SRC = 'video.mp4?v=2';
   v.muted = true;
+
+  /* Other scripts (the envelope-open handler) await this before ever
+     calling .play() — that's what guarantees the video only ever starts
+     from the fully-downloaded local copy instead of a live network
+     stream, so there's nothing left to stall/buffer/stutter mid-playback. */
+  let resolveReady;
+  window.__videoReady = new Promise(function(res){ resolveReady = res; });
+  /* safety net: never block playback forever if the network is really
+     bad — after 6s just let it play from whatever's available */
+  setTimeout(resolveReady, 6000);
 
   function warmUpNative(){
     /* fallback warm-up (same trick as before) in case the blob fetch
@@ -3297,17 +3320,20 @@ function celebrateBurst(count){
          it's already working fine off the native stream, so we leave
          it alone instead of interrupting it. */
       if(v.currentTime > 0 || !v.paused){
+        resolveReady();
         return;
       }
       const blobUrl = URL.createObjectURL(blob);
       v.src = blobUrl;
       v.load();
+      resolveReady();
     })
     .catch(function(){
       /* network/CORS issue — just rely on native streaming + warm-up */
       if(document.readyState === 'complete') warmUpNative();
       else window.addEventListener('load', warmUpNative);
       setTimeout(warmUpNative, 1200);
+      resolveReady();
     });
 })();
 
