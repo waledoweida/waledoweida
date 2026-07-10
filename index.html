@@ -79,9 +79,11 @@ body.night .notice-text{ color:#e39a9a; }
 html{scroll-behavior:smooth;}
 html,body{
   height:100%; width:100%;
+  max-width:100%;
   font-family:'Tajawal',sans-serif;
   color:var(--ink);
   overflow-x:hidden;
+  overscroll-behavior:none;
   background-color:#f4eddb;
 }
 
@@ -3245,9 +3247,54 @@ function celebrateBurst(count){
   const btn = document.getElementById('musicBtn');
   const audio = document.getElementById('video');
   btn.addEventListener('click', function(){
-    if(audio.paused){ audio.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){}); }
-    else { audio.pause(); btn.textContent='🔈'; btn.classList.remove('playing'); }
+    if(audio.paused){
+      window.__videoUserPaused = false;
+      audio.play().then(function(){btn.textContent='🔊'; btn.classList.add('playing');}).catch(function(){});
+    } else {
+      window.__videoUserPaused = true;
+      audio.pause(); btn.textContent='🔈'; btn.classList.remove('playing');
+    }
   });
+})();
+
+/* ══ VIDEO KEEP-ALIVE ══
+   The hero <video> doubles as the background music, so if the mobile
+   browser ever stalls/suspends/pauses it on its own (tab switch, low
+   memory, coming back from the phone's app-switcher, a network blip,
+   scrolling the element off/on screen, etc.) we detect that and resume
+   playback automatically — unless the guest deliberately paused it via
+   the music button (tracked by window.__videoUserPaused above). */
+(function(){
+  const v = document.getElementById('video');
+  if(!v) return;
+  window.__videoUserPaused = false;
+  let resumeTimer = null;
+  function tryResume(){
+    if(window.__videoUserPaused) return;
+    if(document.hidden) return;
+    if(v.paused || v.ended){
+      const p = v.play();
+      if(p && p.catch) p.catch(function(){ /* will retry on next trigger */ });
+    }
+  }
+  function scheduleResume(){
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(tryResume, 60);
+  }
+  ['pause','stalled','suspend','waiting','ended'].forEach(function(evt){
+    v.addEventListener(evt, scheduleResume);
+  });
+  v.addEventListener('error', function(){
+    try{ v.load(); }catch(e){}
+    scheduleResume();
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) scheduleResume();
+  });
+  window.addEventListener('pageshow', scheduleResume);
+  window.addEventListener('focus', scheduleResume);
+  /* periodic safety-net check in case an event was missed */
+  setInterval(tryResume, 4000);
 })();
 
 /* ══ SHARE (opens QR modal with native-share + copy-link options) ══ */
