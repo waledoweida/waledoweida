@@ -2063,7 +2063,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
         <span class="monogram-sub">WALEED &amp; 𝓡</span>
       </div>
       <div class="hero-parallax" id="heroParallax">
-        <video id="video" playsinline loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:contain; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
+        <video id="video" playsinline muted loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:contain; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
           <source src="video.mp4" type="video/mp4">
         </video>
       </div>
@@ -2508,6 +2508,7 @@ function playSealSound(){
       spawnNameStars(sealRect);
       runFrameBrush();
       startPageTurnWatch();
+      music.muted = false;
       music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
       if(typeof window.startAmbientButterflies === 'function') window.startAmbientButterflies();
     }, 2500);
@@ -3240,6 +3241,37 @@ function celebrateBurst(count){
   }
   check();
   setInterval(check, 30000); /* in case the page stays open past midnight into the big day */
+})();
+
+/* ══ VIDEO WARM-UP ══
+   Mobile browsers (especially on cellular) often ignore preload="auto"
+   and don't actually start fetching the video's data until it receives
+   a real play() call from a user gesture. That means the moment the
+   guest opens the envelope, the video may still be nearly empty and
+   takes a visible moment to catch up. To avoid that, we play it muted
+   (autoplay-muted is allowed everywhere) the instant the page is ready,
+   which forces real buffering to begin early, then immediately pause
+   it. By the time the envelope is opened the video is already warmed
+   up and starts instantly — we just unmute it there. */
+(function(){
+  const v = document.getElementById('video');
+  if(!v) return;
+  v.muted = true;
+  let warmed = false;
+  function warmUp(){
+    if(warmed) return;
+    warmed = true;
+    const p = v.play();
+    if(p && p.then){
+      p.then(function(){
+        setTimeout(function(){ v.pause(); }, 60);
+      }).catch(function(){ warmed = false; });
+    }
+  }
+  if(document.readyState === 'complete') warmUp();
+  else window.addEventListener('load', warmUp);
+  /* safety retry in case the first attempt was blocked */
+  setTimeout(warmUp, 1200);
 })();
 
 /* ══ MUSIC TOGGLE ══ */
