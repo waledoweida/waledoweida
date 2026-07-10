@@ -2430,6 +2430,11 @@ function playSealSound(){
   const musicBtn = document.getElementById('musicBtn');
   const reduceMo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened = false;
+  /* global flag other scripts (like the keep-alive watcher) check before
+     ever calling .play() — the video must stay silent and paused until
+     the guest actually taps the envelope open, no matter what network/
+     buffering events fire in the meantime */
+  window.__inviteOpened = false;
 
   /* once the envelope has drifted in and settled, let it sway gently
      until it's touched — a quiet invitation to interact */
@@ -2508,6 +2513,7 @@ function playSealSound(){
       spawnNameStars(sealRect);
       runFrameBrush();
       startPageTurnWatch();
+      window.__inviteOpened = true;
       music.muted = false;
       music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
       if(typeof window.startAmbientButterflies === 'function') window.startAmbientButterflies();
@@ -2891,6 +2897,10 @@ function playSealSound(){
   }
 
   function frame(){
+    if(document.hidden){
+      if(!reduceMotion) requestAnimationFrame(frame);
+      return;
+    }
     const progress = window.RL_WEDDING_PROGRESS || 0;
     if(progress < 0.99){
       const limit = pileTopY(progress);
@@ -3262,14 +3272,16 @@ function celebrateBurst(count){
 
   function warmUpNative(){
     /* fallback warm-up (same trick as before) in case the blob fetch
-       hasn't finished yet or fails outright */
+       hasn't finished yet or fails outright — but never before the
+       guest has actually tapped the envelope open */
+    if(!window.__inviteOpened) return;
     const p = v.play();
     if(p && p.then){
       p.then(function(){ setTimeout(function(){ v.pause(); }, 60); }).catch(function(){});
     }
   }
 
-  fetch(ORIGINAL_SRC)
+  fetch(ORIGINAL_SRC, {priority: 'high'})
     .then(function(res){
       if(!res.ok) throw new Error('bad response');
       return res.blob();
@@ -3327,6 +3339,7 @@ function celebrateBurst(count){
   window.__videoUserPaused = false;
   let resumeTimer = null;
   function tryResume(){
+    if(!window.__inviteOpened) return; /* never auto-play before the guest opens the card */
     if(window.__videoUserPaused) return;
     if(document.hidden) return;
     if(v.paused || v.ended){
@@ -3680,7 +3693,34 @@ function celebrateBurst(count){
     }, {passive:true});
   }
 
+  /* Building the same soft gold glow as one small pre-rendered sprite
+     (instead of calling ctx.createRadialGradient() for every single
+     particle on every single frame — up to 55 gradients × 60 times a
+     second) is the single biggest win here: drawImage() of a cached
+     sprite costs a fraction of building a fresh gradient each frame,
+     with an identical look, so nothing visual changes. */
+  const SPRITE_SIZE = 64;
+  const glowSprite = (function(){
+    const s = document.createElement('canvas');
+    s.width = s.height = SPRITE_SIZE;
+    const sctx = s.getContext('2d');
+    const c = SPRITE_SIZE/2;
+    const grad = sctx.createRadialGradient(c,c,0,c,c,c);
+    grad.addColorStop(0,'rgba(255,246,208,1)');
+    grad.addColorStop(0.5,'rgba(212,175,55,0.5)');
+    grad.addColorStop(1,'rgba(212,175,55,0)');
+    sctx.fillStyle = grad;
+    sctx.beginPath(); sctx.arc(c,c,c,0,Math.PI*2); sctx.fill();
+    return s;
+  })();
+
   function draw(){
+    /* skip all work while the tab/screen isn't visible — saves battery
+       and CPU without affecting anything the guest can actually see */
+    if(document.hidden){
+      if(!reduceMotion) requestAnimationFrame(draw);
+      return;
+    }
     ctx.clearRect(0,0,w,h);
     const parallaxX = (pointerX - 0.5) * 18;
     const parallaxY = (pointerY - 0.5) * 10;
@@ -3690,16 +3730,12 @@ function celebrateBurst(count){
       if(p.x < -10) p.x = w+10;
       if(p.x > w+10) p.x = -10;
       const flicker = 0.6 + Math.sin(p.tw)*0.4;
-      ctx.beginPath();
       const gx = p.x + parallaxX, gy = p.y + parallaxY;
-      const grad = ctx.createRadialGradient(gx,gy,0,gx,gy,p.r*4);
-      grad.addColorStop(0, 'rgba(255,246,208,'+(p.a*flicker)+')');
-      grad.addColorStop(0.5, 'rgba(212,175,55,'+(p.a*flicker*0.5)+')');
-      grad.addColorStop(1, 'rgba(212,175,55,0)');
-      ctx.fillStyle = grad;
-      ctx.arc(gx, gy, p.r*4, 0, Math.PI*2);
-      ctx.fill();
+      const d = p.r*8;
+      ctx.globalAlpha = p.a*flicker;
+      ctx.drawImage(glowSprite, gx-d/2, gy-d/2, d, d);
     }
+    ctx.globalAlpha = 1;
     if(!reduceMotion) requestAnimationFrame(draw);
   }
   if(!reduceMotion) requestAnimationFrame(draw);
