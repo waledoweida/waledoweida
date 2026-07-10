@@ -893,7 +893,7 @@ body.night .envelope-letter{
    forces a fresh reload from the exact stuck position, which a plain
    play() call can't always recover from. Hidden by default. ══ */
 .video-resume-btn{
-  position:absolute; inset:0; z-index:6;
+  position:absolute; inset:0; z-index:10;
   display:none; align-items:center; justify-content:center;
   background:linear-gradient(180deg, rgba(20,14,4,.15), rgba(20,14,4,.5));
   border:none; margin:0; padding:0; cursor:pointer;
@@ -2089,18 +2089,18 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
         <video id="video" playsinline muted loop preload="auto" fetchpriority="high" oncontextmenu="return false" onerror="this.style.display='none'" style="position:relative; z-index:2; width:100%; height:100%; object-fit:contain; transform:translateZ(0); backface-visibility:hidden; will-change:transform;">
           <source src="video.mp4?v=2" type="video/mp4">
         </video>
-        <button id="videoResumeBtn" class="video-resume-btn" type="button" aria-label="إعادة تشغيل الفيديو" style="display:none;">
-          <span class="video-resume-inner">
-            <span class="video-resume-icon">↻</span>
-            <span class="video-resume-label">اضغط لإكمال التشغيل</span>
-          </span>
-        </button>
       </div>
       <div class="hero-veil"></div>
       <div class="hero-lightbar"></div>
       <div class="hero-overlay"></div>
       <div class="img-watermark">وليد &amp; 𝓡 ✦ 11.09.2026</div>
       <div class="img-protect" oncontextmenu="return false"></div>
+      <button id="videoResumeBtn" class="video-resume-btn" type="button" aria-label="إعادة تشغيل الفيديو" style="display:none;">
+        <span class="video-resume-inner">
+          <span class="video-resume-icon">↻</span>
+          <span class="video-resume-label">اضغط لإكمال التشغيل</span>
+        </span>
+      </button>
     </div>
 
     <!-- CONTENT -->
