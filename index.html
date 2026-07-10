@@ -3275,15 +3275,21 @@ function celebrateBurst(count){
       return res.blob();
     })
     .then(function(blob){
+      /* IMPORTANT: only swap the element to the in-memory copy while
+         it hasn't started playing yet. Re-assigning .src on a <video>
+         forces the browser to tear down its decoder/buffer and reload
+         (that's what v.load() does), and doing that WHILE the video is
+         already rolling is exactly what produces a visible stutter/jump
+         — a "cut" — the instant the blob finishes downloading. If the
+         guest already opened the envelope and playback is underway,
+         it's already working fine off the native stream, so we leave
+         it alone instead of interrupting it. */
+      if(v.currentTime > 0 || !v.paused){
+        return;
+      }
       const blobUrl = URL.createObjectURL(blob);
-      const wasPlaying = !v.paused;
-      const t = v.currentTime;
       v.src = blobUrl;
       v.load();
-      if(wasPlaying || window.__videoUserPaused === false){
-        v.currentTime = t;
-        v.play().catch(function(){});
-      }
     })
     .catch(function(){
       /* network/CORS issue — just rely on native streaming + warm-up */
