@@ -2514,21 +2514,8 @@ function playSealSound(){
       runFrameBrush();
       startPageTurnWatch();
       window.__inviteOpened = true;
-      /* wait for the fully-downloaded local copy of the video before
-         ever starting playback — that's what removes network buffering/
-         stalling as a possible cause of stutter during playback. On a
-         normal connection this resolves almost instantly since the
-         video is small and was already downloading in the background;
-         worst case there's a 6s safety cap so nobody gets stuck. */
-      const startPlayback = function(){
-        music.muted = false;
-        music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
-      };
-      if(window.__videoReady && typeof window.__videoReady.then === 'function'){
-        window.__videoReady.then(startPlayback);
-      } else {
-        startPlayback();
-      }
+      music.muted = false;
+      music.play().then(function(){ musicBtn.textContent = '🔊'; musicBtn.classList.add('playing'); }).catch(function(){ musicBtn.textContent = '🔈'; });
       if(typeof window.startAmbientButterflies === 'function') window.startAmbientButterflies();
     }, 2500);
   }
@@ -3266,75 +3253,43 @@ function celebrateBurst(count){
   setInterval(check, 30000); /* in case the page stays open past midnight into the big day */
 })();
 
-/* ══ VIDEO FULL PRELOAD (BLOB) ══
-   The video is small (a few MB), so instead of relying on the browser's
-   normal progressive/streamed playback — which stalls if the hosting
-   server doesn't support HTTP range requests, or the network hiccups —
-   we fetch the entire file into memory ourselves while the guest is
-   still looking at the envelope, then hand the video element a local
-   blob: URL. Once that's done, playback is served entirely from memory
-   with zero network involved, so there's no buffering/stalling at all.
-   If the fetch fails for any reason (offline, CORS, etc.) we silently
-   fall back to the original <source src="video.mp4"> that's already
-   in the markup, so nothing breaks. */
+/* ══ VIDEO PLAYBACK — kept deliberately simple ══
+   We tested playing video.mp4 directly (no page, no JS) and it played
+   perfectly with zero stutter — which proves the file and the server
+   are both fine. So instead of layering custom JS on top (fetching the
+   whole file into a blob, forcing frequent play() calls, etc.), we just
+   let the <video> element do what browsers already do well natively:
+   preload="auto" + the <link rel=preload> in <head> both already tell
+   the browser to start downloading in the background at high priority
+   the moment the page loads, and playback only ever starts once, on
+   the envelope tap. That extra JS layer we had before was the more
+   likely source of the mobile-only stutter (it duplicates the video in
+   memory as a blob AND polls play() every few seconds, both of which
+   compete with everything else running on a phone with limited RAM) —
+   removing it is the fix. */
 (function(){
   const v = document.getElementById('video');
   if(!v) return;
-  const ORIGINAL_SRC = 'video.mp4?v=2';
   v.muted = true;
+})();
 
-  /* Other scripts (the envelope-open handler) await this before ever
-     calling .play() — that's what guarantees the video only ever starts
-     from the fully-downloaded local copy instead of a live network
-     stream, so there's nothing left to stall/buffer/stutter mid-playback. */
-  let resolveReady;
-  window.__videoReady = new Promise(function(res){ resolveReady = res; });
-  /* safety net: never block playback forever if the network is really
-     bad — after 6s just let it play from whatever's available */
-  setTimeout(resolveReady, 6000);
-
-  function warmUpNative(){
-    /* fallback warm-up (same trick as before) in case the blob fetch
-       hasn't finished yet or fails outright — but never before the
-       guest has actually tapped the envelope open */
-    if(!window.__inviteOpened) return;
-    const p = v.play();
-    if(p && p.then){
-      p.then(function(){ setTimeout(function(){ v.pause(); }, 60); }).catch(function(){});
-    }
-  }
-
-  fetch(ORIGINAL_SRC, {priority: 'high'})
-    .then(function(res){
-      if(!res.ok) throw new Error('bad response');
-      return res.blob();
-    })
-    .then(function(blob){
-      /* IMPORTANT: only swap the element to the in-memory copy while
-         it hasn't started playing yet. Re-assigning .src on a <video>
-         forces the browser to tear down its decoder/buffer and reload
-         (that's what v.load() does), and doing that WHILE the video is
-         already rolling is exactly what produces a visible stutter/jump
-         — a "cut" — the instant the blob finishes downloading. If the
-         guest already opened the envelope and playback is underway,
-         it's already working fine off the native stream, so we leave
-         it alone instead of interrupting it. */
-      if(v.currentTime > 0 || !v.paused){
-        resolveReady();
-        return;
-      }
-      const blobUrl = URL.createObjectURL(blob);
-      v.src = blobUrl;
-      v.load();
-      resolveReady();
-    })
-    .catch(function(){
-      /* network/CORS issue — just rely on native streaming + warm-up */
-      if(document.readyState === 'complete') warmUpNative();
-      else window.addEventListener('load', warmUpNative);
-      setTimeout(warmUpNative, 1200);
-      resolveReady();
+/* Lightweight diagnostics: if playback ever stops unexpectedly again,
+   these lines print exactly why to the console (readyState/networkState/
+   error code) — connect the phone to a computer (Safari Web Inspector
+   for iPhone, chrome://inspect for Android) and check the console to
+   see the real reason instead of guessing. */
+(function(){
+  const v = document.getElementById('video');
+  if(!v) return;
+  ['pause','stalled','suspend','waiting','ended','error'].forEach(function(evt){
+    v.addEventListener(evt, function(){
+      console.log('[video] event=' + evt,
+        'readyState=' + v.readyState,
+        'networkState=' + v.networkState,
+        'currentTime=' + v.currentTime.toFixed(2),
+        'error=' + (v.error ? v.error.code : 'none'));
     });
+  });
 })();
 
 /* ══ MUSIC TOGGLE ══ */
@@ -3352,18 +3307,19 @@ function celebrateBurst(count){
   });
 })();
 
-/* ══ VIDEO KEEP-ALIVE ══
-   The hero <video> doubles as the background music, so if the mobile
-   browser ever stalls/suspends/pauses it on its own (tab switch, low
-   memory, coming back from the phone's app-switcher, a network blip,
-   scrolling the element off/on screen, etc.) we detect that and resume
-   playback automatically — unless the guest deliberately paused it via
-   the music button (tracked by window.__videoUserPaused above). */
+/* ══ VIDEO KEEP-ALIVE (light touch) ══
+   The hero <video> doubles as the background music. If it genuinely
+   pauses or errors out on its own — not while the guest paused it via
+   the music button — we resume it once. We deliberately do NOT react to
+   'stalled'/'suspend'/'waiting' anymore: those just mean the browser is
+   buffering normally, and forcing extra play() calls during buffering
+   was fighting the browser's own decode/memory management, which is
+   the more likely explanation for it giving up on some phones. We also
+   dropped the aggressive every-4-seconds poll for the same reason. */
 (function(){
   const v = document.getElementById('video');
   if(!v) return;
   window.__videoUserPaused = false;
-  let resumeTimer = null;
   function tryResume(){
     if(!window.__inviteOpened) return; /* never auto-play before the guest opens the card */
     if(window.__videoUserPaused) return;
@@ -3373,24 +3329,17 @@ function celebrateBurst(count){
       if(p && p.catch) p.catch(function(){ /* will retry on next trigger */ });
     }
   }
-  function scheduleResume(){
-    clearTimeout(resumeTimer);
-    resumeTimer = setTimeout(tryResume, 60);
-  }
-  ['pause','stalled','suspend','waiting','ended'].forEach(function(evt){
-    v.addEventListener(evt, scheduleResume);
-  });
+  v.addEventListener('pause', function(){ setTimeout(tryResume, 200); });
+  v.addEventListener('ended', function(){ setTimeout(tryResume, 200); });
   v.addEventListener('error', function(){
     try{ v.load(); }catch(e){}
-    scheduleResume();
+    setTimeout(tryResume, 200);
   });
   document.addEventListener('visibilitychange', function(){
-    if(!document.hidden) scheduleResume();
+    if(!document.hidden) tryResume();
   });
-  window.addEventListener('pageshow', scheduleResume);
-  window.addEventListener('focus', scheduleResume);
-  /* periodic safety-net check in case an event was missed */
-  setInterval(tryResume, 4000);
+  window.addEventListener('pageshow', tryResume);
+  window.addEventListener('focus', tryResume);
 })();
 
 /* ══ SHARE (opens QR modal with native-share + copy-link options) ══ */
