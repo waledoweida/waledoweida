@@ -3121,25 +3121,19 @@ function startPageTurnWatch(){
   });
 })();
 
-/* ══ NIGHT MODE — auto by local time (6PM–6AM), overridable via toggle button ══ */
+/* ══ NIGHT MODE — on by default at all times; switches to day mode only
+   when the guest taps the toggle button themselves, and remembers that
+   choice for their next visit. ══ */
 (function(){
   function getStoredTheme(){
     try{ return localStorage.getItem('wr_theme'); }catch(e){ return null; }
   }
-  function applyNightMode(){
-    if(getStoredTheme()) return; /* user chose manually, don't override */
-    const hour = new Date().getHours();
-    const isNight = hour >= 18 || hour < 6;
-    document.body.classList.toggle('night', isNight);
-  }
-  applyNightMode();
-  setInterval(applyNightMode, 5*60*1000);
+  const stored = getStoredTheme();
+  /* night by default — day mode only if the guest explicitly chose it before */
+  document.body.classList.toggle('night', stored !== 'day');
 
   const btn = document.getElementById('themeBtn');
   function updateIcon(){ btn.textContent = document.body.classList.contains('night') ? '☀️' : '🌙'; }
-  const stored = getStoredTheme();
-  if(stored === 'night') document.body.classList.add('night');
-  else if(stored === 'day') document.body.classList.remove('night');
   updateIcon();
   btn.addEventListener('click', function(){
     const toNight = !document.body.classList.contains('night');
