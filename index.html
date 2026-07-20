@@ -828,6 +828,20 @@ body.night .envelope-letter{
 .env-guest-name.show{display:inline-block;}
 .env-guest-name.visible{opacity:1; transform:translateY(0) scale(1);}
 .env-guest-name b{color:var(--gold); font-weight:700;}
+.env-notice{
+  font-family:'Scheherazade New',serif;
+  font-weight:600;
+  font-size:clamp(.85rem,3.4vw,.98rem);
+  line-height:1.85;
+  color:#8a3b3b;
+  max-width:320px;
+  margin:22px auto 0;
+  padding-top:16px;
+  border-top:1px dashed var(--line-gold);
+  opacity:0; animation:fadeUp 1s ease forwards;
+  animation-delay:1.7s;
+}
+body.night .env-notice{ color:#e39a9a; }
 @keyframes fadeUp{ to{opacity:1; transform:translateY(0);} }
 .env-bismillah,.env-title,.env-names,.env-date,.env-hint{transform:translateY(10px);}
 @keyframes hintBlink{0%,100%{opacity:.5;}50%{opacity:1;}}
@@ -835,7 +849,7 @@ body.night .envelope-letter{
 /* ══ HERO ══ */
 .hero{
   position:relative; width:100%; z-index:2;
-  aspect-ratio:3/4; overflow:hidden;
+  aspect-ratio:800/1534; overflow:hidden;
   background:linear-gradient(160deg,#efe3c2,#d9c48c 60%,#c7ab6a);
 }
 .hero-parallax{
@@ -2030,6 +2044,7 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
     <p class="env-names">وليد &amp; 𝓡</p>
     <p class="env-date">11 / 9 / 2026</p>
     <p class="env-hint" id="envHint"><span class="hint-w">✦</span><span class="hint-w">المس</span><span class="hint-w">الختم</span><span class="hint-w">أو</span><span class="hint-w">اسحبه</span><span class="hint-w">برفق،</span><span class="hint-w">لتتكشف</span><span class="hint-w">لك</span><span class="hint-w">بطاقة</span><span class="hint-w">الفرح</span><span class="hint-w">✦</span></p>
+    <p class="env-notice">يُرجى العلم أنه ممنوع التصوير نهائيًا داخل القاعة (ممنوع تصوير العروسين)، ونرجو من سيادتكم إخبار العائلة والأطفال وتأكيد الأمر عليهم تجنبًا للإحراج أو حدوث أي توتر، شكرًا لكم ❤</p>
   </div>
 </div>
 
