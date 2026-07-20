@@ -1744,6 +1744,8 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
   animation:btnBreathe 5.5s ease-in-out infinite;
 }
 .floating-btn:active{transform:scale(.9);}
+#whatsappBtn{color:#2b2013; text-decoration:none;}
+#whatsappBtn svg{width:21px; height:21px; display:block;}
 @keyframes btnBreathe{
   0%,100%{box-shadow:0 6px 18px rgba(122,92,16,.35);}
   50%{box-shadow:0 6px 22px rgba(122,92,16,.5), 0 0 0 5px rgba(212,175,55,.12);}
@@ -1771,10 +1773,11 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
   transition:transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
 }
 .fab-wrap.open .fab-item{ opacity:1; pointer-events:auto; }
-.fab-wrap.open .fab-item:nth-of-type(1){ transform:scale(1) translateY(-64px); transition-delay:.02s; }
-.fab-wrap.open .fab-item:nth-of-type(2){ transform:scale(1) translateY(-128px); transition-delay:.08s; }
-.fab-wrap.open .fab-item:nth-of-type(3){ transform:scale(1) translateY(-192px); transition-delay:.14s; }
-.fab-wrap.open .fab-item:nth-of-type(4){ transform:scale(1) translateY(-256px); transition-delay:.2s; }
+.fab-wrap.open .fab-item:nth-child(1){ transform:scale(1) translateY(-64px); transition-delay:.02s; }
+.fab-wrap.open .fab-item:nth-child(2){ transform:scale(1) translateY(-128px); transition-delay:.08s; }
+.fab-wrap.open .fab-item:nth-child(3){ transform:scale(1) translateY(-192px); transition-delay:.14s; }
+.fab-wrap.open .fab-item:nth-child(4){ transform:scale(1) translateY(-256px); transition-delay:.2s; }
+.fab-wrap.open .fab-item:nth-child(5){ transform:scale(1) translateY(-320px); transition-delay:.26s; }
 
 /* QR share modal */
 .qr-modal{
@@ -2259,6 +2262,9 @@ body.night .end-notice-text{color:#e39a9a;}
     <button id="themeBtn" class="floating-btn fab-item" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع الليلي/النهاري">🌙</button>
     <button id="saveImgBtn" class="floating-btn fab-item" aria-label="حفظ الدعوة كصورة" title="حفظ الدعوة كصورة">💾</button>
     <button id="shareBtn" class="floating-btn fab-item" aria-label="مشاركة الدعوة" title="مشاركة الدعوة">🔗</button>
+    <a id="whatsappBtn" class="floating-btn fab-item" aria-label="تواصل معنا عبر واتساب" title="تواصل معنا عبر واتساب" href="https://wa.me/201025926261" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.02c-.24.68-1.19 1.25-1.94 1.4-.53.11-1.22.2-3.53-.76-2.96-1.22-4.87-4.22-5.02-4.42-.15-.2-1.2-1.6-1.2-3.05 0-1.45.75-2.16 1.03-2.46.24-.26.53-.32.7-.32h.5c.16 0 .38-.02.58.44.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.28.46-.14.16-.29.36-.42.48-.14.13-.29.28-.12.55.16.27.72 1.19 1.55 1.92 1.07.95 1.96 1.24 2.24 1.38.28.14.44.12.6-.07.16-.2.7-.81.88-1.09.18-.28.36-.23.6-.14.24.09 1.55.73 1.81.86.27.14.45.2.51.31.06.11.06.63-.18 1.3z"/></svg>
+    </a>
   </div>
   <button id="fabMain" class="floating-btn fab-main" aria-label="قائمة الخيارات" aria-expanded="false" title="قائمة الخيارات">✦</button>
 </div>
