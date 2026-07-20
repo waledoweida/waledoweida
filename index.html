@@ -1810,6 +1810,48 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
 .qr-caption{font-size:.76rem; color:var(--ink-soft); margin-bottom:18px; line-height:1.6;}
 .qr-modal-actions{display:flex; flex-direction:column; gap:10px;}
 
+/* ══ END-OF-PAGE NOTICE BANNER — a non-blocking reminder that slides down
+   from the top once the guest scrolls near the bottom of the invitation.
+   It floats above the content but never covers the whole screen and never
+   traps focus, so every other button/link on the page stays fully usable
+   while it's showing. ══ */
+.end-notice{
+  position:fixed; top:14px; left:50%; z-index:250;
+  width:calc(100% - 28px); max-width:380px;
+  transform:translate(-50%,-140%);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:transform .5s cubic-bezier(.22,1,.36,1), opacity .4s ease, visibility .5s;
+}
+.end-notice.show{
+  transform:translate(-50%,0);
+  opacity:1; visibility:visible; pointer-events:auto;
+}
+.end-notice-inner{
+  position:relative;
+  background:linear-gradient(175deg,var(--paper) 0%, var(--marble-1) 55%, var(--marble-2) 100%);
+  border:1px solid var(--line-gold); border-radius:14px;
+  box-shadow:var(--sh-gold), 0 20px 50px rgba(20,15,4,.3);
+  padding:16px 40px 14px 16px;
+  text-align:center;
+}
+.end-notice-icon{font-size:1.15rem; display:block; margin-bottom:4px;}
+.end-notice-text{
+  font-family:'Scheherazade New',serif;
+  font-weight:600;
+  font-size:clamp(.78rem,3.2vw,.9rem);
+  line-height:1.75;
+  color:#8a3b3b;
+}
+body.night .end-notice-text{color:#e39a9a;}
+.end-notice-close{
+  position:absolute; top:8px; left:8px; width:26px; height:26px; border-radius:50%;
+  border:1px solid var(--line-gold); background:transparent; color:var(--ink-soft);
+  font-size:.82rem; line-height:1; cursor:pointer;
+}
+@media (prefers-reduced-motion:reduce){
+  .end-notice{transition:opacity .3s ease;}
+}
+
 /* ambient falling gold flecks (fallback layer, canvas handles main dust) */
 #fallingFxLayer{position:fixed; inset:0; z-index:15; pointer-events:none; overflow:hidden;}
 
@@ -2233,6 +2275,13 @@ body.night .rl-butterfly.ambient-butterfly svg{ filter:drop-shadow(0 0 14px rgba
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="end-notice" id="endNotice">
+  <div class="end-notice-inner">
+    <button class="end-notice-close" id="endNoticeClose" aria-label="إغلاق">✕</button>
+    <span class="end-notice-icon">📵</span>
+    <p class="end-notice-text">يُرجى العلم أنه ممنوع التصوير نهائيًا داخل القاعة (ممنوع تصوير العروسين)، ونرجو من سيادتكم إخبار العائلة والأطفال وتأكيد الأمر عليهم تجنبًا للإحراج أو حدوث أي توتر، شكرًا لكم ❤</p>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -3280,6 +3329,42 @@ function celebrateBurst(count){
     } else {
       audio.pause(); btn.textContent='🔈'; btn.classList.remove('playing');
     }
+  });
+})();
+
+/* ══ END-OF-PAGE NOTICE BANNER ══
+   Shows once the guest scrolls near the bottom of the invitation (after
+   the envelope has been opened). It's a small floating banner, not a
+   full-screen modal, so it never blocks taps/clicks on anything else on
+   the page. Dismissing it with ✕ hides it for the rest of this visit. */
+(function(){
+  const banner = document.getElementById('endNotice');
+  const closeBtn = document.getElementById('endNoticeClose');
+  if(!banner || !closeBtn) return;
+  let shown = false;
+  let dismissed = false;
+
+  function nearBottom(){
+    const doc = document.documentElement;
+    const scrolledTo = window.scrollY + window.innerHeight;
+    return doc.scrollHeight - scrolledTo < 140;
+  }
+
+  function checkNotice(){
+    if(dismissed || shown) return;
+    if(!window.__inviteOpened) return;
+    if(nearBottom()){
+      shown = true;
+      banner.classList.add('show');
+    }
+  }
+
+  window.addEventListener('scroll', checkNotice, {passive:true});
+  window.addEventListener('resize', checkNotice, {passive:true});
+
+  closeBtn.addEventListener('click', function(){
+    dismissed = true;
+    banner.classList.remove('show');
   });
 })();
 
