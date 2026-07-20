@@ -2248,6 +2248,7 @@ body.night .end-notice-text{color:#e39a9a;}
 
       <p class="notice-text page-turn page-turn-soft">نرجو من ضيوفنا الكرام عدم التصوير داخل القاعة، حفاظًا على خصوصية الحفل ومنعًا للإحراج 🤳📵</p>
       <p class="blessings2 page-turn page-turn-soft">دامت لنا ولكم الأفراح، وأدامكم الله لنا أحبابًا أعزاء</p>
+      <div id="pageEndSentinel" aria-hidden="true" style="height:1px;"></div>
     </div>
   </div>
 </div>
@@ -3333,34 +3334,48 @@ function celebrateBurst(count){
 })();
 
 /* ══ END-OF-PAGE NOTICE BANNER ══
-   Shows once the guest scrolls near the bottom of the invitation (after
-   the envelope has been opened). It's a small floating banner, not a
-   full-screen modal, so it never blocks taps/clicks on anything else on
-   the page. Dismissing it with ✕ hides it for the rest of this visit. */
+   Shows once the guest scrolls down to the very end of the invitation
+   (after the envelope has been opened). Uses an IntersectionObserver on
+   an invisible sentinel placed at the bottom of the card — this works
+   reliably no matter which element actually handles the scrolling
+   (window, <html>, or <body>, which can vary by browser/layout), unlike
+   comparing scrollTop/scrollHeight numbers by hand.
+   It's a small floating banner, not a full-screen modal, so it never
+   blocks taps/clicks on anything else on the page. Dismissing it with ✕
+   hides it for the rest of this visit. */
 (function(){
   const banner = document.getElementById('endNotice');
   const closeBtn = document.getElementById('endNoticeClose');
-  if(!banner || !closeBtn) return;
+  const sentinel = document.getElementById('pageEndSentinel');
+  if(!banner || !closeBtn || !sentinel) return;
   let shown = false;
   let dismissed = false;
 
-  function nearBottom(){
-    const doc = document.documentElement;
-    const scrolledTo = window.scrollY + window.innerHeight;
-    return doc.scrollHeight - scrolledTo < 140;
-  }
-
-  function checkNotice(){
+  function reveal(){
     if(dismissed || shown) return;
     if(!window.__inviteOpened) return;
-    if(nearBottom()){
-      shown = true;
-      banner.classList.add('show');
-    }
+    shown = true;
+    banner.classList.add('show');
   }
 
-  window.addEventListener('scroll', checkNotice, {passive:true});
-  window.addEventListener('resize', checkNotice, {passive:true});
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) reveal();
+      });
+    }, {threshold:0});
+    obs.observe(sentinel);
+  } else {
+    /* very old browsers: fall back to a simple periodic check against
+       whichever of body/documentElement is the real scroll container */
+    setInterval(function(){
+      const el = (document.body.scrollHeight - document.body.clientHeight > 20)
+        ? document.body
+        : document.documentElement;
+      const remaining = el.scrollHeight - (el.scrollTop + el.clientHeight);
+      if(remaining < 140) reveal();
+    }, 600);
+  }
 
   closeBtn.addEventListener('click', function(){
     dismissed = true;
