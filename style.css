@@ -1,7 +1,7 @@
 /* ---------- tokens ---------- */
 :root{
   --bg:#f6f5f1; --surface:#ffffff; --surface-2:#efede6; --text:#14161b; --muted:#5b616d; --line:#e4e1d8;
-  --accent:#a8823a; --accent-2:#c99a45; --accent-soft:#f3ead6; --on-accent:#16130c; --wa:#1fa855;
+  --accent:#85652a; --accent-2:#c99a45; --accent-soft:#f3ead6; --on-accent:#16130c; --wa:#1fa855;
   /* always-dark brand panels (hero, CTA, footer) */
   --ink:#0b0d12; --ink-2:#12151c; --ink-3:#1a1e27; --ink-line:#252a35; --ink-text:#eef0f4; --ink-muted:#9aa1ae;
   --gold:#e6c983; --gold-2:#c99a45;
@@ -342,3 +342,15 @@ details[open] > p{animation:rise .35s ease both}
 [dir="ltr"] select{background-position:right 14px center;padding-left:15px;padding-right:40px}
 [dir="ltr"] .fab{left:auto;right:18px}
 [dir="ltr"] .hero h1{letter-spacing:-.03em}
+
+/* utility classes (kept out of inline styles for the CSP) */
+.sprite{position:absolute}
+.why-cta{margin-top:28px}
+.chip-ic.chip-wa{color:#25d366;background:rgba(37,211,102,.12)}
+
+/* ---------- 404 ---------- */
+body.nf-page{background:var(--ink);color:var(--ink-text);min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px 16px}
+.nf b{display:block;font-family:"Readex Pro",sans-serif;font-size:clamp(5rem,20vw,8rem);line-height:1;font-weight:700}
+.nf h1{font-size:1.5rem;margin:16px 0 4px}
+.nf p{color:var(--ink-muted);margin-bottom:28px}
+.nf .btns{justify-content:center}
