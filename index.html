@@ -33,7 +33,7 @@
 {"@context":"https://schema.org","@type":"Person","name":"وليد أحمد علي أبوعويضة","alternateName":"Waled Oweida","url":"https://waledoweida.com/","jobTitle":"تسويق إلكتروني وتصميم مواقع","telephone":"+201025926261","image":"https://waledoweida.com/profile.jpg","areaServed":["Egypt","Kuwait","Saudi Arabia","United Arab Emirates","Qatar","Bahrain","Oman"]}
 </script>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="/style.css?v=2">
+<link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
 
@@ -43,6 +43,7 @@
   <symbol id="arrow" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
 </svg>
 
+<div class="progress" aria-hidden="true"></div>
 <header id="top">
   <div class="wrap">
     <a href="#" class="brand"><img class="avatar" src="/avatar.jpg" alt="" width="40" height="40">وليد أبوعويضة</a>
@@ -124,6 +125,11 @@
     </div>
   </div>
 
+  <!-- ===== STATS ===== -->
+  <div class="stats" aria-label="أرقام">
+    <div class="wrap stats-grid"><div class="stat reveal"><b data-count="11">11</b><span>خدمة احترافية</span></div><div class="stat reveal"><b data-count="3">3</b><span>أسواق: مصر والكويت والخليج</span></div><div class="stat reveal"><b data-count="10+">10+</b><span>منصات إعلانية وتقنية</span></div><div class="stat reveal"><b data-count="2">2</b><span>لغات: عربي وإنجليزي</span></div></div>
+  </div>
+
   <!-- ===== REGIONS ===== -->
   <section class="regions" id="work">
     <div class="wrap">
@@ -162,71 +168,64 @@
         <p class="lead">من أول فكرة لحد ما العميل يوصلك: تسويق، مواقع، وتصميم تحت سقف واحد.</p>
       </div>
 
-      <div class="group">
-        <div class="group-title reveal">التسويق والإعلانات</div>
-        <div class="grid">
-          <div class="card reveal">
+      <div class="group-title reveal">الخدمات الأساسية</div>
+      <div class="feat-grid">
+          <article class="feat reveal">
             <div class="ic"><svg class="i"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
             <h3>إعلانات ممولة</h3>
             <p>إدارة حملات إعلانية ممولة على كل المنصات: فيسبوك، إنستجرام، تيك توك، سناب شات وجوجل، باستهداف دقيق وميزانية محسوبة توصّلك لعملاء حقيقيين.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <h3>خدمات السوشيال ميديا</h3>
-            <p>إدارة صفحاتك على السوشيال ميديا: تصميم بوستات، كتابة محتوى، جدولة النشر، والرد على العملاء.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
-            <h3>ظهور في جوجل (SEO)</h3>
-            <p>تحسين موقعك عشان يطلع في أول نتايج جوجل لما العملاء يدوّروا على خدمتك، من غير ما تدفع على كل زيارة.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
-            <h3>تسجيل على جوجل ماب</h3>
-            <p>تسجيل نشاطك على خرايط جوجل بالعنوان والصور والمواعيد، عشان يظهر لكل اللي بيدوّر في منطقتك.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg></div>
-            <h3>استشارات تسويق</h3>
-            <p>خطة تسويق واضحة لمشروعك قبل ما تصرف: مين عميلك، توصله إزاي، وتحط فلوسك فين.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="group-title reveal">المواقع والتصميم</div>
-        <div class="grid">
-          <div class="card reveal">
+            <ul><li><svg class="i"><use href="#check"/></svg>فيسبوك وإنستجرام</li><li><svg class="i"><use href="#check"/></svg>تيك توك وسناب شات</li><li><svg class="i"><use href="#check"/></svg>إعلانات جوجل ويوتيوب</li><li><svg class="i"><use href="#check"/></svg>استهداف دقيق وميزانية محسوبة</li></ul>
+            <a class="feat-link" href="#contact" data-service="إعلانات ممولة">اطلب الخدمة <svg class="i"><use href="#arrow"/></svg></a>
+          </article>
+          <article class="feat reveal">
             <div class="ic"><svg class="i"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
             <h3>تصميم مواقع</h3>
             <p>تصميم مواقع احترافية سريعة ومتوافقة مع الموبايل، مجهزة للظهور في جوجل، لشركتك أو مشروعك أو متجرك.</p>
-          </div>
-          <div class="card reveal">
+            <ul><li><svg class="i"><use href="#check"/></svg>سريع ومتوافق مع الموبايل</li><li><svg class="i"><use href="#check"/></svg>مجهز للظهور في جوجل</li><li><svg class="i"><use href="#check"/></svg>عربي وإنجليزي</li><li><svg class="i"><use href="#check"/></svg>زرار واتساب وفورم طلبات</li></ul>
+            <a class="feat-link" href="#contact" data-service="تصميم مواقع">اطلب الخدمة <svg class="i"><use href="#arrow"/></svg></a>
+          </article>
+          <article class="feat reveal">
+            <div class="ic"><svg class="i"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <h3>خدمات السوشيال ميديا</h3>
+            <p>إدارة صفحاتك على السوشيال ميديا: تصميم بوستات، كتابة محتوى، جدولة النشر، والرد على العملاء.</p>
+            <ul><li><svg class="i"><use href="#check"/></svg>تصميم بوستات</li><li><svg class="i"><use href="#check"/></svg>كتابة محتوى</li><li><svg class="i"><use href="#check"/></svg>جدولة النشر</li><li><svg class="i"><use href="#check"/></svg>الرد على العملاء</li></ul>
+            <a class="feat-link" href="#contact" data-service="خدمات السوشيال ميديا">اطلب الخدمة <svg class="i"><use href="#arrow"/></svg></a>
+          </article>
+      </div>
+      <div class="group-title reveal">خدمات تانية</div>
+      <div class="mini-grid">
+          <a class="mini reveal" href="#contact" data-service="ظهور في جوجل (SEO)">
+            <div class="ic"><svg class="i"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <div><h3>ظهور في جوجل (SEO)</h3><p>تطلع في أول نتايج جوجل لما العملاء يدوّروا على خدمتك.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="متاجر إلكترونية">
             <div class="ic"><svg class="i"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H5.1"/></svg></div>
-            <h3>متاجر إلكترونية</h3>
-            <p>متجر أونلاين كامل بالمنتجات والسلة والدفع والشحن، سهل تديره بنفسك وتبيع منه من أول يوم.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 10h4M14 14h4"/></svg></div>
-            <h3>مواقع تعريف شخصية وبيزنس كارد أونلاين</h3>
-            <p>صفحة شخصية أنيقة باسمك وخدماتك وطرق التواصل معاك، تحط لينكها في البايو أو على كارتك. مناسبة للدكاترة والمحامين والمدرسين وأصحاب المهن.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-            <h3>دعوات أفراح ومناسبات أونلاين</h3>
-            <p>دعوة إلكترونية بلينك واحد تبعته لكل المعازيم: عد تنازلي، خريطة المكان، موسيقى، وإضافة الموعد للتقويم. للأفراح والخطوبة وأعياد الميلاد وكل المناسبات.</p>
-          </div>
-          <div class="card reveal">
-            <div class="ic"><svg class="i"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg></div>
-            <h3>ترجمة المواقع للإنجليزي</h3>
-            <p>نسخة إنجليزي كاملة من موقعك بترجمة احترافية مش حرفية، عشان توصل لعملاء أكتر جوه البلد وبرّاها.</p>
-          </div>
-          <div class="card reveal">
+            <div><h3>متاجر إلكترونية</h3><p>متجر كامل بالسلة والدفع والشحن، تديره بنفسك بسهولة.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="تسجيل على جوجل ماب">
+            <div class="ic"><svg class="i"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><h3>تسجيل على جوجل ماب</h3><p>نشاطك يظهر على خرايط جوجل لكل اللي بيدوّر في منطقتك.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="تصميم جرافيك وهوية بصرية">
             <div class="ic"><svg class="i"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7h2c3 0 5.5-2.5 5.5-5.5C22 6 17.5 2 12 2z"/><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/></svg></div>
-            <h3>تصميم جرافيك وهوية بصرية</h3>
-            <p>لوجو وألوان وخطوط وتصميمات موحّدة تدّي البراند بتاعك شكل احترافي يفتكره العميل.</p>
-          </div>
-        </div>
+            <div><h3>تصميم جرافيك وهوية بصرية</h3><p>لوجو وهوية بصرية تدّي البراند شكل احترافي يفتكره العميل.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="استشارات تسويق">
+            <div class="ic"><svg class="i"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg></div>
+            <div><h3>استشارات تسويق</h3><p>خطة واضحة: مين عميلك، توصله إزاي، وتصرف فلوسك فين.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="دعوات أفراح ومناسبات أونلاين">
+            <div class="ic"><svg class="i"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+            <div><h3>دعوات أفراح ومناسبات أونلاين</h3><p>دعوة بلينك واحد فيها عد تنازلي وخريطة وموسيقى لكل المعازيم.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="ترجمة المواقع للإنجليزي">
+            <div class="ic"><svg class="i"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg></div>
+            <div><h3>ترجمة المواقع للإنجليزي</h3><p>نسخة إنجليزي احترافية من موقعك توصّلك لعملاء أكتر.</p></div>
+          </a>
+          <a class="mini reveal" href="#contact" data-service="مواقع تعريف شخصية وبيزنس كارد أونلاين">
+            <div class="ic"><svg class="i"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 10h4M14 14h4"/></svg></div>
+            <div><h3>مواقع تعريف شخصية وبيزنس كارد أونلاين</h3><p>صفحة شخصية أنيقة تحط لينكها في البايو أو على كارتك.</p></div>
+          </a>
       </div>
     </div>
   </section>
@@ -282,8 +281,18 @@
     </div>
   </section>
 
+  <!-- ===== CTA BAND ===== -->
+  <section class="band-wrap">
+    <div class="wrap">
+      <div class="band reveal">
+        <div><h2>عندك مشروع في دماغك؟</h2><p>ابعتلي على واتساب ونتكلم فيه، من غير أي التزام.</p></div>
+        <a class="btn btn-dark" href="https://wa.me/201025926261" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>كلّمني على واتساب</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== FAQ ===== -->
-  <section id="faq" style="padding-top:0">
+  <section id="faq">
     <div class="wrap faq-grid">
       <div class="reveal">
         <span class="eyebrow">أسئلة شائعة</span>
@@ -399,6 +408,6 @@
 
 <a class="fab" href="https://wa.me/201025926261" target="_blank" rel="noopener" aria-label="تواصل على واتساب"><svg><use href="#wa"/></svg></a>
 
-<script src="/main.js?v=2" defer></script>
+<script src="/main.js?v=3" defer></script>
 </body>
 </html>
