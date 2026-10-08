@@ -19,11 +19,12 @@
 <meta property="og:locale" content="ar_EG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://waledoweida.com/og.png">
+<link rel="preload" as="image" href="profile.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"وليد أحمد علي أبوعويضة","alternateName":"Waled Oweida","url":"https://waledoweida.com/","jobTitle":"تسويق إلكتروني وتصميم مواقع","telephone":"+201025926261"}
+{"@context":"https://schema.org","@type":"Person","name":"وليد أحمد علي أبوعويضة","alternateName":"Waled Oweida","url":"https://waledoweida.com/","jobTitle":"تسويق إلكتروني وتصميم مواقع","telephone":"+201025926261","image":"https://waledoweida.com/profile.jpg"}
 </script>
 <script>document.documentElement.classList.add('js')</script>
 <style>
@@ -113,32 +114,26 @@ nav a:hover{color:var(--gold)}
 .trust svg{width:18px;height:18px;color:var(--gold)}
 
 /* hero visual */
-.visual{position:relative;max-width:520px;width:100%;margin-inline:auto;aspect-ratio:1/0.92}
-.win{position:absolute;inset:6% 4% 14% 10%;border-radius:18px;background:var(--ink-2);border:1px solid var(--ink-line);box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden}
-.win-bar{display:flex;align-items:center;gap:6px;padding:12px 14px;border-bottom:1px solid var(--ink-line);direction:ltr}
-.win-bar i{width:10px;height:10px;border-radius:50%;background:#3a3f4b}
-.win-bar i:nth-child(1){background:#ff5f57}.win-bar i:nth-child(2){background:#febc2e}.win-bar i:nth-child(3){background:#28c840}
-.url{margin-left:10px;flex:1;height:22px;border-radius:6px;background:var(--ink-3);font-size:11px;color:var(--ink-muted);display:flex;align-items:center;padding:0 10px;font-family:system-ui}
-.win-body{padding:20px;display:grid;gap:12px}
-.sk{height:10px;border-radius:6px;background:var(--ink-3)}
-.sk.h{height:16px;width:60%;background:linear-gradient(90deg,var(--gold),var(--gold-2));opacity:.9}
-.sk.w80{width:80%}.sk.w50{width:50%}
-.sk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
-.sk-card{height:70px;border-radius:10px;background:var(--ink-3);border:1px solid var(--ink-line)}
+.visual{position:relative;max-width:500px;width:100%;margin-inline:auto;aspect-ratio:1/1.08}
+.visual::before{content:"";position:absolute;inset:9% 9% 3% 22%;border:2px solid rgba(230,201,131,.35);border-radius:30px}
+.photo{position:absolute;inset:3% 14% 9% 17%;border-radius:28px;overflow:hidden;border:1px solid var(--ink-line);box-shadow:0 30px 80px rgba(0,0,0,.5);background:var(--ink-2)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,13,18,.55))}
 .float{position:absolute;border-radius:16px;background:rgba(18,21,28,.92);border:1px solid var(--ink-line);box-shadow:0 20px 50px rgba(0,0,0,.45);backdrop-filter:blur(8px);padding:14px 16px;animation:bob 6s ease-in-out infinite}
 .float small{display:block;color:var(--ink-muted);font-size:.78rem;line-height:1.5}
 .float b{font-family:"Readex Pro",sans-serif;font-weight:600;font-size:.95rem}
-.f-ads{left:0;bottom:0;width:58%;animation-delay:-2s}
+.f-ads{left:0;bottom:-4%;width:54%;animation-delay:-2s}
 .f-ads svg{display:block;width:100%;height:60px;margin-top:8px}
 .f-seo{right:0;top:0;display:flex;align-items:center;gap:12px}
 .f-soc{right:-2%;bottom:24%;display:flex;align-items:center;gap:10px;animation-delay:-4s}
 .chip-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(230,201,131,.12);color:var(--gold)}
 @keyframes bob{50%{transform:translateY(-8px)}}
 @media (max-width:560px){
-  .visual{aspect-ratio:1/0.8}
-  .win{inset:12% 0 16% 6%}
+  .visual{max-width:360px}
   .f-soc{display:none}
-  .f-ads{width:66%}
+  .f-seo{top:-5%;right:-4%}
+  .f-ads{width:62%;bottom:-9%;left:-4%}
+  .f-ads svg{height:40px}
 }
 
 /* ---------- platforms strip ---------- */
@@ -292,26 +287,17 @@ footer{background:var(--ink);color:var(--ink-muted);border-top:1px solid var(--i
         </div>
       </div>
 
-      <div class="visual" aria-hidden="true">
-        <div class="win">
-          <div class="win-bar"><i></i><i></i><i></i><div class="url">yourbrand.com</div></div>
-          <div class="win-body">
-            <div class="sk h"></div>
-            <div class="sk w80"></div>
-            <div class="sk w50"></div>
-            <div class="sk-row"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
-            <div class="sk w80"></div>
-          </div>
-        </div>
-        <div class="float f-seo">
+      <div class="visual">
+        <div class="photo"><img src="profile.jpg" alt="وليد أحمد علي أبوعويضة" width="520" height="620" fetchpriority="high"></div>
+        <div class="float f-seo" aria-hidden="true">
           <span class="chip-ic"><svg class="i"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
           <div><b>ظهور في جوجل</b><small>SEO وخرايط جوجل</small></div>
         </div>
-        <div class="float f-soc">
+        <div class="float f-soc" aria-hidden="true">
           <span class="chip-ic"><svg class="i"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
           <div><b>سوشيال ميديا</b><small>محتوى وتصميم ونشر</small></div>
         </div>
-        <div class="float f-ads">
+        <div class="float f-ads" aria-hidden="true">
           <b>حملة إعلانية</b><small>استهداف دقيق • نتايج قابلة للقياس</small>
           <svg viewBox="0 0 200 60" preserveAspectRatio="none">
             <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e6c983" stop-opacity=".35"/><stop offset="1" stop-color="#e6c983" stop-opacity="0"/></linearGradient></defs>
