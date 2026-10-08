@@ -44,11 +44,12 @@
   // count-up numbers
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function countUp(el){
-    var raw = el.getAttribute('data-count'), end = parseInt(raw, 10), suffix = raw.replace(/[0-9]/g, '');
-    if (reduce || !end) return;
-    var t0 = null;
-    function step(t){ if (!t0) t0 = t; var k = Math.min((t - t0) / 1200, 1); el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))) + suffix; if (k < 1) requestAnimationFrame(step); }
-    el.textContent = '0' + suffix; requestAnimationFrame(step);
+    var raw = el.getAttribute('data-count'), m = raw.match(/^(\D*)(\d+)(\D*)$/);
+    if (reduce || !m) return;
+    var pre = m[1], end = parseInt(m[2], 10), post = m[3], t0 = null;
+    function fmt(n){ return pre + n.toLocaleString('en-US') + post; }
+    function step(t){ if (!t0) t0 = t; var k = Math.min((t - t0) / 1600, 1); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); }
+    el.textContent = fmt(0); requestAnimationFrame(step);
   }
   if ('IntersectionObserver' in window) {
     var co = new IntersectionObserver(function(entries){
