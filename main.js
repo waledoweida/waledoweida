@@ -4,7 +4,11 @@
 
   // header background after scrolling past the top
   var hdr = document.getElementById('top');
-  function onScroll(){ hdr.classList.toggle('scrolled', window.scrollY > 20); }
+  var bar = document.querySelector('.progress');
+  function onScroll(){
+    hdr.classList.toggle('scrolled', window.scrollY > 20);
+    if (bar) { var h = document.documentElement.scrollHeight - innerHeight; bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')'; }
+  }
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
 
   // mobile menu
@@ -18,6 +22,12 @@
 
   // request form -> WhatsApp
   var f = document.getElementById('reqForm');
+
+  // service links preselect the service in the form
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-service]');
+    if (t && f) f.elements['service'].value = t.getAttribute('data-service');
+  });
   f.addEventListener('submit', function(e){
     e.preventDefault();
     var el = f.elements;
@@ -30,6 +40,22 @@
       : 'السلام عليكم، أنا ' + name + '\nمحتاج خدمة: ' + service + (details ? '\n\nالتفاصيل:\n' + details : '');
     window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
   });
+
+  // count-up numbers
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(el){
+    var raw = el.getAttribute('data-count'), end = parseInt(raw, 10), suffix = raw.replace(/[0-9]/g, '');
+    if (reduce || !end) return;
+    var t0 = null;
+    function step(t){ if (!t0) t0 = t; var k = Math.min((t - t0) / 1200, 1); el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))) + suffix; if (k < 1) requestAnimationFrame(step); }
+    el.textContent = '0' + suffix; requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window) {
+    var co = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if (en.isIntersecting) { countUp(en.target); co.unobserve(en.target); } });
+    }, { threshold: .6 });
+    document.querySelectorAll('[data-count]').forEach(function(el){ co.observe(el); });
+  }
 
   // reveal on scroll
   var els = document.querySelectorAll('.reveal');
