@@ -7,6 +7,15 @@
   function onScroll(){ hdr.classList.toggle('scrolled', window.scrollY > 20); }
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
 
+  // mobile menu
+  var mb = document.querySelector('.menu-btn'), mn = document.getElementById('mnav');
+  if (mb && mn) {
+    function setMenu(open){ mn.hidden = !open; mb.setAttribute('aria-expanded', open); hdr.classList.toggle('menu-open', open); }
+    mb.addEventListener('click', function(){ setMenu(mn.hidden); });
+    mn.addEventListener('click', function(e){ if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+  }
+
   // request form -> WhatsApp
   var f = document.getElementById('reqForm');
   f.addEventListener('submit', function(e){
