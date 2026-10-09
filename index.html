@@ -37,7 +37,7 @@
 {"@context":"https://schema.org","@type":"Person","name":"وليد أحمد علي أبوعويضة","alternateName":"Waled Oweida","url":"https://waledoweida.com/","jobTitle":"تسويق إلكتروني وتصميم مواقع","telephone":"+201025926261","image":"https://waledoweida.com/profile.jpg","areaServed":["Egypt","Libya","Kuwait","Saudi Arabia","United Arab Emirates","Qatar","Bahrain","Oman"]}
 </script>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="/style.css?v=19">
+<link rel="stylesheet" href="/style.css?v=20">
 </head>
 <body>
 
@@ -298,16 +298,31 @@
   </section>
 
   <!-- ===== CTA BAND ===== -->
-  <section class="band-wrap" id="audit">
+  <section class="audit-wrap" id="audit">
     <div class="wrap">
-      <div class="band reveal">
-        <div class="band-text"><span class="band-tag">تقييم مجاني</span><h2>قيّملك صفحتك أو موقعك ببلاش</h2><p>ابعتلي لينك صفحتك أو موقعك، وأقولك إيه اللي ممكن يتحسّن عشان يجيبلك عملاء أكتر. من غير أي التزام.</p></div>
-        <form class="audit" id="auditForm" novalidate>
-          <label class="sr-only" for="auditLink">لينك صفحتك أو موقعك</label>
-          <input id="auditLink" name="link" type="text" inputmode="url" autocomplete="url" required placeholder="مثلاً: facebook.com/yourpage">
-          <label class="sr-only" for="auditName">اسمك</label>
-          <input id="auditName" name="name" type="text" autocomplete="name" required placeholder="اسمك">
-          <button class="btn btn-dark" type="submit"><svg><use href="#wa"/></svg>اطلب التقييم المجاني</button>
+      <div class="audit-card reveal">
+        <div class="audit-info">
+          <span class="audit-tag">تقييم مجاني</span>
+          <h2>قيّملك صفحتك أو موقعك ببلاش</h2>
+          <p>ابعتلي لينك صفحتك أو موقعك، وهراجعه بنفسي وأقولك بالظبط إيه اللي ممكن يتحسّن عشان يجيبلك عملاء أكتر.</p>
+          <ul class="audit-list">
+            <li><svg class="i"><use href="#check"/></svg>شكل الصفحة وسرعتها على الموبايل</li>
+            <li><svg class="i"><use href="#check"/></svg>ظهورك في جوجل وخرايط جوجل</li>
+            <li><svg class="i"><use href="#check"/></svg>الكلام والعروض وطريقة عرض خدماتك</li>
+            <li><svg class="i"><use href="#check"/></svg>إعلاناتك وصفحاتك على السوشيال ميديا</li>
+          </ul>
+          <div class="audit-badges"><span>من غير أي التزام</span><span>مراجعة شخصية مني</span></div>
+        </div>
+        <form class="audit-form" id="auditForm" novalidate>
+          <h3>ابعت طلبك</h3>
+          <label>لينك صفحتك أو موقعك
+            <input name="link" type="text" inputmode="url" autocomplete="url" required placeholder="facebook.com/yourpage" dir="ltr">
+          </label>
+          <label>اسمك
+            <input name="name" type="text" autocomplete="name" required placeholder="مثلاً: أحمد محمد">
+          </label>
+          <button class="btn btn-gold" type="submit"><svg class="i"><use href="#wa"/></svg>اطلب التقييم المجاني</button>
+          <p class="audit-note">هيتفتح واتساب برسالة جاهزة، تدوس إرسال وبس.</p>
           <p class="audit-ok" role="status" hidden>تمام! اتفتح واتساب بطلبك، دوس إرسال وهبعتلك التقييم.</p>
         </form>
       </div>

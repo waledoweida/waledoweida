@@ -36,7 +36,7 @@
 {"@context":"https://schema.org","@type":"Person","name":"Waled Ahmed Ali Abu Oweida","alternateName":"وليد أحمد علي أبوعويضة","url":"https://waledoweida.com/en/","jobTitle":"Digital Marketing & Web Design","telephone":"+201025926261","image":"https://waledoweida.com/profile.jpg","areaServed":["Egypt","Libya","Kuwait","Saudi Arabia","United Arab Emirates","Qatar","Bahrain","Oman"]}
 </script>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="/style.css?v=19">
+<link rel="stylesheet" href="/style.css?v=20">
 </head>
 <body>
 
@@ -297,16 +297,31 @@
   </section>
 
   <!-- ===== CTA BAND ===== -->
-  <section class="band-wrap" id="audit">
+  <section class="audit-wrap" id="audit">
     <div class="wrap">
-      <div class="band reveal">
-        <div class="band-text"><span class="band-tag">Free review</span><h2>Get a free review of your page or website</h2><p>Send me the link to your page or website and I'll tell you what can be improved to bring you more customers. No commitment.</p></div>
-        <form class="audit" id="auditForm" novalidate>
-          <label class="sr-only" for="auditLink">Link to your page or website</label>
-          <input id="auditLink" name="link" type="text" inputmode="url" autocomplete="url" required placeholder="e.g. instagram.com/yourbrand">
-          <label class="sr-only" for="auditName">Your name</label>
-          <input id="auditName" name="name" type="text" autocomplete="name" required placeholder="Your name">
-          <button class="btn btn-dark" type="submit"><svg><use href="#wa"/></svg>Get my free review</button>
+      <div class="audit-card reveal">
+        <div class="audit-info">
+          <span class="audit-tag">Free review</span>
+          <h2>Get a free review of your page or website</h2>
+          <p>Send me the link to your page or website. I'll review it myself and tell you exactly what can be improved to bring you more customers.</p>
+          <ul class="audit-list">
+            <li><svg class="i"><use href="#check"/></svg>Design and speed on mobile</li>
+            <li><svg class="i"><use href="#check"/></svg>Visibility on Google and Google Maps</li>
+            <li><svg class="i"><use href="#check"/></svg>Copy, offers and how your services come across</li>
+            <li><svg class="i"><use href="#check"/></svg>Your ads and social media pages</li>
+          </ul>
+          <div class="audit-badges"><span>No commitment</span><span>Reviewed personally by me</span></div>
+        </div>
+        <form class="audit-form" id="auditForm" novalidate>
+          <h3>Send your request</h3>
+          <label>Link to your page or website
+            <input name="link" type="text" inputmode="url" autocomplete="url" required placeholder="instagram.com/yourbrand" dir="ltr">
+          </label>
+          <label>Your name
+            <input name="name" type="text" autocomplete="name" required placeholder="e.g. Sarah Ahmed">
+          </label>
+          <button class="btn btn-gold" type="submit"><svg class="i"><use href="#wa"/></svg>Get my free review</button>
+          <p class="audit-note">WhatsApp opens with a ready message — just hit send.</p>
           <p class="audit-ok" role="status" hidden>Done! WhatsApp opened with your request — hit send and I'll get back to you with the review.</p>
         </form>
       </div>
