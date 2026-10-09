@@ -38,3 +38,8 @@ changes these paths.
 - Security headers live in `vercel.json` as an explicit list of the site's paths. `wedding/` and `فرح/` are intentionally not listed so their responses stay untouched.
 - Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST) and `ADMIN_KEY`. Never commit their values. `package.json` holds the `redis` client plus dev-only TypeScript tooling.
 - The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.
+
+## Checks
+
+- `npm run check` = types + API tests + HTML validation (`html-validate`, wedding excluded via `.htmlvalidateignore`).
+- `.github/workflows/quality.yml` runs the same plus `npm audit` and verifies generated pages match `tools/` sources. Keep it green.

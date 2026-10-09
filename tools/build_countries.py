@@ -13,7 +13,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_blog import L, SITE, chrome, page, write, update_sitemap, build as build_blog  # noqa: E402
+from build_blog import L, SITE, chrome, page, page_title, write, update_sitemap, build as build_blog  # noqa: E402
 from countries import COUNTRIES  # noqa: E402
 
 T = {
@@ -125,7 +125,7 @@ def build():
                   "provider": {"@type": "Person", "name": d["name"], "url": SITE + d["home"],
                                "telephone": "+" + WA_NUM}}
             write(path.strip("/") + "/index.html",
-                  page(lang, title=f"{x['title']} | {d['short']}", desc=x["desc"], path=path, alt_path=alt,
+                  page(lang, title=page_title(x.get('seo_title', x['title']), d['short']), desc=x["desc"], path=path, alt_path=alt,
                        og_type="website", ld=ld, body=body, ch=ch))
             out.append(path)
     return out

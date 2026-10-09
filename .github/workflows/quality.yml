@@ -1,0 +1,39 @@
+# Quality gate for every pull request and push to main:
+# TypeScript types, API tests, HTML validation, generated pages in sync, no vulnerable dependencies.
+# The wedding invitation (wedding/, فرح/) is excluded everywhere; protect-wedding.yml guards it separately.
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - name: Types
+        run: npm run typecheck
+      - name: API tests
+        run: npm test
+      - name: HTML validation
+        run: npm run lint:html
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+      - name: Generated pages are in sync with their sources
+        run: |
+          python3 tools/build_countries.py > /dev/null
+          python3 tools/build_review.py > /dev/null
+          git diff --exit-code -- . ':(exclude)wedding' ':(exclude)فرح'

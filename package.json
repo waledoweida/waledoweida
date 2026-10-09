@@ -10,10 +10,13 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "test": "tsc -p tsconfig.test.json && node --test tests/api.test.js"
+    "test": "tsc -p tsconfig.test.json && node --test tests/api.test.js",
+    "lint:html": "html-validate \"**/*.html\"",
+    "check": "npm run typecheck && npm test && npm run lint:html"
   },
   "devDependencies": {
     "@types/node": "20.16.11",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "html-validate": "8.24.1"
   }
 }
