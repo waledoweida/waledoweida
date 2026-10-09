@@ -1,5 +1,57 @@
 (function(){
   var WA = '201025926261';
+
+  // anonymous visit stats -> Google Apps Script (tools/analytics-apps-script.gs), read on /admin/.
+  // Empty TRACK_URL = off. Bots are skipped, and so is the owner once /admin/ was opened on that device.
+  var TRACK_URL = '';
+  (function(){
+    if (!TRACK_URL || !navigator.sendBeacon) return;
+    var ua = navigator.userAgent || '';
+    if (navigator.webdriver || /bot|crawl|spider|slurp|preview|lighthouse|headless/i.test(ua)) return;
+    function get(st, k){ try { return st.getItem(k); } catch (e) { return null; } }
+    function put(st, k, v){ try { st.setItem(k, v); } catch (e) {} }
+    var LS = window.localStorage, SS = window.sessionStorage;
+    if (get(LS, 'wo_owner') === '1') return;
+    function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+    var vid = get(LS, 'wo_vid') || rid(); put(LS, 'wo_vid', vid);
+    var sid = get(SS, 'wo_sid') || rid(); put(SS, 'wo_sid', sid);
+    var q = new URLSearchParams(location.search), ref = '';
+    try { if (document.referrer) { var r = new URL(document.referrer); if (r.host !== location.host) ref = r.host; } } catch (e) {}
+    var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    var base = { vid: vid, sid: sid, path: location.pathname, ref: ref,
+      source: q.get('utm_source') || '', medium: q.get('utm_medium') || '', campaign: q.get('utm_campaign') || '',
+      device: /iPad|Tablet/i.test(ua) ? 'tablet' : (/Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop'),
+      tz: tz, lang: document.documentElement.lang };
+    function send(type, value){
+      var d = {}; for (var k in base) d[k] = base[k];
+      d.type = type; d.value = value || '';
+      try { navigator.sendBeacon(TRACK_URL, JSON.stringify(d)); } catch (e) {}
+    }
+    // one view per page per visit, so refreshing doesn't inflate the numbers
+    var seen = 'wo_seen_' + location.pathname;
+    if (!get(SS, seen)) { put(SS, seen, '1'); send('view'); }
+    // contact clicks
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+      var h = a.getAttribute('href');
+      if (/^https:\/\/wa\.me\//.test(h)) send('click', 'whatsapp:' + (a.className.split(' ')[0] || 'link'));
+      else if (/^tel:/.test(h)) send('click', 'phone');
+    }, true);
+    document.addEventListener('submit', function(e){
+      var fm = e.target; if (fm.checkValidity && fm.checkValidity()) send('click', 'form:' + (fm.id || 'form'));
+    }, true);
+    // time actually spent looking at the page (tab visible)
+    var shown = document.visibilityState === 'visible' ? Date.now() : 0;
+    function flush(){
+      if (!shown) return;
+      var secs = Math.round((Date.now() - shown) / 1000); shown = 0;
+      if (secs >= 1) send('time', secs);
+    }
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'hidden') flush(); else shown = Date.now();
+    });
+    window.addEventListener('pagehide', flush);
+  })();
   var yr = document.getElementById('y'); if (yr) yr.textContent = new Date().getFullYear();
 
   // header background after scrolling past the top
