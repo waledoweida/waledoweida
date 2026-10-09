@@ -90,16 +90,11 @@
   }
 
   function load(){
-    var key = get('wo_admin_key');
-    if (!key) { show('login'); return; }
     $('err').hidden = true;
     $('updated').textContent = 'جاري التحميل…';
-    fetch(STATS_URL + '?days=' + days, { headers: { Authorization: 'Bearer ' + key }, cache: 'no-store' })
+    fetch(STATS_URL + '?days=' + days, { credentials: 'same-origin', cache: 'no-store' })
       .then(function(r){
-        if (r.status === 401) {
-          put('wo_admin_key', null); show('login');
-          $('loginErr').textContent = 'كلمة السر غلط.'; $('loginErr').hidden = false; return null;
-        }
+        if (r.status === 401) { show('login'); return null; }
         if (r.status === 503) { show('setup'); return null; }
         if (!r.ok) throw new Error(r.status);
         return r.json();
@@ -108,11 +103,23 @@
       .catch(function(){ show('dash'); $('err').textContent = 'تعذّر تحميل البيانات. اتأكد من الإنترنت وجرّب تاني.'; $('err').hidden = false; });
   }
 
+  // password goes to /api/login once; the session lives in an HttpOnly cookie the page can't read
   $('loginForm').addEventListener('submit', function(e){
     e.preventDefault(); $('loginErr').hidden = true;
-    put('wo_admin_key', $('key').value.trim()); $('key').value = ''; load();
+    var pw = $('key').value; $('key').value = '';
+    fetch('/api/login', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }) })
+      .then(function(r){
+        if (r.ok) { load(); return; }
+        $('loginErr').textContent = r.status === 429 ? 'محاولات كتير غلط. استنى ربع ساعة وجرّب تاني.'
+          : r.status === 503 ? 'لوحة التحكم مش متظبطة لسه.' : 'كلمة السر غلط.';
+        $('loginErr').hidden = false;
+      })
+      .catch(function(){ $('loginErr').textContent = 'تعذّر الاتصال. جرّب تاني.'; $('loginErr').hidden = false; });
   });
-  $('logout').addEventListener('click', function(){ put('wo_admin_key', null); show('login'); });
+  $('logout').addEventListener('click', function(){
+    fetch('/api/logout', { method: 'POST', credentials: 'same-origin' }).finally(function(){ show('login'); });
+  });
+  put('wo_admin_key', null); // old versions kept the password in the browser; remove it
   $('refresh').addEventListener('click', load);
   document.querySelectorAll('.seg button').forEach(function(b){
     b.setAttribute('aria-pressed', +b.getAttribute('data-days') === days ? 'true' : 'false');

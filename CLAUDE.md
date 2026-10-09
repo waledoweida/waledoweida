@@ -27,13 +27,14 @@ changes these paths.
 - `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed)
 - `404.html`, `robots.txt`, `sitemap.xml`, icons, `og.png`, `profile.jpg`, `avatar.jpg`
 - Home pages carry a Content-Security-Policy meta; keep styles out of inline `style=""` attributes.
-- `_config.yml` keeps repo-only files (`CLAUDE.md`, `tools/`) off the published site.
+- `.vercelignore` keeps repo-only files (`CLAUDE.md`, `tools/`, `tests/`, …) off the published site.
 - Blog: `tools/build_blog.py` generates `blog/` and `en/blog/` from the article sources in `tools/articles.py`; run it after editing an article and commit the output.
 - Country pages: `tools/build_countries.py` generates `/egypt/`, `/libya/`, `/kuwait/`, `/gulf/` (+ `/en/...`) from `tools/countries.py`; it also refreshes `sitemap.xml`.
 
 ## Hosting (Vercel) and visitor stats
 
-- The site is served by Vercel from `main` (static files + the functions in `api/`); every merge to `main` deploys automatically. `.vercelignore` keeps repo-only files off Vercel. GitHub Pages was the old host (`_config.yml`, `CNAME` are leftovers from it).
-- `api/track.js` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `api/stats.js` returns the summary for `/admin/` when called with `Authorization: Bearer <ADMIN_KEY>`.
-- Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST) and `ADMIN_KEY`. Never commit their values. `package.json` only exists for the `redis` client used by `api/`.
+- The site is served by Vercel from `main` (static files + the functions in `api/`); every merge to `main` deploys automatically.
+- `api/` is TypeScript (`npm run typecheck`, `npm test`). `track.ts` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `login.ts` checks `ADMIN_KEY` (5 wrong tries per 15 min per address) and sets a signed HttpOnly session cookie; `stats.ts` needs that session.
+- Security headers live in `vercel.json` as an explicit list of the site's paths. `wedding/` and `فرح/` are intentionally not listed so their responses stay untouched.
+- Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST) and `ADMIN_KEY`. Never commit their values. `package.json` holds the `redis` client plus dev-only TypeScript tooling.
 - The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.
