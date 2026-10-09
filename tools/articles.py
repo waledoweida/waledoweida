@@ -4,6 +4,239 @@
 
 ARTICLES = [
 {
+  "slug": "website-cost",
+  "date": "2026-10-09",
+  "icon": "price",
+  "ar": {
+    "title": "تصميم موقع بيتكلف كام؟ إيه اللي بيحدد السعر فعلًا",
+    "desc": "ليه سعر الموقع بيفرق من مكان للتاني؟ اعرف العوامل اللي بتحدد التكلفة، وإزاي تاخد أحسن قيمة لفلوسك من غير مفاجآت.",
+    "body": """
+<p>"الموقع بكام؟" سؤال بيجيلي كل يوم، والإجابة الصادقة: حسب الموقع. زي ما سعر العربية بيفرق حسب الموديل والإمكانيات، سعر الموقع بيفرق حسب اللي إنت محتاجه منه. في المقال ده هوضحلك العوامل اللي بتحدد السعر، عشان تعرف إنت بتدفع في إيه بالظبط.</p>
+
+<h2>1. نوع الموقع</h2>
+<p>صفحة تعريف بسيطة أو بيزنس كارد أونلاين حاجة، وموقع شركة فيه خدمات ومدونة حاجة تانية، ومتجر إلكتروني فيه منتجات وسلة ودفع حاجة تالتة خالص. كل ما الموقع يعمل حاجات أكتر، كل ما الشغل اللي وراه يزيد.</p>
+
+<h2>2. عدد الصفحات والمحتوى</h2>
+<p>صفحة واحدة غير عشر صفحات. وكمان مين هيكتب الكلام ويجهّز الصور؟ لو المحتوى جاهز عندك، ده بيوفر وقت وفلوس. ولو محتاجني أكتبه وأظبطه عشان يبيع ويظهر في جوجل، ده جزء من الشغل.</p>
+
+<h2>3. التصميم: قالب جاهز ولا تصميم خاص؟</h2>
+<p>القالب الجاهز أرخص وأسرع، بس شكله ممكن يكون شبه مواقع كتير. التصميم الخاص معمول على مقاس نشاطك وهويتك، وبيدي انطباع احترافي أقوى. الاختيار يعتمد على ميزانيتك وأهمية الصورة الاحترافية في مجالك.</p>
+
+<h2>4. المميزات الإضافية</h2>
+<p>فورم طلبات، حجز مواعيد، دفع أونلاين، لغتين عربي وإنجليزي، ربط بالواتساب، لوحة تحكم تعدّل منها بنفسك… كل ميزة من دول بتضيف قيمة، وبتضيف شغل.</p>
+
+<h2>5. الدومين والاستضافة</h2>
+<p>الدومين هو اسم موقعك (زي waledoweida.com)، والاستضافة هي المكان اللي الموقع شغال عليه. دول بيتجددوا كل سنة، فخلي بالك تسأل عليهم من الأول عشان ما تتفاجئش بعدين.</p>
+
+<blockquote class="tip"><strong>نصيحة:</strong> اتأكد إن الدومين متسجل باسمك إنت، مش باسم الشخص اللي عمل الموقع. كده الموقع ملكك فعلًا مهما حصل.</blockquote>
+
+<h2>6. المتابعة بعد التسليم</h2>
+<p>الموقع مش حاجة بتتعمل مرة وخلاص. تحديثات، تعديل أسعار، إضافة خدمات، حل أي مشكلة. اسأل دايمًا: هل في متابعة بعد التسليم؟ ولمدة قد إيه؟</p>
+
+<h2>إزاي تاخد أحسن قيمة لفلوسك؟</h2>
+<ul>
+  <li><strong>ابدأ باللي محتاجه فعلًا:</strong> موقع صغير شغال كويس أحسن من موقع كبير ناقص.</li>
+  <li><strong>اطلب سعر واضح ومكتوب:</strong> فيه كل حاجة هتتعمل، عشان مفيش مفاجآت.</li>
+  <li><strong>بص على شغل سابق:</strong> واسأل عن سرعة الموقع وشكله على الموبايل.</li>
+</ul>
+
+<h2>الخلاصة</h2>
+<p>السعر الصح هو اللي بيجيبلك عملاء أكتر من اللي دفعته. لو عايز تعرف موقعك هيتكلف كام بالظبط، ابعتلي على واتساب وقولّي محتاج إيه، وهبعتلك خطة وسعر واضح قبل ما نبدأ.</p>
+"""
+  },
+  "en": {
+    "title": "How much does a website cost? What actually sets the price",
+    "desc": "Why do website prices vary so much? Learn the factors that drive the cost and how to get the best value without surprises.",
+    "body": """
+<p>"How much is a website?" I get asked this every day, and the honest answer is: it depends on the website. Just as a car's price depends on the model and features, a website's price depends on what you need it to do. Here are the factors that set the price, so you know exactly what you're paying for.</p>
+
+<h2>1. The type of website</h2>
+<p>A simple profile page or online business card is one thing; a company site with services and a blog is another; an online store with products, cart and payments is something else entirely. The more a site does, the more work goes into it.</p>
+
+<h2>2. Number of pages and content</h2>
+<p>One page isn't ten. And who writes the copy and prepares the images? If your content is ready, that saves time and money. If you need it written and shaped to sell and rank on Google, that's part of the job.</p>
+
+<h2>3. Design: template or custom?</h2>
+<p>A template is cheaper and faster, but may look like many other sites. A custom design is built around your business and brand and makes a stronger professional impression. The choice depends on your budget and how much a premium image matters in your field.</p>
+
+<h2>4. Extra features</h2>
+<p>Order forms, appointment booking, online payment, Arabic and English, WhatsApp integration, a dashboard to edit content yourself… each adds value — and work.</p>
+
+<h2>5. Domain and hosting</h2>
+<p>The domain is your site's name (like waledoweida.com); hosting is where it runs. Both renew yearly, so ask about them upfront to avoid surprises later.</p>
+
+<blockquote class="tip"><strong>Tip:</strong> Make sure the domain is registered in your name, not the developer's. That way the site is truly yours, whatever happens.</blockquote>
+
+<h2>6. Support after launch</h2>
+<p>A website isn't a one-off. Updates, price changes, new services, fixing issues. Always ask: is there support after delivery, and for how long?</p>
+
+<h2>How to get the best value</h2>
+<ul>
+  <li><strong>Start with what you actually need:</strong> a small site that works well beats a big one that's half done.</li>
+  <li><strong>Ask for a clear, written quote:</strong> listing everything that will be delivered.</li>
+  <li><strong>Look at previous work:</strong> and check speed and how it looks on mobile.</li>
+</ul>
+
+<h2>The bottom line</h2>
+<p>The right price is the one that brings in more customers than it costs. If you want to know exactly what your site would cost, message me on WhatsApp with what you need and I'll send a clear plan and price before we start.</p>
+"""
+  }
+},
+{
+  "slug": "online-store-vs-whatsapp",
+  "date": "2026-10-09",
+  "icon": "store",
+  "ar": {
+    "title": "متجر إلكتروني ولا البيع على واتساب والسوشيال؟",
+    "desc": "إمتى يكفيك البيع على واتساب وإنستجرام، وإمتى يبقى المتجر الإلكتروني خطوة لازمة؟ مقارنة عملية تساعدك تختار صح.",
+    "body": """
+<p>مشاريع كتير بتبدأ البيع على واتساب وإنستجرام، وده بداية ممتازة. بس مع الوقت بيبدأ السؤال: أعمل متجر إلكتروني ولا أكمّل كده؟ الإجابة مش واحدة لكل الناس، فخلّينا نقارن بهدوء.</p>
+
+<h2>البيع على واتساب والسوشيال: مميزاته</h2>
+<ul>
+  <li><strong>بداية سريعة ومن غير تكلفة كبيرة:</strong> صفحة ورقم واتساب وتبدأ.</li>
+  <li><strong>تواصل شخصي:</strong> العميل بيسأل وإنت بترد، وده بيبني ثقة.</li>
+  <li><strong>مناسب لعدد منتجات قليل</strong> أو خدمات بتحتاج اتفاق على التفاصيل.</li>
+</ul>
+
+<h2>وعيوبه لما الشغل يكبر</h2>
+<ul>
+  <li><strong>وقتك كله بيروح في الرد:</strong> نفس الأسئلة كل يوم: السعر كام؟ المقاسات؟ الشحن؟</li>
+  <li><strong>طلبات بتضيع:</strong> رسالة اتنست أو عميل ما اتردّش عليه بسرعة فراح لحد تاني.</li>
+  <li><strong>صعب تعرف أرقامك:</strong> مبيعات الشهر كام؟ أكتر منتج بيتباع إيه؟</li>
+  <li><strong>إنت مش ماسك المنصة:</strong> لو الحساب اتقفل، الشغل كله يقف.</li>
+</ul>
+
+<h2>المتجر الإلكتروني: إمتى يبقى لازم؟</h2>
+<p>لو عندك منتجات كتير، أو طلبات يومية، أو بتعلن وعايز تعرف كل جنيه بيجيب كام، أو عايز العميل يطلب حتى وإنت نايم، يبقى المتجر هيوفر عليك وقت ويزود مبيعاتك. العميل يشوف المنتجات والأسعار والصور، ويختار، ويطلب في دقيقتين.</p>
+
+<blockquote class="tip"><strong>نصيحة:</strong> مش لازم تختار واحد بس. أحسن حل غالبًا إن المتجر يكون فيه زرار واتساب، فالعميل اللي محتاج يسأل يكلمك، واللي عارف هو عايز إيه يطلب على طول.</blockquote>
+
+<h2>إزاي تقرر؟</h2>
+<p>اسأل نفسك تلات أسئلة:</p>
+<ol>
+  <li>هل بتقضي وقت كبير بترد على نفس الأسئلة؟</li>
+  <li>هل عندك أكتر من 15–20 منتج؟</li>
+  <li>هل بتصرف على إعلانات ومش عارف بالظبط بتجيب كام؟</li>
+</ol>
+<p>لو جاوبت بـ "أيوه" على اتنين منهم، غالبًا الوقت جه لمتجر إلكتروني.</p>
+
+<h2>الخلاصة</h2>
+<p>واتساب والسوشيال بداية ممتازة، والمتجر هو الخطوة اللي بتخلّي الشغل يكبر من غير ما وقتك ينتهي. لو محتار، ابعتلي تفاصيل مشروعك وأقولك الأنسب ليك بصراحة.</p>
+"""
+  },
+  "en": {
+    "title": "Online store or selling on WhatsApp and social media?",
+    "desc": "When is selling on WhatsApp and Instagram enough, and when does an online store become necessary? A practical comparison to help you choose.",
+    "body": """
+<p>Many businesses start by selling on WhatsApp and Instagram, and that's a great start. But over time the question comes up: should I build an online store or keep going like this? The answer isn't the same for everyone, so let's compare calmly.</p>
+
+<h2>Selling on WhatsApp and social: the upside</h2>
+<ul>
+  <li><strong>Fast, low-cost start:</strong> a page, a WhatsApp number, and you're selling.</li>
+  <li><strong>Personal contact:</strong> customers ask, you answer, and trust builds.</li>
+  <li><strong>Good for a few products</strong> or services that need details agreed one by one.</li>
+</ul>
+
+<h2>The downside as you grow</h2>
+<ul>
+  <li><strong>Your time goes on replies:</strong> the same questions every day — price? sizes? shipping?</li>
+  <li><strong>Lost orders:</strong> a missed message or slow reply sends the customer elsewhere.</li>
+  <li><strong>Hard to know your numbers:</strong> monthly sales? best-selling product?</li>
+  <li><strong>You don't own the platform:</strong> if the account is closed, the business stops.</li>
+</ul>
+
+<h2>When does an online store become necessary?</h2>
+<p>If you have many products, daily orders, run ads and want to know what each dollar brings back, or want customers to order while you sleep, a store saves time and lifts sales. Customers see products, prices and photos, choose, and order in two minutes.</p>
+
+<blockquote class="tip"><strong>Tip:</strong> You don't have to choose just one. The best setup is often a store with a WhatsApp button: customers with questions message you, and those who know what they want order straight away.</blockquote>
+
+<h2>How to decide</h2>
+<p>Ask yourself three questions:</p>
+<ol>
+  <li>Do you spend a lot of time answering the same questions?</li>
+  <li>Do you have more than 15–20 products?</li>
+  <li>Do you spend on ads without knowing exactly what they bring back?</li>
+</ol>
+<p>If you answered "yes" to two of them, it's probably time for an online store.</p>
+
+<h2>The bottom line</h2>
+<p>WhatsApp and social media are a great start; a store is the step that lets the business grow without eating all your time. If you're unsure, send me your project details and I'll honestly tell you what suits you best.</p>
+"""
+  }
+},
+{
+  "slug": "seo-basics",
+  "date": "2026-10-09",
+  "icon": "seo",
+  "ar": {
+    "title": "7 حاجات بسيطة تخلّي موقعك يظهر في جوجل",
+    "desc": "خطوات SEO عملية تقدر تبدأ بيها النهارده عشان موقعك يطلع في نتايج جوجل ويجيبلك عملاء من غير إعلانات.",
+    "body": """
+<p>عندك موقع بس محدش بيلاقيه في جوجل؟ دي مشكلة منتشرة جدًا. الخبر الحلو إن في حاجات بسيطة تقدر تعملها تفرق كتير في ظهورك. ده اسمه SEO، أو تحسين الظهور في محركات البحث، ومش محتاج تكون خبير عشان تبدأ.</p>
+
+<h2>1. اعرف الناس بتدوّر بإيه</h2>
+<p>فكّر في الكلام اللي عميلك بيكتبه في جوجل فعلًا، مش اللي إنت بتسمي بيه خدمتك. مثلًا الناس بتكتب "تصليح تكييف في مدينة نصر" أكتر من "صيانة أنظمة تبريد". استخدم الكلمات دي في عناوين صفحاتك وكلامك.</p>
+
+<h2>2. عنوان ووصف واضح لكل صفحة</h2>
+<p>كل صفحة محتاجة عنوان بيظهر في نتايج جوجل، فيه الخدمة والمكان، ووصف قصير بيشجع الناس تدوس. ده أول حاجة العميل بيشوفها قبل ما يدخل موقعك.</p>
+
+<h2>3. موقعك لازم يكون سريع</h2>
+<p>أغلب الناس بتدخل من الموبايل، ولو الموقع بطيء هيقفلوه ويروحوا لغيرك، وجوجل بيلاحظ ده. صغّر حجم الصور، وابعد عن الإضافات اللي ملهاش لازمة.</p>
+
+<h2>4. شكله مظبوط على الموبايل</h2>
+<p>جوجل بيقيّم موقعك على أساس نسخة الموبايل. اتأكد إن الكلام مقروء، والأزرار سهلة الضغط، ومفيش حاجة طالعة برّه الشاشة.</p>
+
+<h2>5. محتوى بيجاوب على أسئلة العملاء</h2>
+<p>اكتب عن الأسئلة اللي بتتسألها كل يوم: الأسعار، المدة، الفرق بين الاختيارات. كل مقال مفيد هو باب جديد العميل ممكن يدخلك منه من جوجل.</p>
+
+<blockquote class="tip"><strong>نصيحة:</strong> سجّل موقعك في Google Search Console (مجاني). هيقولك الناس بتلاقيك بكلمات إيه، وهل في مشاكل بتمنع ظهورك.</blockquote>
+
+<h2>6. سجّل نشاطك على خرايط جوجل</h2>
+<p>لو عندك محل أو بتخدم منطقة معينة، الملف التجاري على جوجل بيخليك تظهر في الخريطة لما حد قريب منك يدوّر. ده من أسرع الطرق للظهور المحلي.</p>
+
+<h2>7. خليك ثابت</h2>
+<p>الـ SEO مش زرار بيشتغل في يوم. محتوى جديد بانتظام، وتحديث المعلومات، وآراء عملاء حقيقية، كل ده بيبني ثقة جوجل في موقعك مع الوقت.</p>
+
+<h2>الخلاصة</h2>
+<p>الظهور في جوجل بيجيبلك عملاء بيدوّروا على خدمتك بالفعل، ومن غير ما تدفع على كل زيارة. لو عايز أراجع موقعك وأقولك إيه اللي ناقصه عشان يظهر، اطلب تقييم مجاني.</p>
+"""
+  },
+  "en": {
+    "title": "7 simple things that help your website show up on Google",
+    "desc": "Practical SEO steps you can start today so your site ranks on Google and brings customers without ads.",
+    "body": """
+<p>You have a website but nobody finds it on Google? That's very common. The good news: a few simple things make a big difference. It's called SEO — search engine optimization — and you don't need to be an expert to start.</p>
+
+<h2>1. Know what people search for</h2>
+<p>Think about the words your customers actually type, not what you call your service. People search "AC repair in Nasr City" more than "cooling system maintenance." Use those words in your page titles and copy.</p>
+
+<h2>2. A clear title and description for every page</h2>
+<p>Each page needs a title that shows in Google results — with the service and location — and a short description that makes people click. It's the first thing a customer sees before visiting.</p>
+
+<h2>3. Your site must be fast</h2>
+<p>Most people browse on mobile, and if your site is slow they leave for a competitor — and Google notices. Compress images and avoid unnecessary plugins.</p>
+
+<h2>4. It must work well on mobile</h2>
+<p>Google evaluates your site based on its mobile version. Make sure text is readable, buttons are easy to tap, and nothing spills off the screen.</p>
+
+<h2>5. Content that answers customers' questions</h2>
+<p>Write about the questions you get every day: prices, timelines, the difference between options. Every useful article is a new door customers can find you through on Google.</p>
+
+<blockquote class="tip"><strong>Tip:</strong> Add your site to Google Search Console (free). It tells you which words people find you with and whether anything is blocking your visibility.</blockquote>
+
+<h2>6. List your business on Google Maps</h2>
+<p>If you have a shop or serve a specific area, a Google Business Profile shows you on the map when someone nearby searches. It's one of the fastest routes to local visibility.</p>
+
+<h2>7. Be consistent</h2>
+<p>SEO isn't a switch you flip in a day. Regular new content, up-to-date information and genuine customer reviews build Google's trust in your site over time.</p>
+
+<h2>The bottom line</h2>
+<p>Showing up on Google brings customers who are already looking for your service — without paying for every visit. If you'd like me to review your site and tell you what's missing, ask for a free review.</p>
+"""
+  }
+},
+{
   "slug": "paid-ads-guide",
   "date": "2026-10-09",
   "icon": "ads",
