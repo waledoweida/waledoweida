@@ -1,9 +1,9 @@
 (function(){
   var WA = '201025926261';
 
-  // anonymous visit stats -> Google Apps Script (tools/analytics-apps-script.gs), read on /admin/.
+  // anonymous visit stats -> /api/track (Vercel function, see api/), read on /admin/.
   // Empty TRACK_URL = off. Bots are skipped, and so is the owner once /admin/ was opened on that device.
-  var TRACK_URL = '';
+  var TRACK_URL = '/api/track';
   (function(){
     if (!TRACK_URL || !navigator.sendBeacon) return;
     var ua = navigator.userAgent || '';
@@ -17,11 +17,10 @@
     var sid = get(SS, 'wo_sid') || rid(); put(SS, 'wo_sid', sid);
     var q = new URLSearchParams(location.search), ref = '';
     try { if (document.referrer) { var r = new URL(document.referrer); if (r.host !== location.host) ref = r.host; } } catch (e) {}
-    var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
     var base = { vid: vid, sid: sid, path: location.pathname, ref: ref,
       source: q.get('utm_source') || '', medium: q.get('utm_medium') || '', campaign: q.get('utm_campaign') || '',
       device: /iPad|Tablet/i.test(ua) ? 'tablet' : (/Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop'),
-      tz: tz, lang: document.documentElement.lang };
+      lang: document.documentElement.lang };
     function send(type, value){
       var d = {}; for (var k in base) d[k] = base[k];
       d.type = type; d.value = value || '';

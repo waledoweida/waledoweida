@@ -1,6 +1,6 @@
 (function(){
-  // Same Apps Script web-app URL as TRACK_URL in /main.js (see tools/analytics-apps-script.gs).
-  var TRACK_URL = '';
+  // Summary endpoint (Vercel function api/stats.js); the key is sent as a Bearer header.
+  var STATS_URL = '/api/stats';
   var $ = function(id){ return document.getElementById(id); };
   function get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }
   function put(k, v){ try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
@@ -91,19 +91,20 @@
 
   function load(){
     var key = get('wo_admin_key');
-    if (!TRACK_URL) { show('setup'); return; }
     if (!key) { show('login'); return; }
     $('err').hidden = true;
     $('updated').textContent = 'جاري التحميل…';
-    fetch(TRACK_URL + '?action=stats&days=' + days + '&key=' + encodeURIComponent(key))
-      .then(function(r){ return r.json(); })
-      .then(function(s){
-        if (!s.ok) {
+    fetch(STATS_URL + '?days=' + days, { headers: { Authorization: 'Bearer ' + key }, cache: 'no-store' })
+      .then(function(r){
+        if (r.status === 401) {
           put('wo_admin_key', null); show('login');
-          $('loginErr').textContent = 'كلمة السر غلط.'; $('loginErr').hidden = false; return;
+          $('loginErr').textContent = 'كلمة السر غلط.'; $('loginErr').hidden = false; return null;
         }
-        show('dash'); render(s);
+        if (r.status === 503) { show('setup'); return null; }
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
       })
+      .then(function(s){ if (s) { show('dash'); render(s); } })
       .catch(function(){ show('dash'); $('err').textContent = 'تعذّر تحميل البيانات. اتأكد من الإنترنت وجرّب تاني.'; $('err').hidden = false; });
   }
 
