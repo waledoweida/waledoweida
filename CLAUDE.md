@@ -1,6 +1,6 @@
 # waledoweida.com
 
-Static personal/business site for وليد أحمد علي أبوعويضة, served by GitHub Pages.
+Static personal/business site for وليد أحمد علي أبوعويضة, hosted on Vercel (DNS at GoDaddy).
 
 ## RED LINE — the wedding invitation is off-limits
 
@@ -33,7 +33,7 @@ changes these paths.
 
 ## Hosting (Vercel) and visitor stats
 
-- The site is moving from GitHub Pages to Vercel (static files + the functions in `api/`). `.vercelignore` keeps repo-only files off Vercel; `_config.yml` does the same on GitHub Pages.
+- The site is served by Vercel from `main` (static files + the functions in `api/`); every merge to `main` deploys automatically. `.vercelignore` keeps repo-only files off Vercel. GitHub Pages was the old host (`_config.yml`, `CNAME` are leftovers from it).
 - `api/track.js` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `api/stats.js` returns the summary for `/admin/` when called with `Authorization: Bearer <ADMIN_KEY>`.
 - Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST) and `ADMIN_KEY`. Never commit their values. `package.json` only exists for the `redis` client used by `api/`.
 - The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.
