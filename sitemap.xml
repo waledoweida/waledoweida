@@ -50,4 +50,44 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/google-maps-business-listing/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/google-maps-business-listing/"/>
   </url>
+  <url>
+    <loc>https://waledoweida.com/egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/egypt/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/egypt/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/libya/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/libya/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/libya/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/kuwait/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/kuwait/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/kuwait/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/gulf/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/gulf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/gulf/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/egypt/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/egypt/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/libya/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/libya/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/libya/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/kuwait/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/kuwait/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/kuwait/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/gulf/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/gulf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/gulf/"/>
+  </url>
 </urlset>

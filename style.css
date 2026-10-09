@@ -483,6 +483,30 @@ body.nf-page{background:var(--ink);color:var(--ink-text);min-height:100vh;displa
 .stars label:hover{transform:scale(1.12)}
 .stars input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
 
+/* ---------- region cards → country pages ---------- */
+a.reg{display:block;color:inherit}
+.reg-more{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--accent);font-family:"Readex Pro","Tajawal",sans-serif;font-weight:600;font-size:.9rem}
+.reg-more svg{width:16px;height:16px;transition:transform .2s}
+a.reg:hover .reg-more svg{transform:translateX(-4px)}
+[dir="ltr"] a.reg:hover .reg-more svg{transform:translateX(4px)}
+[dir="ltr"] .reg-more svg{transform:scaleX(-1)}
+[dir="ltr"] a.reg:hover .reg-more svg{transform:scaleX(-1) translateX(-4px)}
+
+/* ---------- country pages ---------- */
+.country-code{margin:18px 0 0}
+.country-hero .btns{margin-top:26px}
+.country-services{padding-bottom:40px}
+.country-why,.country-faq{padding:40px 0}
+.country-why h2,.country-faq h2{margin-bottom:20px}
+.c-why{list-style:none;display:grid;gap:12px}
+.c-why li{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.c-why svg{width:20px;height:20px;color:var(--accent);margin-top:4px}
+.c-others{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:28px;font-size:.92rem;color:var(--muted)}
+.c-others b{font-weight:500;margin-inline-end:4px}
+.c-others a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);transition:border-color .2s}
+.c-others a:hover{border-color:var(--accent)}
+.c-others a span{font-family:"Readex Pro",sans-serif;font-weight:700;font-size:.72rem;color:var(--accent)}
+
 /* ---------- compact mobile layout ---------- */
 @media (max-width:600px){
   section{padding:56px 0}

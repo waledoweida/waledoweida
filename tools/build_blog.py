@@ -272,10 +272,13 @@ def build():
 
 
 def update_sitemap(paths):
+    """Sitemap = home pages + the given blog paths + the country pages."""
+    from build_countries import paths as country_paths
+    paths = paths + country_paths()
     urls = ["/", "/en/"] + paths
     pairs = {"/": "/en/", "/en/": "/"}
     for p in paths:
-        pairs[p] = p.replace("/en/blog/", "/blog/") if p.startswith("/en/") else p.replace("/blog/", "/en/blog/", 1)
+        pairs[p] = p[3:] if p.startswith("/en/") else "/en" + p
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
     for u in urls:
