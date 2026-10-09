@@ -2,3 +2,5 @@
 exclude:
   - CLAUDE.md
   - tools
+  - api
+  - vercel.json

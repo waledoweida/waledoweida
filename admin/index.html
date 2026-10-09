@@ -6,7 +6,7 @@
 <title>إحصائيات الموقع</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d12">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="stylesheet" href="/admin/admin.css?v=1">
@@ -32,7 +32,7 @@
 
   <section class="card login" id="login" hidden>
     <h2>دخول</h2>
-    <p class="muted">اكتب كلمة السر اللي حطيتها في <code>ADMIN_KEY</code>. هتتحفظ على الجهاز ده بس.</p>
+    <p class="muted">اكتب كلمة السر اللي حطيتها في <code>ADMIN_KEY</code> على Vercel. هتتحفظ على الجهاز ده بس.</p>
     <form id="loginForm">
       <input type="password" id="key" autocomplete="current-password" placeholder="كلمة السر" required>
       <button type="submit">دخول</button>
@@ -42,7 +42,7 @@
 
   <section class="card setup" id="setup" hidden>
     <h2>لسه الإحصائيات مش متوصّلة</h2>
-    <p class="muted">محتاج تعمل ربط بجوجل شيت مرة واحدة. الخطوات مكتوبة في <code>tools/analytics-apps-script.gs</code>، وبعدها حط الرابط في <code>TRACK_URL</code> في <code>main.js</code> و<code>admin/admin.js</code>.</p>
+    <p class="muted">على Vercel: اربط قاعدة بيانات Upstash Redis بالمشروع (Storage)، وضيف متغير <code>ADMIN_KEY</code> في Settings ← Environment Variables، وبعدين اعمل Redeploy.</p>
   </section>
 
   <div id="dash" hidden>
@@ -62,7 +62,7 @@
     <div class="grid2">
       <section class="card"><h2>جايين منين</h2><div class="bars" id="sources"></div></section>
       <section class="card"><h2>من أنهي بلد</h2><div class="bars" id="countries"></div>
-        <p class="note">البلد تقريبي حسب توقيت جهاز الزائر.</p></section>
+</section>
       <section class="card"><h2>ضغطات التواصل</h2><div class="bars" id="clicks"></div></section>
       <section class="card"><h2>نوع الجهاز</h2><div class="bars" id="devices"></div></section>
     </div>
@@ -87,6 +87,6 @@
   <p class="err" id="err" hidden></p>
 </main>
 <div class="tip" id="tip" role="tooltip" hidden></div>
-<script src="/admin/admin.js?v=1" defer></script>
+<script src="/admin/admin.js?v=2" defer></script>
 </body>
 </html>

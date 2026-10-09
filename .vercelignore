@@ -1,0 +1,6 @@
+# Repo-only files: keep them off the published site on Vercel.
+CLAUDE.md
+tools/
+.github/
+_config.yml
+CNAME

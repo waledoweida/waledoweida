@@ -29,3 +29,11 @@ changes these paths.
 - Home pages carry a Content-Security-Policy meta; keep styles out of inline `style=""` attributes.
 - `_config.yml` keeps repo-only files (`CLAUDE.md`, `tools/`) off the published site.
 - Blog: `tools/build_blog.py` generates `blog/` and `en/blog/` from the article sources in `tools/articles.py`; run it after editing an article and commit the output.
+- Country pages: `tools/build_countries.py` generates `/egypt/`, `/libya/`, `/kuwait/`, `/gulf/` (+ `/en/...`) from `tools/countries.py`; it also refreshes `sitemap.xml`.
+
+## Hosting (Vercel) and visitor stats
+
+- The site is moving from GitHub Pages to Vercel (static files + the functions in `api/`). `.vercelignore` keeps repo-only files off Vercel; `_config.yml` does the same on GitHub Pages.
+- `api/track.js` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Upstash Redis; `api/stats.js` returns the summary for `/admin/` when called with `Authorization: Bearer <ADMIN_KEY>`.
+- Vercel env vars: `KV_REST_API_URL` + `KV_REST_API_TOKEN` (set by the Upstash integration) and `ADMIN_KEY`. Never commit their values.
+- The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.
