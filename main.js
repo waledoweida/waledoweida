@@ -126,6 +126,33 @@
 
   // count-up numbers
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // WhatsApp bubble: after a few seconds, a short "typing…" then a greeting pops out of
+  // the floating button. Closing it keeps it hidden for the rest of the visit.
+  var dock = document.getElementById('waDock'), bub = document.getElementById('waBubble');
+  if (dock && bub) {
+    var KEY = 'waBubbleClosed', closed = false;
+    try { closed = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+    var focusables = bub.querySelectorAll('button,a');
+    function setOpen(open){
+      bub.classList.toggle('show', open);
+      bub.setAttribute('aria-hidden', open ? 'false' : 'true');
+      focusables.forEach(function(el){ el.tabIndex = open ? 0 : -1; });
+    }
+    function closeBubble(){
+      setOpen(false); dock.classList.remove('badge');
+      try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+    }
+    document.getElementById('waClose').addEventListener('click', closeBubble);
+    bub.querySelector('.wa-cta').addEventListener('click', closeBubble);
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && bub.classList.contains('show')) closeBubble(); });
+    if (!closed) {
+      setTimeout(function(){
+        dock.classList.add('badge'); setOpen(true);
+        setTimeout(function(){ bub.classList.add('typed'); }, reduce ? 0 : 1600);
+      }, 5000);
+    }
+  }
   function countUp(el){
     var raw = el.getAttribute('data-count'), m = raw.match(/^(\D*)(\d+)(\D*)$/);
     if (reduce || !m) return;
