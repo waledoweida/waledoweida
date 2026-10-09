@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>إحصائيات الموقع</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0d12">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/admin/admin.css?v=1">
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div>
+      <h1>إحصائيات الموقع</h1>
+      <p class="muted" id="updated">waledoweida.com</p>
+    </div>
+    <div class="controls" id="controls" hidden>
+      <div class="seg" role="group" aria-label="الفترة">
+        <button type="button" data-days="1">النهارده</button>
+        <button type="button" data-days="7" aria-pressed="true">7 أيام</button>
+        <button type="button" data-days="30">30 يوم</button>
+        <button type="button" data-days="90">90 يوم</button>
+      </div>
+      <button type="button" class="ghost" id="refresh">تحديث</button>
+      <button type="button" class="ghost" id="logout">خروج</button>
+    </div>
+  </header>
+
+  <section class="card login" id="login" hidden>
+    <h2>دخول</h2>
+    <p class="muted">اكتب كلمة السر اللي حطيتها في <code>ADMIN_KEY</code>. هتتحفظ على الجهاز ده بس.</p>
+    <form id="loginForm">
+      <input type="password" id="key" autocomplete="current-password" placeholder="كلمة السر" required>
+      <button type="submit">دخول</button>
+    </form>
+    <p class="err" id="loginErr" hidden></p>
+  </section>
+
+  <section class="card setup" id="setup" hidden>
+    <h2>لسه الإحصائيات مش متوصّلة</h2>
+    <p class="muted">محتاج تعمل ربط بجوجل شيت مرة واحدة. الخطوات مكتوبة في <code>tools/analytics-apps-script.gs</code>، وبعدها حط الرابط في <code>TRACK_URL</code> في <code>main.js</code> و<code>admin/admin.js</code>.</p>
+  </section>
+
+  <div id="dash" hidden>
+    <section class="tiles">
+      <div class="tile"><span>زوار حقيقيين</span><b id="tVisitors">–</b><small>كل جهاز بيتحسب مرة واحدة</small></div>
+      <div class="tile"><span>زيارات</span><b id="tSessions">–</b><small>مرات الدخول للموقع</small></div>
+      <div class="tile"><span>تواصلوا معاك</span><b id="tContacted">–</b><small id="tRate">–</small></div>
+      <div class="tile"><span>متوسط الوقت في الموقع</span><b id="tTime">–</b><small>وقت فعلي والصفحة قدامهم</small></div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2>الزوار في اليوم</h2><button type="button" class="link" data-table="dailyTable">عرض كجدول</button></div>
+      <div class="chart" id="dailyChart" role="img" aria-label="رسم بياني للزوار في كل يوم"></div>
+      <table class="tbl" id="dailyTable" hidden><thead><tr><th>اليوم</th><th>زوار</th></tr></thead><tbody></tbody></table>
+    </section>
+
+    <div class="grid2">
+      <section class="card"><h2>جايين منين</h2><div class="bars" id="sources"></div></section>
+      <section class="card"><h2>من أنهي بلد</h2><div class="bars" id="countries"></div>
+        <p class="note">البلد تقريبي حسب توقيت جهاز الزائر.</p></section>
+      <section class="card"><h2>ضغطات التواصل</h2><div class="bars" id="clicks"></div></section>
+      <section class="card"><h2>نوع الجهاز</h2><div class="bars" id="devices"></div></section>
+    </div>
+
+    <section class="card"><h2>أكتر الصفحات زيارة</h2><div class="bars" id="pages"></div></section>
+
+    <section class="card">
+      <h2>آخر الزيارات</h2>
+      <div class="scroll">
+        <table class="tbl" id="recent">
+          <thead><tr><th>الوقت</th><th>منين</th><th>البلد</th><th>الجهاز</th><th>صفحات</th><th>الوقت في الموقع</th><th>تواصل؟</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card owner">
+      <label><input type="checkbox" id="ownerToggle" checked> متحسبش زياراتي أنا من الجهاز ده</label>
+    </section>
+  </div>
+
+  <p class="err" id="err" hidden></p>
+</main>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<script src="/admin/admin.js?v=1" defer></script>
+</body>
+</html>
