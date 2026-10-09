@@ -9,10 +9,15 @@ Static personal/business site for وليد أحمد علي أبوعويضة, ser
 - `wedding/` (the invitation page and all its assets)
 - `فرح/` (the shortcut that redirects to `/wedding/`)
 
-This applies to every kind of change: content, design, security hardening, accessibility,
-validation fixes, dependency updates, link checks, bulk find-and-replace, formatting.
-Site-wide changes must exclude these paths. If a task seems to require touching them,
-stop and ask the owner first.
+This applies to every kind of change and to every request, now or later: content, design,
+security hardening, accessibility, validation fixes, dependency updates, link checks, bulk
+find-and-replace, formatting, build scripts. Site-wide changes must exclude these paths.
+The owner has decided the page stays exactly as it is. Do not touch it as a side effect of
+any other request. The only exception is a request from the owner that explicitly names the
+wedding page and asks to change it — and even then, confirm with them before doing anything.
+
+A CI check (`.github/workflows/protect-wedding.yml`) fails any pull request or push that
+changes these paths.
 
 > خط أحمر: دعوة الفرح (`wedding/` و `فرح/`) ممنوع أي تعديل أو تحديث عليها نهائيًا.
 

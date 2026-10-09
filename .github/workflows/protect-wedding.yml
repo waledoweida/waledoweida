@@ -1,0 +1,35 @@
+# The wedding invitation (wedding/ and فرح/) is a red line: no change is allowed.
+# This check fails any pull request or push to main that touches those paths.
+name: Protect wedding invitation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  protect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fail if wedding pages changed
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          git config core.quotepath off
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            echo "No base commit to compare; skipping."; exit 0
+          fi
+          changed=$(git diff --name-only "$BASE" "$HEAD" -- 'wedding/' 'فرح/')
+          if [ -n "$changed" ]; then
+            echo "::error::The wedding invitation is off-limits. These files were changed:"
+            echo "$changed"
+            exit 1
+          fi
+          echo "Wedding invitation untouched."
