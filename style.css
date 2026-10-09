@@ -24,13 +24,13 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#0b0d12; --surface:#12151c; --surface-2:#171b24; --text:#eef0f4; --muted:#9aa1ae; --line:#232833;
-    --accent:#e6c983; --accent-2:#c99a45; --accent-soft:#252016; --on-accent:#16130c; --wa:#25d366;
+    --accent:#e6c983; --accent-2:#c99a45; --accent-soft:#252016; --on-accent:#16130c; --wa:#1fa855;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
   }
 }
 :root[data-theme="dark"]{
   --bg:#0b0d12; --surface:#12151c; --surface-2:#171b24; --text:#eef0f4; --muted:#9aa1ae; --line:#232833;
-  --accent:#e6c983; --accent-2:#c99a45; --accent-soft:#252016; --on-accent:#16130c; --wa:#25d366;
+  --accent:#e6c983; --accent-2:#c99a45; --accent-soft:#252016; --on-accent:#16130c; --wa:#1fa855;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
 }
 
@@ -60,7 +60,8 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16130c;box-shadow:0 8px 24px rgba(201,154,69,.28)}
 .btn-ghost{border-color:rgba(255,255,255,.16);color:var(--ink-text);background:rgba(255,255,255,.04)}
 .btn-ghost:hover{background:rgba(255,255,255,.08)}
-.btn-wa{background:var(--wa);color:#fff}
+.btn-wa{background:#137a3d;color:#fff}
+.btn-wa:hover{background:#0f6a34}
 .btn-line{border-color:var(--line);color:var(--text);background:var(--surface)}
 .btn svg{width:20px;height:20px}
 
@@ -395,8 +396,8 @@ body.nf-page{background:var(--ink);color:var(--ink-text);min-height:100vh;displa
 .post-hero h1{font-size:clamp(1.8rem,4.6vw,2.7rem);font-weight:700;line-height:1.35;margin:10px 0 14px}
 .post-hero .lead{color:var(--ink-muted);max-width:620px}
 .crumbs{font-size:.9rem;color:var(--ink-muted)}
-.crumbs a{color:var(--gold)}
-.crumbs a:hover{text-decoration:underline}
+.crumbs a{color:var(--gold);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.crumbs a:hover{text-decoration-thickness:2px}
 .byline{display:flex;align-items:center;gap:12px;color:var(--ink-muted);font-size:.92rem;line-height:1.6}
 .byline b{color:var(--ink-text)}
 .prose{padding-top:48px;padding-bottom:24px;font-size:1.08rem;line-height:2}
@@ -427,3 +428,15 @@ body.nf-page{background:var(--ink);color:var(--ink-text);min-height:100vh;displa
 .post-more{margin-top:auto;display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-family:"Readex Pro","Tajawal",sans-serif;font-weight:600}
 .post-more svg{width:18px;height:18px}
 @media (prefers-reduced-motion:reduce){.post-card{transition:none}}
+
+/* ---------- client review page ---------- */
+.review-form .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.review-form .row2{grid-template-columns:1fr}}
+.rating{border:0;padding:0;margin:0}
+.rating legend{font-weight:500;font-size:.95rem;color:var(--ink-text);margin-bottom:6px;padding:0}
+.stars{display:inline-flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px}
+.stars input{position:absolute;opacity:0;width:1px;height:1px}
+.stars label{display:block;font-size:2.2rem;line-height:1;color:#3a3f4b;cursor:pointer;transition:color .15s,transform .15s}
+.stars label:hover,.stars label:hover ~ label,.stars input:checked ~ label{color:var(--gold)}
+.stars label:hover{transform:scale(1.12)}
+.stars input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}

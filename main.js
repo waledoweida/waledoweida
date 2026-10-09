@@ -5,11 +5,16 @@
   // header background after scrolling past the top
   var hdr = document.getElementById('top');
   var bar = document.querySelector('.progress');
-  function onScroll(){
-    hdr.classList.toggle('scrolled', window.scrollY > 20);
-    if (bar) { var h = document.documentElement.scrollHeight - innerHeight; bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')'; }
+  // read layout first, then write, at most once per frame (avoids forced reflow)
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    hdr.classList.toggle('scrolled', y > 20);
+    if (bar) bar.style.transform = 'scaleX(' + (h > 0 ? y / h : 0) + ')';
   }
-  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+  function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  update(); window.addEventListener('scroll', onScroll, { passive: true });
 
   // mobile menu
   var mb = document.querySelector('.menu-btn'), mn = document.getElementById('mnav');
@@ -36,6 +41,26 @@
       : 'السلام عليكم، أنا ' + who + '\nعايز تقييم مجاني لـ: ' + link;
     window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
     af.querySelector('.audit-ok').hidden = false;
+  });
+
+  // client review form -> WhatsApp
+  var rf = document.getElementById('reviewForm');
+  if (rf) rf.addEventListener('submit', function(e){
+    e.preventDefault();
+    var el = rf.elements, en = document.documentElement.lang === 'en';
+    var name = el['name'].value.trim(), text = el['text'].value.trim();
+    var r = rf.querySelector('input[name="rating"]:checked');
+    if (!name) { el['name'].reportValidity(); el['name'].focus(); return; }
+    if (!r) { rf.querySelector('#r5').reportValidity(); rf.querySelector('#r5').focus(); return; }
+    if (!text) { el['text'].reportValidity(); el['text'].focus(); return; }
+    var n = +r.value, stars = new Array(n + 1).join('★') + new Array(6 - n).join('☆');
+    var lines = en
+      ? ['New review from the website', 'Name: ' + name, 'Country: ' + (el['country'].value || '-'), 'Service: ' + (el['service'].value || '-'),
+         'Rating: ' + stars + ' (' + n + '/5)', 'Review: ' + text, 'Publish as: ' + el['publish'].value]
+      : ['تقييم جديد من الموقع', 'الاسم: ' + name, 'البلد: ' + (el['country'].value || '-'), 'الخدمة: ' + (el['service'].value || '-'),
+         'التقييم: ' + stars + ' (' + n + '/5)', 'الرأي: ' + text, 'النشر: ' + el['publish'].value];
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    rf.querySelector('.form-ok').hidden = false;
   });
 
   // service links preselect the service in the form
