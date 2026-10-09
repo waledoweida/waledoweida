@@ -1,27 +1,49 @@
-// Shared helpers for the visitor-stats functions (Vercel serverless, no dependencies).
-// Storage: Upstash Redis over its REST API. Vercel's Upstash integration sets
-// KV_REST_API_URL / KV_REST_API_TOKEN (or UPSTASH_REDIS_REST_URL / _TOKEN).
+// Shared helpers for the visitor-stats functions (Vercel serverless).
+// Storage: Redis. Works with either
+//   - REDIS_URL (Vercel's Redis integration / any redis:// or rediss:// URL), via the `redis` package, or
+//   - an Upstash REST endpoint: KV_REST_API_URL + KV_REST_API_TOKEN (or UPSTASH_REDIS_REST_URL / _TOKEN).
 // Events are kept in one Redis list per day ("ev:YYYY-MM-DD", Cairo time) for ~13 months.
 
 const TZ = 'Africa/Cairo';
 const KEEP_SECONDS = 400 * 24 * 3600;
 
-function redisConfig() {
+function restConfig() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   return url && token ? { url: url.replace(/\/$/, ''), token } : null;
 }
 
+function redisConfig() {
+  return restConfig() || (process.env.REDIS_URL ? { url: process.env.REDIS_URL } : null);
+}
+
+// one TCP connection per warm function instance
+let clientPromise = null;
+function tcpClient() {
+  if (!clientPromise) {
+    const { createClient } = require('redis');
+    const client = createClient({ url: process.env.REDIS_URL, socket: { connectTimeout: 5000, reconnectStrategy: false } });
+    client.on('error', () => { clientPromise = null; });
+    clientPromise = client.connect().then(() => client).catch((e) => { clientPromise = null; throw e; });
+  }
+  return clientPromise;
+}
+
+// commands: [['RPUSH', key, value], ...] -> array of results
 async function redis(commands) {
-  const cfg = redisConfig();
-  if (!cfg) throw new Error('storage not configured');
-  const r = await fetch(cfg.url + '/pipeline', {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + cfg.token, 'Content-Type': 'application/json' },
-    body: JSON.stringify(commands),
-  });
-  if (!r.ok) throw new Error('storage error ' + r.status);
-  return (await r.json()).map((x) => x.result);
+  const rest = restConfig();
+  if (rest) {
+    const r = await fetch(rest.url + '/pipeline', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + rest.token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(commands),
+    });
+    if (!r.ok) throw new Error('storage error ' + r.status);
+    return (await r.json()).map((x) => x.result);
+  }
+  if (!process.env.REDIS_URL) throw new Error('storage not configured');
+  const client = await tcpClient();
+  return Promise.all(commands.map((c) => client.sendCommand(c.map(String))));
 }
 
 function dayKey(date) {

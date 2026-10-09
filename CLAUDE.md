@@ -34,6 +34,6 @@ changes these paths.
 ## Hosting (Vercel) and visitor stats
 
 - The site is moving from GitHub Pages to Vercel (static files + the functions in `api/`). `.vercelignore` keeps repo-only files off Vercel; `_config.yml` does the same on GitHub Pages.
-- `api/track.js` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Upstash Redis; `api/stats.js` returns the summary for `/admin/` when called with `Authorization: Bearer <ADMIN_KEY>`.
-- Vercel env vars: `KV_REST_API_URL` + `KV_REST_API_TOKEN` (set by the Upstash integration) and `ADMIN_KEY`. Never commit their values.
+- `api/track.js` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `api/stats.js` returns the summary for `/admin/` when called with `Authorization: Bearer <ADMIN_KEY>`.
+- Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST) and `ADMIN_KEY`. Never commit their values. `package.json` only exists for the `redis` client used by `api/`.
 - The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.

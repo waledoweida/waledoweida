@@ -1,0 +1,9 @@
+{
+  "name": "waledoweida-site",
+  "private": true,
+  "description": "Static site + visitor-stats functions in api/ (Vercel).",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "redis": "4.7.0"
+  }
+}
