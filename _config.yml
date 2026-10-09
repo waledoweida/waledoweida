@@ -1,8 +1,0 @@
-# GitHub Pages (Jekyll) settings: keep repo-only files off the public site.
-exclude:
-  - CLAUDE.md
-  - tools
-  - api
-  - vercel.json
-  - package.json
-  - node_modules

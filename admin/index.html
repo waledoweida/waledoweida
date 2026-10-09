@@ -32,7 +32,7 @@
 
   <section class="card login" id="login" hidden>
     <h2>دخول</h2>
-    <p class="muted">اكتب كلمة السر اللي حطيتها في <code>ADMIN_KEY</code> على Vercel. هتتحفظ على الجهاز ده بس.</p>
+    <p class="muted">اكتب كلمة السر اللي حطيتها في <code>ADMIN_KEY</code> على Vercel. هتفضل مسجّل دخول على الجهاز ده لمدة أسبوع.</p>
     <form id="loginForm">
       <input type="password" id="key" autocomplete="current-password" placeholder="كلمة السر" required>
       <button type="submit">دخول</button>
@@ -42,7 +42,7 @@
 
   <section class="card setup" id="setup" hidden>
     <h2>لسه الإحصائيات مش متوصّلة</h2>
-    <p class="muted">على Vercel: اربط قاعدة بيانات Upstash Redis بالمشروع (Storage)، وضيف متغير <code>ADMIN_KEY</code> في Settings ← Environment Variables، وبعدين اعمل Redeploy.</p>
+    <p class="muted">على Vercel: اربط قاعدة بيانات Redis بالمشروع (Storage)، وضيف متغير <code>ADMIN_KEY</code> في Settings ← Environment Variables، وبعدين اعمل Redeploy.</p>
   </section>
 
   <div id="dash" hidden>
@@ -87,6 +87,6 @@
   <p class="err" id="err" hidden></p>
 </main>
 <div class="tip" id="tip" role="tooltip" hidden></div>
-<script src="/admin/admin.js?v=2" defer></script>
+<script src="/admin/admin.js?v=3" defer></script>
 </body>
 </html>
