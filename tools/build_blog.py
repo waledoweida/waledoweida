@@ -115,6 +115,12 @@ def minutes(body):
     return max(1, math.ceil(words / 200))
 
 
+def page_title(title, short):
+    """'<title> | <name>' when that fits in 70 characters, otherwise just the title (search engines cut longer ones)."""
+    full = f"{title} | {short}"
+    return full if len(html.escape(full)) <= 70 else title
+
+
 def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
     d = L[lang]
     other = d["other"]
@@ -200,7 +206,7 @@ def build():
         body = f"""  <section class="post-hero">
     <div class="wrap">
       <div class="crumbs"><a href="{d['home']}">{d['crumbs_home']}</a> / <span>{d['blog_title']}</span></div>
-      <h1>{d['blog_h1']}</h1>
+      <h1>{html.escape(d['blog_h1'])}</h1>
       <p class="lead">{d['blog_lead']}</p>
     </div>
   </section>
@@ -268,7 +274,7 @@ def build():
                   "author": {"@type": "Person", "name": d["name"], "url": SITE + d["home"]},
                   "publisher": {"@type": "Person", "name": d["name"]}}
             write(path.strip("/") + "/index.html",
-                  page(lang, title=f"{t['title']} | {d['short']}", desc=t["desc"], path=path, alt_path=alt,
+                  page(lang, title=page_title(t['title'], d['short']), desc=t["desc"], path=path, alt_path=alt,
                        og_type="article", ld=ld, body=body, ch=ch))
             out.append(path)
     return out

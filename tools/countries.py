@@ -189,6 +189,7 @@ COUNTRIES = [
   "ar": {
     "name": "دول الخليج",
     "title": "تسويق إلكتروني وتصميم مواقع في السعودية والإمارات وقطر والبحرين وعُمان",
+    "seo_title": "تسويق إلكتروني وتصميم مواقع في دول الخليج",
     "desc": "إعلانات ممولة، تصميم مواقع ومتاجر، إدارة سوشيال ميديا وتسجيل على خرائط جوجل لعملاء في السعودية والإمارات وقطر والبحرين وعُمان.",
     "lead": "حيّاكم الله.. أسوي لكم حملات ومحتوى ومواقع تناسب كل سوق في الخليج، من الرياض وجدة لدبي والدوحة والمنامة ومسقط، وتخاطب عميلكم بالأسلوب اللي يحبه.",
     "services_h": "وش أقدر أسوي لكم؟",
@@ -217,6 +218,7 @@ COUNTRIES = [
   "en": {
     "name": "the Gulf",
     "title": "Digital marketing & web design in Saudi Arabia, the UAE, Qatar, Bahrain and Oman",
+    "seo_title": "Digital marketing & web design in the Gulf",
     "desc": "Paid ads, websites and online stores, social media management and Google Maps listings for clients in Saudi Arabia, the UAE, Qatar, Bahrain and Oman.",
     "lead": "Campaigns, content and websites tailored to each Gulf market — from Riyadh and Jeddah to Dubai, Doha, Manama and Muscat — speaking to your customers the way they like.",
     "services_h": "What I do for businesses in the Gulf",

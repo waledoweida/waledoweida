@@ -1,0 +1,5 @@
+# The wedding invitation is off-limits (see CLAUDE.md): never linted, never changed.
+wedding/
+فرح/
+node_modules/
+.build/

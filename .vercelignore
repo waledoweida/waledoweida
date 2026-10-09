@@ -5,3 +5,5 @@ tests/
 .github/
 .build/
 tsconfig.test.json
+.htmlvalidate.json
+.htmlvalidateignore
