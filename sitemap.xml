@@ -2,14 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://waledoweida.com/</loc>
-    <lastmod>2026-10-08</lastmod>
     <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/"/>
   </url>
   <url>
     <loc>https://waledoweida.com/en/</loc>
-    <lastmod>2026-10-08</lastmod>
     <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/blog/paid-ads-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/paid-ads-guide/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/paid-ads-guide/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/blog/why-your-business-needs-a-website/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/why-your-business-needs-a-website/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/why-your-business-needs-a-website/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/blog/google-maps-business-listing/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/google-maps-business-listing/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/google-maps-business-listing/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/blog/paid-ads-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/paid-ads-guide/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/paid-ads-guide/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/blog/why-your-business-needs-a-website/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/why-your-business-needs-a-website/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/why-your-business-needs-a-website/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/blog/google-maps-business-listing/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/google-maps-business-listing/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/google-maps-business-listing/"/>
   </url>
 </urlset>

@@ -22,3 +22,5 @@ stop and ask the owner first.
 - `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed)
 - `404.html`, `robots.txt`, `sitemap.xml`, icons, `og.png`, `profile.jpg`, `avatar.jpg`
 - Home pages carry a Content-Security-Policy meta; keep styles out of inline `style=""` attributes.
+- `_config.yml` keeps repo-only files (`CLAUDE.md`, `tools/`) off the published site.
+- Blog: `tools/build_blog.py` generates `blog/` and `en/blog/` from the article sources in `tools/articles.py`; run it after editing an article and commit the output.

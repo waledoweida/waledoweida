@@ -1,6 +1,6 @@
 (function(){
   var WA = '201025926261';
-  document.getElementById('y').textContent = new Date().getFullYear();
+  var yr = document.getElementById('y'); if (yr) yr.textContent = new Date().getFullYear();
 
   // header background after scrolling past the top
   var hdr = document.getElementById('top');
@@ -23,12 +23,27 @@
   // request form -> WhatsApp
   var f = document.getElementById('reqForm');
 
+  // free review form -> WhatsApp
+  var af = document.getElementById('auditForm');
+  if (af) af.addEventListener('submit', function(e){
+    e.preventDefault();
+    var link = af.elements['link'].value.trim(), who = af.elements['name'].value.trim();
+    if (!link) { af.elements['link'].reportValidity(); af.elements['link'].focus(); return; }
+    if (!who) { af.elements['name'].reportValidity(); af.elements['name'].focus(); return; }
+    var en = document.documentElement.lang === 'en';
+    var msg = en
+      ? 'Hello, my name is ' + who + '\nI would like a free review of: ' + link
+      : 'السلام عليكم، أنا ' + who + '\nعايز تقييم مجاني لـ: ' + link;
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+    af.querySelector('.audit-ok').hidden = false;
+  });
+
   // service links preselect the service in the form
   document.addEventListener('click', function(e){
     var t = e.target.closest('[data-service]');
     if (t && f) f.elements['service'].value = t.getAttribute('data-service');
   });
-  f.addEventListener('submit', function(e){
+  if (f) f.addEventListener('submit', function(e){
     e.preventDefault();
     var el = f.elements;
     var name = el['name'].value.trim(), service = el['service'].value, details = el['details'].value.trim();
