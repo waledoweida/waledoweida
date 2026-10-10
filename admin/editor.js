@@ -368,7 +368,7 @@
   }
   // same rule as realDate() in api/_lib/schema.ts
   function realDate(s, when){
-    if (when === 'day') { var d = new Date(s + 'T00:00:00Z'); return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s; }
+    if (when === 'day') { var d = new Date(s + 'T00:00:00Z'); return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s && s >= '2000' && s < '2100'; }
     var t = Date.parse(s); return !isNaN(t) && t >= Date.UTC(2020, 0, 1) && t < Date.UTC(2100, 0, 1);
   }
   function uniq(file, data, errs){

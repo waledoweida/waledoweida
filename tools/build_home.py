@@ -56,7 +56,7 @@ def hero(c):
 
       <div class="visual">
         <div class="glow" aria-hidden="true"></div>
-        <div class="photo"><picture><source srcset="/profile.webp" type="image/webp"><img src="/profile.jpg" alt="{attr(h['photo_alt'])}" width="520" height="620" fetchpriority="high"></picture></div>
+        <div class="photo"><picture><source srcset="/profile.webp" type="image/webp"><img src="/profile.jpg" alt="{attr(h['photo_alt'])}" width="640" height="876" fetchpriority="high"></picture></div>
         <div class="float f-seo" aria-hidden="true">
           <span class="chip-ic"><svg class="i">{ICONS['seo']}</svg></span>
           <div><b>{esc(h['chip_seo_title'])}</b><small>{esc(h['chip_seo_text'])}</small></div>

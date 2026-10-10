@@ -146,11 +146,11 @@ export const FILES = Object.keys(SCHEMA);
 
 export class Invalid extends Error {}
 
-/** A date that exists on the calendar (no 30 February), or a time between 2020 and 2100. */
+/** A day that exists on the calendar (no 30 February) in 2000–2099, or a time between 2020 and 2100. */
 export function realDate(s: string, when: 'day' | 'time'): boolean {
   if (when === 'day') {
     const d = new Date(s + 'T00:00:00Z');
-    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s && s >= '2000' && s < '2100';
   }
   const t = Date.parse(s);
   return !Number.isNaN(t) && t >= Date.UTC(2020, 0, 1) && t < Date.UTC(2100, 0, 1);

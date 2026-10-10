@@ -157,17 +157,17 @@ def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
 <link rel="alternate" hreflang="ar" href="{SITE}{hreflang_ar}">
 <link rel="alternate" hreflang="en" href="{SITE}{hreflang_en}">
 <link rel="alternate" hreflang="x-default" href="{SITE}{hreflang_ar}">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<link rel="icon" href="/favicon.ico?v=3" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=3">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="{html.escape(d['short'])}">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{SITE}{path}">
-<meta property="og:image" content="{SITE}/og.png?v=2">
+<meta property="og:image" content="{SITE}/og.png?v=3">
 <meta property="og:locale" content="{d['locale']}">
 <meta name="twitter:card" content="summary_large_image">
 {pre}

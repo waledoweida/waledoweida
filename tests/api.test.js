@@ -220,6 +220,7 @@ test('content: more refusals (wedding-like links, repo folders, broken character
   }
   const arts = g.body.files.articles.data;
   assert.equal((await put('articles', [{ ...arts[0], date: '2026-02-30' }, ...arts.slice(1)])).status, 422);   // no such day
+  assert.equal((await put('articles', [{ ...arts[0], date: '0000-05-01' }, ...arts.slice(1)])).status, 422);   // outside 2000–2099
   const site = g.body.files.site.data;
   assert.equal((await put('site', { ...site, counter: { ...site.counter, start: '1900-01-01T00:00:00Z' } })).status, 422);
   const home = JSON.parse(JSON.stringify(g.body.files.home.data));
