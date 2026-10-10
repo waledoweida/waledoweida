@@ -17,6 +17,7 @@ global.fetch = async (url, opt) => {
       case 'INCR': { const n = (Number(store.get(key)) || 0) + 1; store.set(key, n); return n; }
       case 'GET': return store.has(key) ? String(store.get(key)) : null;
       case 'EXPIRE': return 1;
+      case 'DEL': return store.delete(key) ? 1 : 0;
       default: throw new Error('unexpected ' + cmd);
     }
   });
@@ -90,6 +91,13 @@ test('login sets a secure HttpOnly cookie that unlocks stats; tampering is refus
   assert.equal((await call(stats, { headers: { cookie: forged } })).status, 401);
   const out = await call(logout, { method: 'POST', headers: { origin: 'https://waledoweida.com' } });
   assert.match(out.headers['set-cookie'], /Max-Age=0/);
+});
+
+test('login limit holds against a burst of parallel guesses', async () => {
+  const ip = { 'x-forwarded-for': '8.8.8.8' };
+  const burst = await Promise.all(Array.from({ length: 50 }, () => call(login, { method: 'POST', body: { password: 'nope' }, headers: ip })));
+  assert.equal(burst.filter((r) => r.status === 401).length, 5);
+  assert.equal((await call(login, { method: 'POST', body: { password: process.env.ADMIN_KEY }, headers: ip })).status, 429);
 });
 
 test('changing ADMIN_KEY invalidates existing sessions', async () => {

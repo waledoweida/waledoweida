@@ -18,6 +18,12 @@ export async function hit(key: string, limit: number, windowSeconds: number, str
   }
 }
 
+/** Forgets the hits for `key` in the current window (best effort). */
+export async function clear(key: string, windowSeconds: number): Promise<void> {
+  const window = Math.floor(Date.now() / 1000 / windowSeconds);
+  try { await redis([['DEL', `rl:${key}:${window}`]]); } catch { /* the window expires anyway */ }
+}
+
 /** Reads the current count without adding a hit (throws on storage errors when `strict`). */
 export async function peek(key: string, windowSeconds: number, strict = false): Promise<number> {
   const window = Math.floor(Date.now() / 1000 / windowSeconds);

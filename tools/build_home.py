@@ -341,9 +341,9 @@ def build():
         src = src[:m.start(2)] + ld_json(ld, separators=(",", ":")) + src[m.end(2):]
         # footer
         foot = re.search(r"<footer>.*?</footer>", src, re.S).group(0)
-        new = re.sub(r'(class="brand">.*?>)[^<>]*(</a>\s*<p>)[^<]*(</p>)', lambda m: m.group(1) + esc(c["name"]) + m.group(2) + esc(c["footer"]["about"]) + m.group(3), foot, count=1, flags=re.S)
-        new = re.sub(r'href="https://wa\.me/\d+"', f'href="{wa_link(site)}"', new)
-        new = re.sub(r'(<a href="tel:)\+\d+("[^>]*>)[^<]*(</a>)', lambda m: m.group(1) + "+" + site["whatsapp"] + m.group(2) + (local if lang == "ar" else intl) + m.group(3), new)
+        new = re.sub(r'(class="brand">.*?>)[^<>]*(</a>\s*<p>).*?(</p>)', lambda m: m.group(1) + esc(c["name"]) + m.group(2) + esc(c["footer"]["about"]) + m.group(3), foot, count=1, flags=re.S)
+        new = re.sub(r'href="https://wa\.me/[^"?]*"', f'href="{wa_link(site)}"', new)
+        new = re.sub(r'(<a href="tel:)[^"]*("[^>]*>)[^<]*(</a>)', lambda m: m.group(1) + "+" + site["whatsapp"] + m.group(2) + (local if lang == "ar" else intl) + m.group(3), new)
         new = re.sub(r'(<span id="y">\d+</span> )[^<]*(</span>)', lambda m: m.group(1) + esc(c["footer"]["rights"]) + m.group(2), new)
         src = src.replace(foot, new)
         src = sub(src, r'<aside aria-label=".*?</aside>', dock(c, site))
@@ -352,7 +352,7 @@ def build():
         write(path, src)
     # the forms in main.js send to this number
     js = read("main.js")
-    write("main.js", re.sub(r"var WA = '\d+';", f"var WA = '{site['whatsapp']}';", js, count=1))
+    write("main.js", re.sub(r"var WA = '[^']*';", f"var WA = '{site['whatsapp']}';", js, count=1))
     return [p for p, _ in PAGES.values()]
 
 

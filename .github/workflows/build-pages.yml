@@ -33,6 +33,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: npm ci
+      - name: Content matches the schema (same checks as the admin API)
+        run: npm test
       - name: Build, check and commit the pages
         run: |
           git config core.quotepath off

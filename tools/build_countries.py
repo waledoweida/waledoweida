@@ -155,7 +155,10 @@ def sync_vercel():
             f.write(out)
 
 
-MARK = 'class="post-hero country-hero"'
+# includes "<", which owner text can never produce (it is escaped to &lt;)
+MARK = '<section class="post-hero country-hero">'
+# top-level folders that are never country pages
+NOT_COUNTRY_DIRS = {"en", "blog", "review", "admin", "api", "fonts", "content", "tools", "tests", "node_modules"}
 
 
 def is_country_page(folder):
@@ -181,7 +184,7 @@ def prune():
     for base in ("", "en"):
         for name in os.listdir(os.path.join(ROOT, base) if base else ROOT):
             folder = os.path.join(base, name) if base else name
-            if name in keep or name.casefold().startswith(RED_LINE) or name.startswith("."):
+            if name in keep or name in NOT_COUNTRY_DIRS or name.casefold().startswith(RED_LINE) or name.startswith("."):
                 continue
             if is_country_page(folder):
                 remove_page(folder)

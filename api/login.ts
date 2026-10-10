@@ -1,7 +1,7 @@
 // POST /api/login {password} — starts an admin session. Rate limited per address.
 import type { ApiRequest as VercelRequest, ApiResponse as VercelResponse } from './_lib/types';
 import { clientIp, jsonBody, sameOrigin, sendJson } from './_lib/http';
-import { hit, peek } from './_lib/ratelimit';
+import { clear, hit } from './_lib/ratelimit';
 import { storageConfigured } from './_lib/redis';
 import { adminConfigured, passwordMatches, startSession } from './_lib/session';
 
@@ -14,18 +14,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   // the attempt limit lives in Redis; without it, refuse rather than allow unlimited guesses
   if (!adminConfigured() || !storageConfigured()) return sendJson(res, 503, { ok: false, error: 'not_configured' });
 
+  // every attempt is counted (atomically, before the password is checked) so parallel
+  // requests can't slip past the limit; a correct password clears the count again
   const key = 'login:' + clientIp(req);
-  let fails: number;
-  try { fails = await peek(key, WINDOW, true); } catch { return sendJson(res, 503, { ok: false, error: 'storage' }); }
-  if (fails >= MAX_FAILS) {
+  let allowed: boolean;
+  try { allowed = await hit(key, MAX_FAILS, WINDOW, true); } catch { return sendJson(res, 503, { ok: false, error: 'storage' }); }
+  if (!allowed) {
     res.setHeader('Retry-After', String(WINDOW));
     return sendJson(res, 429, { ok: false, error: 'too_many_attempts' });
   }
   const body = jsonBody(req);
-  if (!passwordMatches(body?.password)) {
-    try { await hit(key, MAX_FAILS, WINDOW, true); } catch { return sendJson(res, 503, { ok: false, error: 'storage' }); }
-    return sendJson(res, 401, { ok: false, error: 'wrong_password' });
-  }
+  if (!passwordMatches(body?.password)) return sendJson(res, 401, { ok: false, error: 'wrong_password' });
+  await clear(key, WINDOW);
   startSession(res);
   return sendJson(res, 200, { ok: true });
 }

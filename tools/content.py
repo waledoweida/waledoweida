@@ -13,7 +13,13 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+# the same rules as api/_lib/schema.ts, for values that could break out of where the build puts them
+SLUG = re.compile(r"[a-z0-9]+(-[a-z0-9]+)*")
+RULES = {
+    "site": [(lambda d: d["whatsapp"], re.compile(r"[1-9][0-9]{7,14}"), "whatsapp")],
+    "countries": [(lambda r: r["code"], re.compile(r"[A-Z]{2,4}"), "code"), (lambda r: r["slug"], SLUG, "slug")],
+    "articles": [(lambda r: r["date"], re.compile(r"\d{4}-\d{2}-\d{2}"), "date"), (lambda r: r["slug"], SLUG, "slug")],
+}
 
 
 def _tidy(v):
@@ -31,10 +37,11 @@ def _tidy(v):
 def load(name):
     with open(os.path.join(ROOT, "content", name + ".json"), encoding="utf-8") as f:
         data = _tidy(json.load(f))
-    if name in ("countries", "articles"):
-        for row in data:
-            if not SLUG.match(row.get("slug", "")):
-                raise ValueError(f"content/{name}.json: bad link {row.get('slug')!r} (a-z, 0-9 and - only)")
+    for get, rule, field in RULES.get(name, []):
+        for row in (data if isinstance(data, list) else [data]):
+            value = get(row)
+            if not isinstance(value, str) or not rule.fullmatch(value):
+                raise ValueError(f"content/{name}.json: bad {field} {value!r}")
     return data
 
 
