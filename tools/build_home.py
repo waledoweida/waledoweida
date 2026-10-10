@@ -35,7 +35,7 @@ def wa_link(site, text=None):
     return f"https://wa.me/{site['whatsapp']}" + (f"?text={quote(text, safe='')}" if text else "")
 
 
-def hero(c):
+def hero(c, site):
     h = c["hero"]
     title = esc(h["title_start"]) + f' <span class="gold-text">{esc(h["title_gold"])}</span>' + (" " + esc(h["title_end"]) if h.get("title_end") else "")
     trust = "\n".join(f"          <span>{CHECK}{esc(t)}</span>" for t in h["trust"])
@@ -46,7 +46,7 @@ def hero(c):
         <h1>{title}</h1>
         <p class="sub">{inline(h['intro'])}</p>
         <div class="btns">
-          <a class="btn btn-gold" href="#contact">{esc(h['button_main'])} {ARROW}</a>
+          <a class="btn btn-gold" href="{attr(wa_link(site, c['chat']['prefill']))}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg>{esc(h['button_main'])}</a>
           <a class="btn btn-ghost" href="#services">{esc(h['button_second'])}</a>
         </div>
         <div class="trust">
@@ -143,12 +143,19 @@ def points(x):
     return "\n            <ul>" + "".join(f"<li>{CHECK}{esc(p)}</li>" for p in x["points"]) + "</ul>"
 
 
+def paragraphs(text):
+    """A long card text: a <p> per paragraph (blank line between them), **bold** and line breaks kept."""
+    return "".join(f"<p>{inline(p)}</p>" for p in re.split(r"\n\s*\n", text.strip()) if p.strip())
+
+
 def services(c):
     s = c["services"]
+    # main.js shortens long texts to a few lines and shows the "more" button, which opens the whole text
     feat = "\n".join(f"""          <article class="feat reveal">
             <div class="ic"><svg class="i">{ICONS[x['icon']]}</svg></div>
             <h3>{esc(x['title'])}</h3>
-            <p>{esc(x['text'])}</p>{points(x)}
+            <div class="feat-text">{paragraphs(x['text'])}</div>
+            <button class="feat-more" type="button" hidden>{esc(s['more'])}</button>{points(x)}
             <a class="feat-link" href="#contact" data-service="{attr(form_name(x))}">{esc(s['order'])} {ARROW}</a>
           </article>""" for x in s["featured"])
     mini = "\n".join(f"""          <a class="mini reveal" href="#contact" data-service="{attr(form_name(x))}">
@@ -333,7 +340,7 @@ def build():
     for lang, (path, url) in PAGES.items():
         c = home[lang]
         src = read(path)
-        parts = {"HERO": hero(c), "PLATFORMS": platforms(c), "STATS": stats(c, site), "REGIONS": regions(c, lang, countries),
+        parts = {"HERO": hero(c, site), "PLATFORMS": platforms(c), "STATS": stats(c, site), "REGIONS": regions(c, lang, countries),
                  "SERVICES": services(c), "WHY": why(c), "STEPS": steps(c), "CTA BAND": audit(c),
                  "CONTACT": contact(c, lang, site), "FAQ": faq(c)}
         for name in SECTIONS:

@@ -481,8 +481,6 @@ a.reg{display:block;color:inherit}
 .reg-more svg{width:16px;height:16px;transition:transform .2s}
 a.reg:hover .reg-more svg{transform:translateX(-4px)}
 [dir="ltr"] a.reg:hover .reg-more svg{transform:translateX(4px)}
-[dir="ltr"] .reg-more svg{transform:scaleX(-1)}
-[dir="ltr"] a.reg:hover .reg-more svg{transform:scaleX(-1) translateX(-4px)}
 
 /* ---------- country pages ---------- */
 .country-code{margin:18px 0 0}
@@ -549,8 +547,8 @@ a.reg:hover .reg-more svg{transform:translateX(-4px)}
   .photo{inset:3% 10% 6% 14%;border-radius:18px}
   .visual .float{padding:5px 8px 5px 6px;border-radius:9px;animation-duration:7s}
   .visual .f-seo,.visual .f-soc{display:flex;gap:6px}
-  .visual .float b{display:block;font-size:.64rem;line-height:1.35;white-space:nowrap}
-  .visual .float small{display:block;font-size:.52rem;line-height:1.35;white-space:nowrap}
+  .visual .float b{display:block;font-size:.7rem;line-height:1.35;white-space:nowrap}
+  .visual .float small{display:block;font-size:.58rem;line-height:1.35;white-space:nowrap}
   .visual .chip-ic{width:20px;height:20px;border-radius:6px}
   .visual .chip-ic svg{transform:scale(.55)}
   .f-seo{top:-7%;right:-4%}
@@ -611,4 +609,50 @@ a.reg:hover .reg-more svg{transform:translateX(-4px)}
 }
 @media (max-width:340px){
   .reg-grid,.mini-grid,.why-list{grid-template-columns:1fr}
+}
+
+/* ---------- if main.js never runs (blocked, failed to load), show the hidden sections anyway ---------- */
+@keyframes failopen{to{opacity:1;transform:none}}
+.js:not(.ready) .reveal{animation:failopen .01s 3s forwards}
+
+/* ---------- mobile fixes on the lead paths ---------- */
+@media (max-width:600px){
+  input,select,textarea{font-size:16px}   /* below 16px iPhones zoom in on tap */
+  .post-cta .btns{width:100%;flex-wrap:wrap}
+  .post-cta .btns .btn{flex:1 1 auto;min-width:0}
+}
+.audit-form{border:0;border-radius:0;box-shadow:none}   /* the gold card already frames it */
+
+/* ---------- long service texts: first lines + "read more" dialog ---------- */
+.feat-text{color:var(--ink-muted);font-size:.97rem;margin-bottom:18px}
+.feat .feat-text p{margin:0 0 10px;color:inherit;font-size:inherit}
+.feat .feat-text p:last-child{margin-bottom:0}
+.js .feat-text.clamp{max-height:9em;overflow:hidden}
+.js .feat-text.cut{-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.feat-more{align-self:flex-start;margin:-8px 0 20px;padding:4px 0;border:0;background:none;color:var(--gold);font:inherit;font-family:"Readex Pro","Tajawal",sans-serif;font-weight:600;font-size:.92rem;cursor:pointer;text-decoration:underline;text-underline-offset:5px}
+.feat-more:hover{color:var(--gold-2)}
+.feat-more[hidden]{display:none}
+html:has(dialog[open]){overflow:hidden}
+.svc-dialog{margin:auto;padding:0;border:0;background:transparent;color:var(--ink-text);width:100%;max-width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:visible}
+.svc-dialog::backdrop{background:rgba(5,6,9,.74);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.svc-box{position:relative;max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;padding:38px 36px 30px;border-radius:22px;background:var(--ink-2);border:1px solid var(--ink-line);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.svc-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-inline-end:44px}
+.svc-head .ic{width:52px;height:52px;flex:none;margin:0;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16130c}
+.svc-head .ic svg{width:26px;height:26px}
+.svc-head h3{font-size:1.45rem;font-weight:600;line-height:1.35}
+.svc-text{font-size:1.06rem;line-height:1.95;color:var(--ink-text)}
+.svc-text p{margin:0 0 14px}
+.svc-text p:last-child{margin-bottom:0}
+.svc-text strong{color:var(--gold);font-weight:700}
+.svc-box ul{list-style:none;display:grid;gap:8px;margin:22px 0 4px;padding-top:18px;border-top:1px solid var(--ink-line)}
+.svc-box li{display:flex;align-items:center;gap:10px}
+.svc-box li svg{width:18px;height:18px;color:var(--gold);flex:none}
+.svc-cta{margin-top:24px;width:100%;justify-content:center}
+.svc-close{position:absolute;top:16px;inset-inline-end:16px;width:38px;height:38px;border-radius:50%;border:1px solid var(--ink-line);background:rgba(255,255,255,.04);color:var(--ink-text);font-size:1.5rem;line-height:1;cursor:pointer}
+.svc-close:hover,.svc-close:focus-visible{border-color:var(--gold);color:var(--gold)}
+@media (max-width:600px){
+  .js .feat-text.clamp{max-height:10.8em}
+  .svc-box{padding:30px 20px 22px;border-radius:18px}
+  .svc-head h3{font-size:1.18rem}
+  .svc-text{font-size:1rem;line-height:1.9}
 }

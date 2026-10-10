@@ -2,8 +2,8 @@
   "ar": {
     "name": "وليد أبوعويضة",
     "seo": {
-      "title": "وليد أحمد علي أبوعويضة | تسويق إلكتروني وتصميم مواقع",
-      "description": "وليد أحمد علي أبوعويضة — إعلانات ممولة، تصميم مواقع ومتاجر إلكترونية، SEO، هوية بصرية وإدارة السوشيال ميديا لعملاء في مصر وليبيا ودول الخليج. تواصل على واتساب 01025926261.",
+      "title": "تسويق إلكتروني وتصميم مواقع في مصر والخليج | وليد أبوعويضة",
+      "description": "إعلانات ممولة، تصميم مواقع ومتاجر، ظهور في جوجل وإدارة سوشيال ميديا لمشاريع في مصر وليبيا والكويت والخليج. اطلب تقييم مجاني لصفحتك على واتساب.",
       "share_title": "وليد أحمد علي أبوعويضة | تسويق إلكتروني وتصميم مواقع",
       "share_description": "إعلانات ممولة، تصميم مواقع ومتاجر، ظهور في جوجل، وإدارة السوشيال ميديا",
       "job_title": "تسويق إلكتروني وتصميم مواقع"
@@ -164,7 +164,8 @@
           "form_name": ""
         }
       ],
-      "order": "اطلب الخدمة"
+      "order": "اطلب الخدمة",
+      "more": "عرض المزيد"
     },
     "why": {
       "eyebrow": "ليه تشتغل معايا",
@@ -303,8 +304,8 @@
   "en": {
     "name": "Waled Oweida",
     "seo": {
-      "title": "Waled Ahmed Ali Abu Oweida | Digital Marketing & Web Design",
-      "description": "Waled Ahmed Ali Abu Oweida — paid ads, website and online store design, SEO, branding and social media management for clients in Egypt, Libya and the Gulf. WhatsApp +20 102 592 6261.",
+      "title": "Digital Marketing & Web Design | Waled Abu Oweida",
+      "description": "Paid ads, websites, online stores, Google visibility and social media management for businesses in Egypt, Libya and the Gulf. Get a free review on WhatsApp.",
       "share_title": "Waled Ahmed Ali Abu Oweida | Digital Marketing & Web Design",
       "share_description": "Paid ads, websites and online stores, Google visibility, and social media management",
       "job_title": "Digital Marketing & Web Design"
@@ -466,7 +467,8 @@
           "form_name": "Profile Site / Digital Business Card"
         }
       ],
-      "order": "Request this service"
+      "order": "Request this service",
+      "more": "Read more"
     },
     "why": {
       "eyebrow": "Why work with me",
