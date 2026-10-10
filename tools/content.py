@@ -39,39 +39,66 @@ def load(name):
 
 
 def esc(s):
-    """Text node: escape &, < and > (quotes stay as typed)."""
-    return html.escape(str(s), quote=False)
+    """Text node: escape &, < and > (quotes stay as typed); line breaks typed in the panel become <br>."""
+    return html.escape(str(s), quote=False).replace("\n", "<br>")
 
 
 def attr(s):
-    """Attribute value in double quotes."""
-    return esc(s).replace('"', "&quot;")
+    """Attribute value in double quotes (on one line)."""
+    return html.escape(str(s), quote=False).replace('"', "&quot;").replace("\n", " ")
 
 
 def inline(s):
     """Escaped text with **bold** and line breaks."""
-    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", esc(s).strip()).replace("\n", "<br>")
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", esc(str(s).strip()))
+
+
+LIST_ITEM = re.compile(r"^(- |\d+\. )")
 
 
 def article_html(text):
-    """Article body in the simple text format -> HTML."""
+    """Article body in the simple text format -> HTML.
+
+    Blocks are separated by a blank line. Inside a block: "## " is a heading, "> " a tip,
+    runs of "- " / "1. " lines a list, and other lines one paragraph.
+    """
     out = []
     for block in re.split(r"\n\s*\n", text.strip()):
         lines = [x.strip() for x in block.strip().split("\n") if x.strip()]
-        if not lines:
-            continue
-        if lines[0].startswith("## "):
-            out.append(f"<h2>{inline(lines[0][3:])}</h2>")
-            if lines[1:]:
-                out.append(f"<p>{inline(' '.join(lines[1:]))}</p>")
-        elif lines[0].startswith("> "):
-            out.append(f'<blockquote class="tip">{inline(" ".join(x.lstrip("> ").strip() for x in lines))}</blockquote>')
-        elif all(x.startswith("- ") for x in lines):
-            out.append("<ul>\n" + "\n".join(f"  <li>{inline(x[2:])}</li>" for x in lines) + "\n</ul>")
-        elif all(re.match(r"\d+\. ", x) for x in lines):
-            out.append("<ol>\n" + "\n".join(f"  <li>{inline(re.sub(r'^\d+\. ', '', x))}</li>" for x in lines) + "\n</ol>")
-        else:
-            out.append(f"<p>{inline(' '.join(lines))}</p>")
+        para = []
+
+        def flush():
+            if para:
+                out.append(f"<p>{inline(' '.join(para))}</p>")
+                para.clear()
+
+        i = 0
+        while i < len(lines):
+            x = lines[i]
+            if x.startswith("## "):
+                flush()
+                out.append(f"<h2>{inline(x[3:])}</h2>")
+                i += 1
+            elif x.startswith("> "):
+                flush()
+                run = []
+                while i < len(lines) and lines[i].startswith("> "):
+                    run.append(lines[i][2:].strip())
+                    i += 1
+                out.append(f'<blockquote class="tip">{inline(" ".join(run))}</blockquote>')
+            elif LIST_ITEM.match(x):
+                flush()
+                tag = "ul" if x.startswith("- ") else "ol"
+                items = []
+                while i < len(lines) and LIST_ITEM.match(lines[i]) and lines[i].startswith("- ") == (tag == "ul"):
+                    items.append(LIST_ITEM.sub("", lines[i], count=1))
+                    i += 1
+                lis = "\n".join(f"  <li>{inline(t)}</li>" for t in items)
+                out.append(f"<{tag}>\n{lis}\n</{tag}>")
+            else:
+                para.append(x)
+                i += 1
+        flush()
     return "\n\n".join(out)
 
 

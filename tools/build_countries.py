@@ -35,6 +35,11 @@ AREA = {
 WA_NUM = load("site")["whatsapp"]
 
 
+def ml(s):
+    """Text from a multi-line field: escaped, line breaks kept."""
+    return html.escape(s).replace("\n", "<br>")
+
+
 def path_for(c, lang):
     return ("/en/" if lang == "en" else "/") + c["slug"] + "/"
 
@@ -61,13 +66,13 @@ def build():
             svc = "".join(f"""
           <a class="mini reveal" href="{esc(wa(x['wa_text'] + ' — ' + sv['title']))}" target="_blank" rel="noopener" aria-label="{esc(t['ask'])}: {esc(sv['title'])}">
             <div class="ic"><svg class="i" viewBox="0 0 24 24">{ICONS[sv['icon']]}</svg></div>
-            <div><h3>{esc(sv['title'])}</h3><p>{esc(sv['text'])}</p></div>
+            <div><h3>{esc(sv['title'])}</h3><p>{ml(sv['text'])}</p></div>
           </a>""" for sv in x["services"])
             why = "".join(f'<li><svg class="i"><use href="#check"/></svg><span>{esc(w)}</span></li>' for w in x["why"])
             faq = "".join(f"""
         <details class="reveal">
           <summary>{esc(f['q'])}</summary>
-          <p>{esc(f['a'])}</p>
+          <p>{ml(f['a'])}</p>
         </details>""" for f in x["faq"])
             others = " ".join(
                 f'<a href="{path_for(o, lang)}"><span>{o["code"]}</span>{esc(o[lang]["name"])}</a>'
@@ -77,7 +82,7 @@ def build():
       <div class="crumbs"><a href="{d['home']}">{d['crumbs_home']}</a> / <a href="{d['home']}#work">{t['markets']}</a> / <span>{esc(x['name'])}</span></div>
       <span class="reg-code country-code">{c['code']}</span>
       <h1>{esc(x['title'])}</h1>
-      <p class="lead">{esc(x['lead'])}</p>
+      <p class="lead">{ml(x['lead'])}</p>
       <div class="btns">
         <a class="btn btn-gold" href="{esc(wa(x['wa_text']))}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg>{t['wa_btn']}</a>
         <a class="btn btn-ghost" href="#services">{t['explore']}</a>

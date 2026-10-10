@@ -130,8 +130,9 @@ global.fetch = async (url, opt = {}) => {
     commits.push(b.message);
     return json(200, { content: { sha } });
   }
-  if (u.pathname === '/repos/waledoweida/waledoweida/commits/main') {
-    return json(200, { commit: { message: commits.length ? commits[commits.length - 1] : 'Rebuild pages from content', committer: { date: '2026-10-10T10:00:00Z' } } });
+  if (u.pathname === '/repos/waledoweida/waledoweida/commits' && u.searchParams.get('sha') === 'main') {
+    const log = ['Rebuild pages from content', 'Merge pull request #1', ...commits].reverse();
+    return json(200, log.map((message) => ({ commit: { message, committer: { date: '2026-10-10T10:00:00Z' } } })));
   }
   return json(404, {});
 };
@@ -173,6 +174,10 @@ test('content: PUT validates, cleans and commits; then reports building', async 
   assert.equal(commits.at(-1), 'Admin: update home page');
   const st = await call(content, { headers: h, query: { status: '1' } });
   assert.equal(st.body.status.state, 'building');
+  commits.push('Merge pull request #2');                 // a merge after the save: still waiting for the rebuild
+  assert.equal((await call(content, { headers: h, query: { status: '1' } })).body.status.state, 'building');
+  commits.push('Rebuild pages from content');
+  assert.equal((await call(content, { headers: h, query: { status: '1' } })).body.status.state, 'live');
   // a save based on an old version is refused instead of overwriting
   const stale = await call(content, { method: 'PUT', headers: h, body: { file: 'home', sha: g.body.files.home.sha, data: home } });
   assert.equal(stale.status, 409);

@@ -24,7 +24,7 @@ changes these paths.
 ## Layout
 
 - `index.html` — Arabic home (RTL), `en/index.html` — English home (LTR)
-- `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed)
+- `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed). The WhatsApp number in `main.js` (`var WA`) is written by the build from `content/site.json`: change it there, not in `main.js`.
 - `404.html`, `robots.txt`, `sitemap.xml`, icons, `og.png`, `profile.jpg`, `avatar.jpg`
 - Home pages carry a Content-Security-Policy meta; keep styles out of inline `style=""` attributes.
 - `.vercelignore` keeps repo-only files (`CLAUDE.md`, `tools/`, `tests/`, …) off the published site.
@@ -33,12 +33,12 @@ changes these paths.
   fills the sections in place; head/header/scripts stay hand-written in the HTML), the country pages
   (`tools/build_countries.py`, also keeps their `vercel.json` header rules in sync and deletes pages of removed countries),
   the blog (`tools/build_blog.py`; article bodies use the simple text format in `tools/content.py`), `sitemap.xml` and the
-  review page. Edit the JSON (or use `/admin/`), run `build_all.py`, commit both.
-- Every write goes through `build_blog.write()`/`safe_path()`, which refuses paths outside the repo or under `wedding/` / `فرح/`.
+  review page. Edit the JSON (or use `/admin/`), run `build_all.py` (Python 3.11+), commit both.
+- Page writes and deletes go through `build_blog.write()` / `safe_path()` / `remove_page()`, which refuse paths outside the repo or under `wedding/` / `فرح/`; `sync_vercel()` rewrites only `vercel.json`.
 
 ## Hosting (Vercel) and visitor stats
 
-- The site is served by Vercel from `main` (static files + the functions in `api/`); every merge to `main` deploys automatically.
+- The site is served by Vercel from `main` (static files + the functions in `api/`); every merge to `main` deploys automatically, except commits that change only `content/` (`ignoreCommand` in `vercel.json`; their rebuilt pages follow in the next commit).
 - `api/` is TypeScript (`npm run typecheck`, `npm test`). `track.ts` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `login.ts` checks `ADMIN_KEY` (5 wrong tries per 15 min per address) and sets a signed HttpOnly session cookie; `stats.ts` needs that session.
 - Security headers live in `vercel.json` as an explicit list of the site's paths. `wedding/` and `فرح/` are intentionally not listed so their responses stay untouched.
 - Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST), `ADMIN_KEY` and `GITHUB_TOKEN`. Never commit their values. `package.json` holds the `redis` client plus dev-only TypeScript tooling.

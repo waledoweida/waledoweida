@@ -32,6 +32,11 @@
   function bilingual(f){ return f.t === 'obj' && f.fields.ar && f.fields.en; }
 
   // ---------- loading ----------
+  var loading = null;      // the one in-flight load of /api/content
+  function load(){
+    if (!loading) loading = fetchAll().then(function(b){ loading = null; return b; }, function(e){ loading = null; throw e; });
+    return loading;
+  }
   function fetchAll(){
     $('edBody').textContent = 'جاري التحميل…';
     return fetch(API, { credentials: 'same-origin', cache: 'no-store' }).then(function(r){
@@ -184,7 +189,7 @@
         [['↑', 'لفوق', i > 0, function(){ swap(i, i - 1); }], ['↓', 'لتحت', i < arr.length - 1, function(){ swap(i, i + 1); }],
          ['✕', 'امسح', arr.length > f.min, function(){
            if (!simple && !confirm('متأكد إنك عايز تمسح "' + itemTitle(f, item, i) + '"؟')) return;
-           arr.splice(i, 1); delete openCards[p]; redraw(); changed();
+           arr.splice(i, 1); shiftOpen(path, i); redraw(); changed();
          }]].forEach(function(b){
           var btn = el('button', 'icon-btn', b[0]); btn.type = 'button'; btn.title = b[1]; btn.setAttribute('aria-label', b[1]); btn.disabled = !b[2];
           btn.addEventListener('click', function(e){ e.preventDefault(); b[3](); });
@@ -211,7 +216,7 @@
       });
       add.disabled = arr.length >= f.max;
     }
-    function swap(a, b){ var t = arr[a]; arr[a] = arr[b]; arr[b] = t; var o = openCards[path + '[' + a + ']']; openCards[path + '[' + a + ']'] = openCards[path + '[' + b + ']']; openCards[path + '[' + b + ']'] = o; redraw(); changed(); }
+    function swap(a, b){ var t = arr[a]; arr[a] = arr[b]; arr[b] = t; swapOpen(path, a, b); redraw(); changed(); }
     var add = el('button', 'add', '+ إضافة'); add.type = 'button';
     add.addEventListener('click', function(){
       arr.push(blank(f.of)); openCards[path + '[' + (arr.length - 1) + ']'] = true; redraw(); changed();
@@ -221,6 +226,20 @@
     redraw();
     return box;
   }
+
+  // open/closed state is kept by path ("countries[2].ar.services[0]"); keep it with its item when items move
+  function remapOpen(path, fn){
+    var esc = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), re = new RegExp('^' + esc + '\\[(\\d+)\\]'), next = {};
+    Object.keys(openCards).forEach(function(k){
+      var m = re.exec(k);
+      if (!m) { next[k] = openCards[k]; return; }
+      var to = fn(+m[1]);
+      if (to != null) next[path + '[' + to + ']' + k.slice(m[0].length)] = openCards[k];
+    });
+    openCards = next;
+  }
+  function shiftOpen(path, removed){ remapOpen(path, function(i){ return i === removed ? null : i > removed ? i - 1 : i; }); }
+  function swapOpen(path, a, b){ remapOpen(path, function(i){ return i === a ? b : i === b ? a : i; }); }
 
   function iconPicker(value, set, id){
     var box = el('div', 'icons'); box.id = id; box.setAttribute('role', 'radiogroup');
@@ -245,8 +264,11 @@
       var b = el('button', null, t[0]); b.type = 'button';
       b.addEventListener('click', function(){
         var s = ta.selectionStart, e = ta.selectionEnd, v = ta.value;
-        ta.value = v.slice(0, s) + t[1] + v.slice(s, e) + t[2] + v.slice(e);
-        ta.selectionStart = ta.selectionEnd = s + t[1].length + (e - s);
+        var before = t[1];
+        if (before === '\n- ' && !/(^|\n)- [^\n]*$/.test(v.slice(0, s))) before = '\n\n- ';   // a new list starts on its own
+        if (s === 0) before = before.replace(/^\n+/, '');
+        ta.value = v.slice(0, s) + before + v.slice(s, e) + t[2] + v.slice(e);
+        ta.selectionStart = ta.selectionEnd = s + before.length + (e - s);
         ta.focus(); ta.dispatchEvent(new Event('input'));
       });
       bar.appendChild(b);
@@ -266,16 +288,26 @@
     text.split(/\*\*(.+?)\*\*/).forEach(function(part, i){ parent.appendChild(i % 2 ? el('strong', null, part) : document.createTextNode(part)); });
     return parent;
   }
+  // same rules as article_html() in tools/content.py
   function renderBody(text, out){
     out.textContent = '';
     text.trim().split(/\n\s*\n/).forEach(function(block){
-      var lines = block.split('\n').map(function(x){ return x.trim(); }).filter(Boolean);
-      if (!lines.length) return;
-      if (/^## /.test(lines[0])) { out.appendChild(inline(el('h3'), lines[0].slice(3))); if (lines.length > 1) out.appendChild(inline(el('p'), lines.slice(1).join(' '))); }
-      else if (/^> /.test(lines[0])) out.appendChild(inline(el('blockquote'), lines.map(function(x){ return x.replace(/^>\s*/, ''); }).join(' ')));
-      else if (lines.every(function(x){ return /^- /.test(x); })) { var ul = el('ul'); lines.forEach(function(x){ ul.appendChild(inline(el('li'), x.slice(2))); }); out.appendChild(ul); }
-      else if (lines.every(function(x){ return /^\d+\. /.test(x); })) { var ol = el('ol'); lines.forEach(function(x){ ol.appendChild(inline(el('li'), x.replace(/^\d+\. /, ''))); }); out.appendChild(ol); }
-      else out.appendChild(inline(el('p'), lines.join(' ')));
+      var lines = block.split('\n').map(function(x){ return x.trim(); }).filter(Boolean), para = [], i = 0;
+      function flush(){ if (para.length) { out.appendChild(inline(el('p'), para.join(' '))); para = []; } }
+      while (i < lines.length) {
+        var x = lines[i];
+        if (/^## /.test(x)) { flush(); out.appendChild(inline(el('h3'), x.slice(3))); i++; }
+        else if (/^> /.test(x)) {
+          flush(); var run = [];
+          while (i < lines.length && /^> /.test(lines[i])) run.push(lines[i++].slice(2).trim());
+          out.appendChild(inline(el('blockquote'), run.join(' ')));
+        } else if (/^(- |\d+\. )/.test(x)) {
+          flush(); var ul = /^- /.test(x), list = el(ul ? 'ul' : 'ol');
+          while (i < lines.length && /^(- |\d+\. )/.test(lines[i]) && /^- /.test(lines[i]) === ul) list.appendChild(inline(el('li'), lines[i++].replace(/^(- |\d+\. )/, '')));
+          out.appendChild(list);
+        } else { para.push(x); i++; }
+      }
+      flush();
     });
   }
 
@@ -301,7 +333,8 @@
         // changing the counter number restarts the count from now
         box.addEventListener('input', function(e){
           if (e.target.dataset.path === 'site.counter.base') {
-            data.counter.start = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
+            var was = JSON.parse(saved.site).counter;
+            data.counter.start = data.counter.base === was.base ? was.start : new Date().toISOString().replace(/\.\d+Z$/, 'Z');
             var st = box.querySelector('[data-path="site.counter.start"]'); if (st) st.value = data.counter.start;
           }
         });
@@ -342,18 +375,38 @@
         errs.push({ path: file + '[' + i + '].slug', msg: 'الرابط "' + x.slug + '" محجوز للموقع، اختار رابط تاني' });
       seen[x.slug] = 1;
     });
+    if (file === 'countries') {
+      var codes = {};
+      data.forEach(function(x, i){
+        if (codes[x.code]) errs.push({ path: 'countries[' + i + '].code', msg: 'كود البلد "' + x.code + '" متكرر' });
+        codes[x.code] = 1;
+      });
+    }
+  }
+
+  // which editor tab shows a given field path
+  function viewFor(path){
+    if (/^site/.test(path)) return 'basics';
+    if (/^countries/.test(path)) return 'countries';
+    if (/^articles/.test(path)) return 'articles';
+    var m = /^home\.(?:ar|en)\.(\w+)/.exec(path), key = m && m[1];
+    return Object.keys(VIEWS).filter(function(v){
+      return VIEWS[v].parts.some(function(p){ return p.file === 'home' && p.keys.indexOf(key) >= 0; });
+    })[0] || view;
   }
 
   function focusError(err){
     var m = /\.(ar|en)(\.|$)/.exec(err.path);
     if (m && m[1] !== lang) setLang(m[1]);
-    // open every card on the way to the field, then focus it
+    var v = viewFor(err.path);
+    if (v !== view) { view = v; if (window.woSelectTab) window.woSelectTab(v); }
+    // open every section and card on the way to the field, then focus it
     var parts = err.path.match(/^[^\[.]+|\[\d+\]|\.[^\[.]+/g) || [], acc = '';
-    parts.forEach(function(p){ acc += p; if (/\]$/.test(acc)) openCards[acc] = true; });
+    parts.forEach(function(p){ acc += p; openCards[acc] = true; });
     render();
     var input = document.querySelector('[data-path="' + err.path.replace(/"/g, '') + '"]');
     if (input) {
-      var d = input.closest('details.more'); if (d) d.open = true;
+      for (var d = input.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true;
       input.classList.add('invalid'); input.focus(); input.scrollIntoView({ block: 'center' });
     }
     var where = m ? (m[1] === 'en' ? 'في النسخة الإنجليزي — ' : 'في النسخة العربي — ') : '';
@@ -370,6 +423,9 @@
       if (errs.length) { focusError(errs[0]); return; }
     }
     $('save').disabled = true; $('saveMsg').textContent = 'بيتحفظ…'; $('saveMsg').className = '';
+    // no typing while the commits run: what's on screen is exactly what gets saved
+    $('edBody').inert = true; $('undo').disabled = true;
+    function unlock(){ $('edBody').inert = false; $('save').disabled = false; $('undo').disabled = false; }
     var chain = Promise.resolve(), committed = 0;
     files.forEach(function(f){
       chain = chain.then(function(){
@@ -387,18 +443,28 @@
       });
     });
     chain.then(function(){
-      $('save').disabled = false;
+      unlock();
       render();
       $('savebar').hidden = false; $('saveMsg').className = 'good';
       $('saveMsg').textContent = committed ? 'اتحفظ ✓ الموقع هيتحدث خلال دقيقتين تلاتة' : 'مفيش تغيير فعلي يتنشر (المسافات الزيادة بتتشال لوحدها)';
       setTimeout(function(){ if (!dirtyFiles().length) $('savebar').hidden = true; }, 6000);
       if (committed) { savedAt = Date.now(); pub({ state: 'building', since: new Date().toISOString() }); }
     }).catch(function(e){
-      $('save').disabled = false;
-      var msg = e.status === 401 ? 'خلصت مدة الدخول. ادخل تاني (تعديلاتك هتضيع لو قفلت الصفحة).'
+      unlock();
+      render();   // the files that did save were replaced by the server's copy; bind the form to them again
+      if (e.status === 422 && e.body && e.body.field) {
+        var i = e.body.field.indexOf(': '), path = e.body.field.slice(0, i), why = e.body.field.slice(i + 2);
+        var WHY = { 'empty': 'فاضية', 'too long': 'أطول من المسموح', 'wrong format': 'الشكل مش مظبوط', 'bad number': 'رقم مش مظبوط',
+          'broken character': 'فيها حرف بايظ (غالبًا إيموجي اتقطع) — امسحه واكتبه تاني', 'duplicate link': 'في رابط متكرر',
+          'duplicate code': 'في كود بلد متكرر', 'reserved link': 'الرابط محجوز للموقع، اختار رابط تاني',
+          'same as platforms.aria': 'لازم تختلف عن اسم شريط المنصات', 'wrong count': 'العدد مش مظبوط' };
+        focusError({ path: path, msg: 'في خانة مش مظبوطة: ' + (WHY[why] || why) });
+        return;
+      }
+      var msg = e.status === 401 ? 'خلصت مدة الدخول. ادخل تاني وبعدين دوس حفظ تاني (متقفلش الصفحة عشان تعديلاتك متضيعش).'
         : e.status === 409 ? 'الملف اتعدّل من مكان تاني. انسخ تعديلاتك واعمل تحديث للصفحة.'
-        : e.status === 422 ? 'في خانة مش مظبوطة: ' + (e.body && e.body.field || '')
         : e.body && e.body.error === 'github_access' ? 'مفتاح GitHub مش شغال (يمكن انتهى أو صلاحيته ناقصة).'
+        : e.body && e.body.error === 'too_large' ? 'الملف بقى كبير أوي. قلّل شوية من الكلام.'
         : 'الحفظ فشل. اتأكد من الإنترنت وجرّب تاني.';
       $('saveMsg').textContent = msg; $('saveMsg').className = 'bad';
       if (e.status === 401) window.woShowLogin();
@@ -423,7 +489,7 @@
   window.woEditor = {
     open: function(name){
       view = name; $('editor').hidden = false; $('noGithub').hidden = true;
-      (state ? Promise.resolve(state) : fetchAll()).then(function(s){ if (s && view === name) render(); })
+      (state ? Promise.resolve(state) : load()).then(function(s){ if (s && view === name) render(); })
         .catch(function(){ $('edBody').textContent = 'تعذّر تحميل المحتوى. جرّب تاني.'; });
     },
     dirty: function(){ return dirtyFiles().length > 0; },

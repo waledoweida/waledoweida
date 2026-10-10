@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the blog (blog/ and en/blog/) from tools/articles.py.
+"""Generate the blog (blog/ and en/blog/) from content/articles.json (loaded by tools/articles.py).
 
 Header, footer, icon sprite and floating WhatsApp button are taken from the
 home pages (index.html / en/index.html) so the blog always matches the site.

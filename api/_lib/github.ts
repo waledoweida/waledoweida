@@ -49,8 +49,8 @@ export async function writeFile(path: string, text: string, sha: string, message
   return r.content.sha;
 }
 
-/** Latest commit on the branch: tells the panel whether the pages were rebuilt after the last save. */
-export async function head(): Promise<{ message: string; date: string }> {
-  const c = await gh(`/repos/${repo()}/commits/${encodeURIComponent(branch())}`) as { commit: { message: string; committer: { date: string } } };
-  return { message: c.commit.message.split('\n')[0], date: c.commit.committer.date };
+/** Recent commits on the branch, newest first: tells the panel whether the pages were rebuilt after the last save. */
+export async function recentCommits(): Promise<{ message: string; date: string }[]> {
+  const list = await gh(`/repos/${repo()}/commits?sha=${encodeURIComponent(branch())}&per_page=30`) as { commit: { message: string; committer: { date: string } } }[];
+  return list.map((c) => ({ message: c.commit.message.split('\n')[0], date: c.commit.committer.date }));
 }

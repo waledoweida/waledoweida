@@ -8,14 +8,22 @@ import type { ApiRequest as VercelRequest, ApiResponse as VercelResponse } from 
 import { jsonBody, sameOrigin, sendJson } from './_lib/http';
 import { adminConfigured, hasSession } from './_lib/session';
 import { FILES, Invalid, SCHEMA, validateFile } from './_lib/schema';
-import { GitHubError, githubConfigured, head, readFile, writeFile } from './_lib/github';
+import { GitHubError, githubConfigured, readFile, recentCommits, writeFile } from './_lib/github';
 
 const SAVE_PREFIX = 'Admin: ';
+const REBUILD = 'Rebuild pages from content';
 const LABEL: Record<string, string> = { site: 'site settings', home: 'home page', countries: 'country pages', articles: 'blog articles' };
 
+// "building" while a save is newer than the last rebuild (the rebuild always builds the newest content)
 async function status(): Promise<{ state: 'building' | 'live'; since: string }> {
-  const h = await head();
-  return { state: h.message.startsWith(SAVE_PREFIX) ? 'building' : 'live', since: h.date };
+  const commits = await recentCommits();
+  let pendingSince = '';
+  for (const c of commits) {
+    if (c.message === REBUILD) break;
+    if (c.message.startsWith(SAVE_PREFIX)) pendingSince = c.date;   // oldest save still waiting
+  }
+  if (pendingSince) return { state: 'building', since: pendingSince };
+  return { state: 'live', since: commits[0]?.date ?? '' };
 }
 
 async function icons(): Promise<Record<string, string>> {

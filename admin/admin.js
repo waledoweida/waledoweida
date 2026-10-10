@@ -27,6 +27,14 @@
     if (!inApp) $('err').hidden = true;
   }
   window.woShowLogin = function(){ show('login'); };
+  // the editor jumps to another tab to show a field with an error
+  window.woSelectTab = function(name){
+    tab = name;
+    document.querySelectorAll('#tabs button').forEach(function(b){
+      if (b.getAttribute('data-tab') === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    try { sessionStorage.setItem('wo_tab', name); } catch (e) {}
+  };
   function openTab(name){
     if (tab !== name && window.woEditor && !window.woEditor.canLeave()) return;
     tab = name;
@@ -120,13 +128,14 @@
     $('updated').textContent = 'جاري التحميل…';
     fetch(STATS_URL + '?days=' + days, { credentials: 'same-origin', cache: 'no-store' })
       .then(function(r){
+        if (tab !== 'stats') return null;   // the owner moved to another tab meanwhile
         if (r.status === 401) { show('login'); return null; }
         if (r.status === 503) { show('setup'); return null; }
         if (!r.ok) throw new Error(r.status);
         return r.json();
       })
       .then(function(s){ if (s && tab === 'stats') { show('dash'); render(s); } })
-      .catch(function(){ show('dash'); $('err').textContent = 'تعذّر تحميل البيانات. اتأكد من الإنترنت وجرّب تاني.'; $('err').hidden = false; });
+      .catch(function(){ if (tab !== 'stats') return; show('dash'); $('err').textContent = 'تعذّر تحميل البيانات. اتأكد من الإنترنت وجرّب تاني.'; $('err').hidden = false; });
   }
 
   // password goes to /api/login once; the session lives in an HttpOnly cookie the page can't read
