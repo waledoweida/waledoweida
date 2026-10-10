@@ -128,6 +128,7 @@ export const SCHEMA: Record<string, Field> = {
       base: { t: 'num', label: 'رقم عداد الخدمات دلوقتي', min: 0, max: 100000000, hint: 'العداد بيزيد لوحده من الرقم ده' },
       start: { t: 'match', label: 'العداد بدأ من', re: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$', max: 40, ltr: true, when: 'time', hint: 'بيتظبط لوحده لما تغيّر الرقم' },
     }, 'عداد الخدمات'),
+    experience_since: { t: 'num', label: 'سنة ما بدأت الشغل', min: 1990, max: 2100, hint: 'سنين الخبرة بتتحسب منها وبتزيد لوحدها كل أول سنة. في أي كلام اكتب {years} مكان الرقم و{years_unit} مكان كلمة "سنين/سنة".' },
   }),
   home: obj({ ar: homeLang, en: homeLang }),
   countries: list('البلاد', obj({
