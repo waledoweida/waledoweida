@@ -3,22 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>إحصائيات الموقع</title>
+<title>لوحة التحكم</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d12">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="stylesheet" href="/admin/admin.css?v=1">
+<link rel="stylesheet" href="/admin/admin.css?v=2">
 </head>
 <body>
 <main class="wrap">
   <header class="top">
     <div>
-      <h1>إحصائيات الموقع</h1>
-      <p class="muted" id="updated">waledoweida.com</p>
+      <h1>لوحة التحكم</h1>
+      <p class="muted"><a href="/" target="_blank" rel="noopener">waledoweida.com</a> <span class="pub" id="pub" hidden></span></p>
     </div>
-    <div class="controls" id="controls" hidden>
+    <button type="button" class="ghost" id="logout" hidden>خروج</button>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="أقسام اللوحة" hidden>
+    <button type="button" data-tab="stats" aria-current="page">الإحصائيات</button>
+    <button type="button" data-tab="basics">الأساسيات</button>
+    <button type="button" data-tab="home">الصفحة الرئيسية</button>
+    <button type="button" data-tab="services">الخدمات</button>
+    <button type="button" data-tab="faq">الأسئلة الشائعة</button>
+    <button type="button" data-tab="countries">البلاد</button>
+    <button type="button" data-tab="articles">المقالات</button>
+  </nav>
+
+  <section id="editor" hidden>
+    <div class="ed-top">
+      <p class="muted" id="edIntro"></p>
+      <div class="seg" role="group" aria-label="اللغة" id="langSeg">
+        <button type="button" data-lang="ar" aria-pressed="true">عربي</button>
+        <button type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+    <div id="edBody"></div>
+    <div class="savebar" id="savebar" hidden>
+      <span id="saveMsg">عندك تعديلات لسه متحفظتش</span>
+      <div><button type="button" class="ghost" id="undo">تراجع</button> <button type="button" class="primary" id="save">حفظ ونشر</button></div>
+    </div>
+  </section>
+
+  <div class="stats-head" id="controls" hidden>
+    <p class="muted" id="updated"></p>
+    <div class="controls">
       <div class="seg" role="group" aria-label="الفترة">
         <button type="button" data-days="1">النهارده</button>
         <button type="button" data-days="7" aria-pressed="true">7 أيام</button>
@@ -26,9 +56,8 @@
         <button type="button" data-days="90">90 يوم</button>
       </div>
       <button type="button" class="ghost" id="refresh">تحديث</button>
-      <button type="button" class="ghost" id="logout">خروج</button>
     </div>
-  </header>
+  </div>
 
   <section class="card login" id="login" hidden>
     <h2>دخول</h2>
@@ -38,6 +67,11 @@
       <button type="submit">دخول</button>
     </form>
     <p class="err" id="loginErr" hidden></p>
+  </section>
+
+  <section class="card setup" id="noGithub" hidden>
+    <h2>تعديل الموقع لسه مش متوصّل</h2>
+    <p class="muted">محتاج مفتاح GitHub في Vercel باسم <code>GITHUB_TOKEN</code> (صلاحية Contents: Read and write على ريبو الموقع بس)، وبعدين Redeploy.</p>
   </section>
 
   <section class="card setup" id="setup" hidden>
@@ -87,6 +121,7 @@
   <p class="err" id="err" hidden></p>
 </main>
 <div class="tip" id="tip" role="tooltip" hidden></div>
-<script src="/admin/admin.js?v=3" defer></script>
+<script src="/admin/admin.js?v=4" defer></script>
+<script src="/admin/editor.js?v=1" defer></script>
 </body>
 </html>

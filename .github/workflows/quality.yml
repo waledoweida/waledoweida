@@ -7,6 +7,8 @@ on:
   pull_request:
   push:
     branches: [main]
+    # an admin save changes only content/; its pages arrive in the next commit (build-pages.yml)
+    paths-ignore: ["content/**"]
 
 permissions:
   contents: read
@@ -34,6 +36,5 @@ jobs:
         run: npm audit --audit-level=high
       - name: Generated pages are in sync with their sources
         run: |
-          python3 tools/build_countries.py > /dev/null
-          python3 tools/build_review.py > /dev/null
+          python3 tools/build_all.py > /dev/null
           git diff --exit-code -- . ':(exclude)wedding' ':(exclude)فرح'

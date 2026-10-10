@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the blog (blog/ and en/blog/) from tools/articles.py.
+"""Generate the blog (blog/ and en/blog/) from content/articles.json (loaded by tools/articles.py).
 
 Header, footer, icon sprite and floating WhatsApp button are taken from the
 home pages (index.html / en/index.html) so the blog always matches the site.
@@ -8,7 +8,6 @@ Never touches wedding/ or فرح/.
 Usage:  python3 tools/build_blog.py
 """
 import html
-import json
 import math
 import os
 import re
@@ -17,9 +16,11 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from articles import ARTICLES  # noqa: E402
+from content import ld_json, load  # noqa: E402
+from icons import ICONS  # noqa: E402
 
 SITE = "https://waledoweida.com"
-WA = "https://wa.me/201025926261"
+WA = "https://wa.me/" + load("site")["whatsapp"]
 
 L = {
     "ar": dict(
@@ -50,14 +51,6 @@ L = {
     ),
 }
 
-ICONS = {
-    "ads": '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
-    "web": '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    "maps": '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
-    "price": '<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
-    "store": '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H5.1"/>',
-    "seo": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-}
 
 
 def read(p):
@@ -65,9 +58,22 @@ def read(p):
         return f.read()
 
 
+RED_LINE = ("wedding", "فرح")
+
+
+def safe_path(p):
+    """Absolute path for a generated file. Refuses anything outside the repo and anything in the
+    wedding invitation (wedding/, فرح/), whatever the spelling (../, ./, symlinks, letter case)."""
+    full = os.path.realpath(os.path.join(ROOT, p))
+    rel = os.path.relpath(full, os.path.realpath(ROOT))
+    top = rel.split(os.sep)[0].casefold()
+    if rel == "." or top == ".." or os.path.isabs(rel) or top.startswith(RED_LINE):
+        raise RuntimeError(f"red line: refusing to write {p!r}")
+    return full
+
+
 def write(p, s):
-    full = os.path.join(ROOT, p)
-    assert not p.startswith(("wedding", "فرح")), "red line: never write the wedding pages"
+    full = safe_path(p)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, "w", encoding="utf-8") as f:
         f.write(s)
@@ -115,10 +121,20 @@ def minutes(body):
     return max(1, math.ceil(words / 200))
 
 
+def fit_title(title, limit=70):
+    """The title, cut at a word boundary (with …) if its escaped form is over `limit` characters."""
+    if len(html.escape(title)) <= limit:
+        return title
+    words = title.split()
+    while words and len(html.escape(" ".join(words) + "…")) > limit:
+        words.pop()
+    return (" ".join(words) + "…") if words else title[:limit - 1] + "…"
+
+
 def page_title(title, short):
     """'<title> | <name>' when that fits in 70 characters, otherwise just the title (search engines cut longer ones)."""
     full = f"{title} | {short}"
-    return full if len(html.escape(full)) <= 70 else title
+    return full if len(html.escape(full)) <= 70 else fit_title(title)
 
 
 def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
@@ -156,7 +172,7 @@ def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
 <meta name="twitter:card" content="summary_large_image">
 {pre}
 <script type="application/ld+json">
-{json.dumps(ld, ensure_ascii=False)}
+{ld_json(ld)}
 </script>
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="{ch['css']}">
@@ -232,6 +248,16 @@ def build():
             alt = f"{o['blog']}{a['slug']}/"
             ch = chrome(lang, alt)
             others = "".join(card(x, lang) for x in ARTICLES if x is not a)
+            # "more articles" only when there is another article to show
+            more = f"""
+
+  <section class="posts">
+    <div class="wrap">
+      <div class="group-title">{d['more']}</div>
+      <div class="post-grid">{others}
+      </div>
+    </div>
+  </section>""" if others else ""
             body = f"""  <section class="post-hero">
     <div class="wrap narrow">
       <div class="crumbs"><a href="{d['home']}">{d['crumbs_home']}</a> / <a href="{d['blog']}">{d['blog_title']}</a></div>
@@ -259,15 +285,7 @@ def build():
         <a class="btn btn-line" href="{d['home']}#audit">{d['cta_audit']}</a>
       </div>
     </div>
-  </section>
-
-  <section class="posts">
-    <div class="wrap">
-      <div class="group-title">{d['more']}</div>
-      <div class="post-grid">{others}
-      </div>
-    </div>
-  </section>"""
+  </section>{more}"""
             ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": t["title"],
                   "description": t["desc"], "datePublished": a["date"], "dateModified": a["date"],
                   "inLanguage": lang, "mainEntityOfPage": SITE + path, "image": SITE + "/og.png",
@@ -278,6 +296,23 @@ def build():
                        og_type="article", ld=ld, body=body, ch=ch))
             out.append(path)
     return out
+
+
+def remove_page(folder):
+    """Delete a generated page (folder/index.html), and the folder only if nothing else is in it."""
+    page_file = safe_path(os.path.join(folder, "index.html"))
+    os.remove(page_file)
+    if not os.listdir(os.path.dirname(page_file)):
+        os.rmdir(os.path.dirname(page_file))
+
+
+def prune():
+    """Delete the pages of articles that were removed from content/articles.json."""
+    keep = {a["slug"] for a in ARTICLES}
+    for blog in ("blog", "en/blog"):
+        for name in os.listdir(os.path.join(ROOT, blog)):
+            if name not in keep and os.path.isfile(os.path.join(ROOT, blog, name, "index.html")):
+                remove_page(os.path.join(blog, name))
 
 
 def update_sitemap(paths):

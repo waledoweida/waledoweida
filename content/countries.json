@@ -1,0 +1,506 @@
+[
+  {
+    "slug": "egypt",
+    "code": "EG",
+    "ar": {
+      "name": "مصر",
+      "card_title": "مصر",
+      "card": "بعملّك موقع وإعلانات وبدير صفحاتك على السوشيال ميديا، بكلام مصري قريب من قلب عميلك ويوصّله على طول، في أي محافظة.",
+      "title": "تسويق إلكتروني وتصميم مواقع في مصر",
+      "seo_title": "",
+      "desc": "إعلانات ممولة، تصميم مواقع ومتاجر، إدارة سوشيال ميديا وتسجيل على جوجل ماب لمشاريع وشركات في كل محافظات مصر.",
+      "lead": "بعملّك موقع وإعلانات وبدير صفحاتك على السوشيال ميديا، بكلام مصري قريب من قلب عميلك، في أي محافظة من إسكندرية لأسوان.",
+      "services_h": "خدماتي لمشروعك في مصر",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "إعلانات ممولة",
+          "text": "حملات على فيسبوك وإنستجرام وتيك توك وجوجل، بتوصل لجمهورك في محافظتك بالظبط، وبميزانية إنت متحكم فيها."
+        },
+        {
+          "icon": "web",
+          "title": "تصميم مواقع",
+          "text": "موقع سريع وشكله محترم على الموبايل، فيه زرار واتساب وفورم طلبات، ومجهّز يظهر في جوجل."
+        },
+        {
+          "icon": "store",
+          "title": "متاجر إلكترونية",
+          "text": "متجر كامل بالسلة والطلبات والشحن، تديره بنفسك بسهولة من غير ما تحتاج حد."
+        },
+        {
+          "icon": "social",
+          "title": "إدارة السوشيال ميديا",
+          "text": "تصميم بوستات وكتابة محتوى بالمصري، ونشر بانتظام، ورد على العملاء أول بأول."
+        },
+        {
+          "icon": "maps",
+          "title": "تسجيل على جوجل ماب",
+          "text": "بسجّل نشاطك على خرايط جوجل عشان اللي حواليك يلاقوك ويتصلوا بيك على طول."
+        },
+        {
+          "icon": "seo",
+          "title": "ظهور في جوجل (SEO)",
+          "text": "بظبطلك موقعك عشان يطلع في أول النتايج لما حد يدوّر على خدمتك في منطقتك."
+        }
+      ],
+      "why_h": "ليه أنا لمشروعك؟",
+      "why": [
+        "فاهم السوق المصري والعروض والكلام اللي بيشد الناس.",
+        "سعر واضح ومتفق عليه قبل ما نبدأ.",
+        "بتتكلم معايا أنا على طول على واتساب، من غير وسطاء."
+      ],
+      "faq": [
+        {
+          "q": "بتشتغل مع مشاريع برا القاهرة؟",
+          "a": "أيوه، الشغل كله أونلاين، فمش فارق إنت في أنهي محافظة. بنتابع مع بعض على واتساب خطوة بخطوة."
+        },
+        {
+          "q": "ينفع أبدأ بميزانية إعلانات صغيرة؟",
+          "a": "أكيد. بنبدأ بميزانية صغيرة نجرّب بيها، ولما النتايج تبان نكبّر على اللي شغال."
+        }
+      ],
+      "cta_h": "يلا نبدأ مشروعك؟",
+      "cta_p": "ابعتلي على واتساب وقولّي محتاج إيه، وهرد عليك بسرعة.",
+      "wa_text": "أهلاً وليد، جاي من صفحة مصر في موقعك وعايز أستفسر عن خدمة"
+    },
+    "en": {
+      "name": "Egypt",
+      "card_title": "Egypt",
+      "card": "Websites, ads and social media management for projects and companies across the country, with content in the Egyptian dialect.",
+      "title": "Digital marketing & web design in Egypt",
+      "seo_title": "",
+      "desc": "Paid ads, websites and online stores, social media management and Google Maps listings for businesses across Egypt.",
+      "lead": "Websites, ads and social media for projects and companies across Egypt — from Alexandria to Aswan — written in the Egyptian voice your customers trust.",
+      "services_h": "What I do for businesses in Egypt",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "Paid ads",
+          "text": "Campaigns on Facebook, Instagram, TikTok and Google that reach your audience in your governorate, on a budget you control."
+        },
+        {
+          "icon": "web",
+          "title": "Website design",
+          "text": "A fast, polished mobile-first site with a WhatsApp button and order form, ready to show up on Google."
+        },
+        {
+          "icon": "store",
+          "title": "Online stores",
+          "text": "A complete store with cart, orders and shipping that you can run yourself."
+        },
+        {
+          "icon": "social",
+          "title": "Social media management",
+          "text": "Post design, Egyptian-Arabic copywriting, a steady publishing schedule and replies to customers."
+        },
+        {
+          "icon": "maps",
+          "title": "Google Maps listing",
+          "text": "Your business on Google Maps so nearby customers can find and call you."
+        },
+        {
+          "icon": "seo",
+          "title": "Google visibility (SEO)",
+          "text": "Your site tuned to rank when people nearby search for what you offer."
+        }
+      ],
+      "why_h": "Why work with me?",
+      "why": [
+        "I understand the Egyptian market and the offers and wording that get people to act.",
+        "A clear, agreed price before we start.",
+        "You talk to me directly on WhatsApp — no middlemen."
+      ],
+      "faq": [
+        {
+          "q": "Do you work with businesses outside Cairo?",
+          "a": "Yes. All the work is online, so your governorate doesn't matter. We follow up on WhatsApp step by step."
+        },
+        {
+          "q": "Can I start with a small ad budget?",
+          "a": "Of course. We start small to test, then scale what works once results show."
+        }
+      ],
+      "cta_h": "Ready to start?",
+      "cta_p": "Message me on WhatsApp with what you need and I'll get back to you quickly.",
+      "wa_text": "Hi Waled, I found your Egypt page and I'd like to ask about a service"
+    }
+  },
+  {
+    "slug": "libya",
+    "code": "LY",
+    "ar": {
+      "name": "ليبيا",
+      "card_title": "ليبيا",
+      "card": "نديرولك موقع وإعلانات ممولة تجيبلك زبائن هلبا، بكلام ليبي يفهمه زبونك ويرتاحله، من طرابلس لبنغازي.",
+      "title": "تسويق إلكتروني وتصميم مواقع في ليبيا",
+      "seo_title": "",
+      "desc": "إعلانات ممولة، تصميم مواقع ومتاجر، إدارة صفحات السوشيال ميديا وتسجيل على خرايط جوجل لمشاريع وشركات في ليبيا.",
+      "lead": "نديرولك موقع وإعلانات ممولة تجيبلك زبائن هلبا، بكلام ليبي يفهمه زبونك ويرتاحله، من طرابلس لبنغازي ومصراتة وسبها.",
+      "services_h": "شن نديرولك في ليبيا؟",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "إعلانات ممولة",
+          "text": "حملات على فيسبوك وإنستجرام وتيك توك، نوصّلو بيها لزبونك في مدينتك بالضبط، وتعرف كل دينار وين مشى."
+        },
+        {
+          "icon": "web",
+          "title": "تصميم مواقع",
+          "text": "موقع باهي وسريع على الموبايل، فيه زر واتساب وفورم طلبات، يخلّي زبونك يثق فيك من أول نظرة."
+        },
+        {
+          "icon": "store",
+          "title": "متاجر إلكترونية",
+          "text": "متجر إلكتروني بالسلة والطلبات، تديره بروحك بكل سهولة."
+        },
+        {
+          "icon": "social",
+          "title": "صفحات السوشيال ميديا",
+          "text": "نصمّمو بوستاتك ونكتبو المحتوى بالليبي، وننزلوه بانتظام، ونردو على زبائنك."
+        },
+        {
+          "icon": "maps",
+          "title": "تسجيل على خرايط جوجل",
+          "text": "نسجّلو محلك على خرايط جوجل باش اللي قريب منك يلقاك ويكلمك طول."
+        },
+        {
+          "icon": "seo",
+          "title": "ظهور في جوجل (SEO)",
+          "text": "نظبطولك موقعك باش يطلع في أول النتايج لما حد يدوّر على خدمتك."
+        }
+      ],
+      "why_h": "علاش تختارني؟",
+      "why": [
+        "نفهم السوق الليبي وشن اللي يشد الزبون.",
+        "سعر واضح ومتفق عليه قبل ما نبدو.",
+        "تتكلم معاي أنا طول على الواتساب، من غير وسيط."
+      ],
+      "faq": [
+        {
+          "q": "تخدم مع ناس في ليبيا وأنت برا؟",
+          "a": "إيه، الخدمة كلها أونلاين، ونتابعو مع بعض على الواتساب خطوة بخطوة."
+        },
+        {
+          "q": "نقدر نبدا بميزانية إعلانات صغيرة؟",
+          "a": "باهي، نبدو بميزانية صغيرة نجربو بيها، ولما النتايج تبان نكبرو على اللي ماشي."
+        }
+      ],
+      "cta_h": "توا نبدو مشروعك؟",
+      "cta_p": "ابعتلي على الواتساب وقولي شن تبي، ونرد عليك بسرعة.",
+      "wa_text": "مرحبا وليد، جاي من صفحة ليبيا في موقعك ونبي نسأل على خدمة"
+    },
+    "en": {
+      "name": "Libya",
+      "card_title": "Libya",
+      "card": "Websites and paid ads for projects and companies in Libya, with content that speaks to Libyan audiences and targeting suited to each city.",
+      "title": "Digital marketing & web design in Libya",
+      "seo_title": "",
+      "desc": "Paid ads, websites and online stores, social media management and Google Maps listings for businesses in Libya.",
+      "lead": "Websites and paid ads that bring real customers, with content that speaks to Libyan audiences — from Tripoli to Benghazi, Misrata and Sabha.",
+      "services_h": "What I do for businesses in Libya",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "Paid ads",
+          "text": "Campaigns on Facebook, Instagram and TikTok that reach customers in your city, with every dinar accounted for."
+        },
+        {
+          "icon": "web",
+          "title": "Website design",
+          "text": "A fast, good-looking mobile site with a WhatsApp button and order form that builds trust at first glance."
+        },
+        {
+          "icon": "store",
+          "title": "Online stores",
+          "text": "An online store with cart and orders that you can run yourself."
+        },
+        {
+          "icon": "social",
+          "title": "Social media pages",
+          "text": "Post design, Libyan-Arabic copywriting, regular publishing and replies to your customers."
+        },
+        {
+          "icon": "maps",
+          "title": "Google Maps listing",
+          "text": "Your shop on Google Maps so nearby customers can find and call you."
+        },
+        {
+          "icon": "seo",
+          "title": "Google visibility (SEO)",
+          "text": "Your site tuned to rank when people search for what you offer."
+        }
+      ],
+      "why_h": "Why work with me?",
+      "why": [
+        "I understand the Libyan market and what gets customers to act.",
+        "A clear, agreed price before we start.",
+        "You talk to me directly on WhatsApp — no middlemen."
+      ],
+      "faq": [
+        {
+          "q": "Do you work with clients in Libya remotely?",
+          "a": "Yes. All the work is online and we follow up on WhatsApp step by step."
+        },
+        {
+          "q": "Can I start with a small ad budget?",
+          "a": "Sure. We start small to test, then scale what works once results show."
+        }
+      ],
+      "cta_h": "Ready to start?",
+      "cta_p": "Message me on WhatsApp with what you need and I'll get back to you quickly.",
+      "wa_text": "Hi Waled, I found your Libya page and I'd like to ask about a service"
+    }
+  },
+  {
+    "slug": "kuwait",
+    "code": "KW",
+    "ar": {
+      "name": "الكويت",
+      "card_title": "الكويت",
+      "card": "أسوي لكم مواقع وحملات لشركاتكم ومحلاتكم، بمحتوى كويتي يوصل لعميلكم وايد زين، واستهداف دقيق لكل المحافظات.",
+      "title": "تسويق إلكتروني وتصميم مواقع في الكويت",
+      "seo_title": "",
+      "desc": "إعلانات ممولة، تصميم مواقع ومتاجر، إدارة سوشيال ميديا وتسجيل على خرائط جوجل لشركات ومحلات في كل محافظات الكويت.",
+      "lead": "أسوي لكم مواقع وحملات لشركاتكم ومحلاتكم، بمحتوى كويتي يوصل لعميلكم وايد زين، من العاصمة لحولي والفروانية والأحمدي والجهراء ومبارك الكبير.",
+      "services_h": "شنو أسوي لكم في الكويت؟",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "إعلانات ممولة",
+          "text": "حملات على إنستغرام وسناب شات وتيك توك وجوجل، تستهدف المناطق اللي تبونها بالضبط، وتعرفون وين راحت كل فلس."
+        },
+        {
+          "icon": "web",
+          "title": "تصميم مواقع",
+          "text": "موقع سريع وشكله راقي على التلفون، فيه زر واتساب وطلبات، ويطلع لكم في جوجل."
+        },
+        {
+          "icon": "store",
+          "title": "متاجر إلكترونية",
+          "text": "متجر إلكتروني كامل بالسلة والدفع والتوصيل، تديرونه بنفسكم بكل سهولة."
+        },
+        {
+          "icon": "social",
+          "title": "إدارة السوشيال ميديا",
+          "text": "تصاميم ومحتوى بالكويتي، ونشر منتظم، ورد على عملائكم أول بأول."
+        },
+        {
+          "icon": "maps",
+          "title": "تسجيل على خرائط جوجل",
+          "text": "أسجّل محلكم على خرائط جوجل عشان اللي بالمنطقة يلقونكم ويتصلون فيكم على طول."
+        },
+        {
+          "icon": "seo",
+          "title": "ظهور في جوجل (SEO)",
+          "text": "أضبط موقعكم عشان يطلع بأول النتايج لما أحد يدوّر على خدمتكم."
+        }
+      ],
+      "why_h": "ليش تختاروني؟",
+      "why": [
+        "أفهم السوق الكويتي وشنو اللي يجذب العميل.",
+        "سعر واضح ومتفق عليه قبل لا نبدأ.",
+        "تتواصلون معاي أنا مباشرة على الواتساب، بدون وسيط."
+      ],
+      "faq": [
+        {
+          "q": "تشتغل مع شركات بالكويت وانت برا؟",
+          "a": "إي نعم، الشغل كله أونلاين، ونتابع ويا بعض على الواتساب خطوة بخطوة."
+        },
+        {
+          "q": "أقدر أبدأ بميزانية إعلانات بسيطة؟",
+          "a": "أكيد، نبدأ بميزانية بسيطة نجرب فيها، وإذا بانت النتايج نكبّر اللي شغال."
+        }
+      ],
+      "cta_h": "نبدأ مشروعكم الحين؟",
+      "cta_p": "راسلوني على الواتساب وقولوا لي شنو تحتاجون، وأرد عليكم بسرعة.",
+      "wa_text": "هلا وليد، جاي من صفحة الكويت في موقعك وأبي أستفسر عن خدمة"
+    },
+    "en": {
+      "name": "Kuwait",
+      "card_title": "Kuwait",
+      "card": "Websites and campaigns for companies and shops in Kuwait, with content in the Kuwaiti dialect and precise targeting across every governorate.",
+      "title": "Digital marketing & web design in Kuwait",
+      "seo_title": "",
+      "desc": "Paid ads, websites and online stores, social media management and Google Maps listings for companies and shops across Kuwait.",
+      "lead": "Websites and campaigns for companies and shops in Kuwait, with content in the Kuwaiti voice and precise targeting across every governorate — Capital, Hawalli, Farwaniya, Ahmadi, Jahra and Mubarak Al-Kabeer.",
+      "services_h": "What I do for businesses in Kuwait",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "Paid ads",
+          "text": "Campaigns on Instagram, Snapchat, TikTok and Google that target exactly the areas you want, with every fils accounted for."
+        },
+        {
+          "icon": "web",
+          "title": "Website design",
+          "text": "A fast, premium mobile site with a WhatsApp button and orders, ready to show up on Google."
+        },
+        {
+          "icon": "store",
+          "title": "Online stores",
+          "text": "A complete store with cart, payment and delivery that you can run yourself."
+        },
+        {
+          "icon": "social",
+          "title": "Social media management",
+          "text": "Designs and Kuwaiti-Arabic content, regular publishing and replies to your customers."
+        },
+        {
+          "icon": "maps",
+          "title": "Google Maps listing",
+          "text": "Your shop on Google Maps so people in your area can find and call you."
+        },
+        {
+          "icon": "seo",
+          "title": "Google visibility (SEO)",
+          "text": "Your site tuned to rank when people search for what you offer."
+        }
+      ],
+      "why_h": "Why work with me?",
+      "why": [
+        "I understand the Kuwaiti market and what attracts customers.",
+        "A clear, agreed price before we start.",
+        "You talk to me directly on WhatsApp — no middlemen."
+      ],
+      "faq": [
+        {
+          "q": "Do you work with companies in Kuwait remotely?",
+          "a": "Yes. All the work is online and we follow up on WhatsApp step by step."
+        },
+        {
+          "q": "Can I start with a small ad budget?",
+          "a": "Of course. We start small to test, then scale what works once results show."
+        }
+      ],
+      "cta_h": "Ready to start?",
+      "cta_p": "Message me on WhatsApp with what you need and I'll get back to you quickly.",
+      "wa_text": "Hi Waled, I found your Kuwait page and I'd like to ask about a service"
+    }
+  },
+  {
+    "slug": "gulf",
+    "code": "GCC",
+    "ar": {
+      "name": "دول الخليج",
+      "card_title": "باقي دول الخليج",
+      "card": "حيّاكم الله.. أسوي لكم حملات ومحتوى يناسب كل سوق في السعودية والإمارات وقطر والبحرين وعُمان، ويخاطب عميلكم بالأسلوب اللي يحبه.",
+      "title": "تسويق إلكتروني وتصميم مواقع في السعودية والإمارات وقطر والبحرين وعُمان",
+      "seo_title": "تسويق إلكتروني وتصميم مواقع في دول الخليج",
+      "desc": "إعلانات ممولة، تصميم مواقع ومتاجر، إدارة سوشيال ميديا وتسجيل على خرائط جوجل لعملاء في السعودية والإمارات وقطر والبحرين وعُمان.",
+      "lead": "حيّاكم الله.. أسوي لكم حملات ومحتوى ومواقع تناسب كل سوق في الخليج، من الرياض وجدة لدبي والدوحة والمنامة ومسقط، وتخاطب عميلكم بالأسلوب اللي يحبه.",
+      "services_h": "وش أقدر أسوي لكم؟",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "إعلانات ممولة",
+          "text": "حملات على سناب شات وإنستغرام وتيك توك وجوجل، تستهدف مدينتكم وعميلكم بالضبط، وتعرفون وين راحت ميزانيتكم."
+        },
+        {
+          "icon": "web",
+          "title": "تصميم مواقع",
+          "text": "موقع سريع وفخم على الجوال، فيه زر واتساب وطلبات، ومجهّز يطلع في جوجل."
+        },
+        {
+          "icon": "store",
+          "title": "متاجر إلكترونية",
+          "text": "متجر إلكتروني متكامل بالسلة والدفع والشحن، تديرونه بأنفسكم بسهولة."
+        },
+        {
+          "icon": "social",
+          "title": "إدارة السوشيال ميديا",
+          "text": "تصاميم ومحتوى يناسب ثقافة كل بلد، ونشر منتظم، ورد على عملائكم أول بأول."
+        },
+        {
+          "icon": "maps",
+          "title": "تسجيل على خرائط جوجل",
+          "text": "أسجّل نشاطكم على خرائط جوجل عشان اللي حولكم يلقونكم ويتواصلون معكم مباشرة."
+        },
+        {
+          "icon": "seo",
+          "title": "ظهور في جوجل (SEO)",
+          "text": "أضبط موقعكم عشان يطلع بأول النتايج لما أحد يدوّر على خدمتكم."
+        }
+      ],
+      "why_h": "ليش تختاروني؟",
+      "why": [
+        "أفهم الفرق بين كل سوق خليجي ووش يناسبه.",
+        "سعر واضح ومتفق عليه قبل لا نبدأ.",
+        "تتواصلون معاي أنا مباشرة على الواتساب، بدون وسيط."
+      ],
+      "faq": [
+        {
+          "q": "تشتغل مع عملاء في السعودية والإمارات وانت برا؟",
+          "a": "إيه، الشغل كله أونلاين، ونتابع مع بعض على الواتساب خطوة بخطوة."
+        },
+        {
+          "q": "أقدر أبدأ بميزانية إعلانات بسيطة؟",
+          "a": "أكيد، نبدأ بميزانية بسيطة نجرب فيها، وإذا بانت النتايج نكبّر اللي شغال."
+        }
+      ],
+      "cta_h": "نبدأ مشروعكم؟",
+      "cta_p": "راسلوني على الواتساب وقولوا لي وش تحتاجون، وأرد عليكم بسرعة.",
+      "wa_text": "مرحبا وليد، جاي من صفحة الخليج في موقعك وأبي أستفسر عن خدمة"
+    },
+    "en": {
+      "name": "the Gulf",
+      "card_title": "Rest of the Gulf",
+      "card": "Clients in Saudi Arabia, the UAE, Qatar, Bahrain and Oman, with campaigns and content tailored to each market, its culture and how its customers think.",
+      "title": "Digital marketing & web design in Saudi Arabia, the UAE, Qatar, Bahrain and Oman",
+      "seo_title": "Digital marketing & web design in the Gulf",
+      "desc": "Paid ads, websites and online stores, social media management and Google Maps listings for clients in Saudi Arabia, the UAE, Qatar, Bahrain and Oman.",
+      "lead": "Campaigns, content and websites tailored to each Gulf market — from Riyadh and Jeddah to Dubai, Doha, Manama and Muscat — speaking to your customers the way they like.",
+      "services_h": "What I do for businesses in the Gulf",
+      "services": [
+        {
+          "icon": "ads",
+          "title": "Paid ads",
+          "text": "Campaigns on Snapchat, Instagram, TikTok and Google that target your city and customer precisely, with clear reporting on spend."
+        },
+        {
+          "icon": "web",
+          "title": "Website design",
+          "text": "A fast, premium mobile site with a WhatsApp button and orders, ready to show up on Google."
+        },
+        {
+          "icon": "store",
+          "title": "Online stores",
+          "text": "A complete store with cart, payment and shipping that you can run yourself."
+        },
+        {
+          "icon": "social",
+          "title": "Social media management",
+          "text": "Designs and content suited to each country's culture, regular publishing and replies to customers."
+        },
+        {
+          "icon": "maps",
+          "title": "Google Maps listing",
+          "text": "Your business on Google Maps so people nearby can find and contact you."
+        },
+        {
+          "icon": "seo",
+          "title": "Google visibility (SEO)",
+          "text": "Your site tuned to rank when people search for what you offer."
+        }
+      ],
+      "why_h": "Why work with me?",
+      "why": [
+        "I understand how each Gulf market differs and what suits it.",
+        "A clear, agreed price before we start.",
+        "You talk to me directly on WhatsApp — no middlemen."
+      ],
+      "faq": [
+        {
+          "q": "Do you work with clients in Saudi Arabia and the UAE remotely?",
+          "a": "Yes. All the work is online and we follow up on WhatsApp step by step."
+        },
+        {
+          "q": "Can I start with a small ad budget?",
+          "a": "Of course. We start small to test, then scale what works once results show."
+        }
+      ],
+      "cta_h": "Ready to start?",
+      "cta_p": "Message me on WhatsApp with what you need and I'll get back to you quickly.",
+      "wa_text": "Hi Waled, I found your Gulf page and I'd like to ask about a service"
+    }
+  }
+]

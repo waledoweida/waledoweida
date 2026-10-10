@@ -7,3 +7,4 @@ tests/
 tsconfig.test.json
 .htmlvalidate.json
 .htmlvalidateignore
+content/
