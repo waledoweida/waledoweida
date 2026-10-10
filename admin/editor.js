@@ -111,7 +111,7 @@
     if (f.t === 'icon') {
       input = iconPicker(get(), set, id);
     } else if (f.t === 'area' || f.t === 'body') {
-      input = el('textarea'); input.rows = f.t === 'body' ? 18 : 3;
+      input = el('textarea'); input.rows = f.t === 'body' ? 18 : f.max > 1000 ? 12 : 3;
     } else {
       input = el('input'); input.type = f.t === 'num' ? 'number' : 'text';
       if (f.t === 'num') { input.min = f.min; input.max = f.max; input.inputMode = 'numeric'; }

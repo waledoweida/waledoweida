@@ -1,16 +1,20 @@
 (function(){
+  // tells the CSS the script is running; without it, hidden sections show anyway after a few seconds
+  document.documentElement.classList.add('ready');
   var WA = '201025926261';
 
   // anonymous visit stats -> /api/track (Vercel function, see api/), read on /admin/.
   // Empty TRACK_URL = off. Bots are skipped, and so is the owner once /admin/ was opened on that device.
   var TRACK_URL = '/api/track';
-  (function(){
+  // wrapped so a browser that blocks storage can never stop the rest of the page script
+  try { (function(){
     if (!TRACK_URL || !navigator.sendBeacon) return;
     var ua = navigator.userAgent || '';
     if (navigator.webdriver || /bot|crawl|spider|slurp|preview|lighthouse|headless/i.test(ua)) return;
     function get(st, k){ try { return st.getItem(k); } catch (e) { return null; } }
     function put(st, k, v){ try { st.setItem(k, v); } catch (e) {} }
-    var LS = window.localStorage, SS = window.sessionStorage;
+    function store(name){ try { return window[name]; } catch (e) { return null; } }
+    var LS = store('localStorage'), SS = store('sessionStorage');
     if (get(LS, 'wo_owner') === '1') return;
     function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
     var vid = get(LS, 'wo_vid') || rid(); put(LS, 'wo_vid', vid);
@@ -50,7 +54,7 @@
       if (document.visibilityState === 'hidden') flush(); else shown = Date.now();
     });
     window.addEventListener('pagehide', flush);
-  })();
+  })(); } catch (e) { /* no stats for this visit */ }
   var yr = document.getElementById('y'); if (yr) yr.textContent = new Date().getFullYear();
 
   // header background after scrolling past the top
@@ -145,6 +149,68 @@
     navLinks.forEach(function(a){ var sec = document.querySelector(a.getAttribute('href')); if (sec) spy.observe(sec); });
   }
 
+  // long service texts: show the first lines and a "more" button that opens the whole text in a dialog
+  var cards = document.querySelectorAll('.feat');
+  var dlg = null;
+  function openCard(card){
+    var en = document.documentElement.lang === 'en';
+    if (!dlg) {
+      dlg = document.createElement('dialog');
+      dlg.className = 'svc-dialog';
+      dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });   // click outside the box
+      document.body.appendChild(dlg);
+    }
+    dlg.textContent = '';
+    var box = document.createElement('div'); box.className = 'svc-box';
+    var close = document.createElement('button');
+    close.type = 'button'; close.className = 'svc-close'; close.setAttribute('aria-label', en ? 'Close' : 'إغلاق'); close.textContent = '×';
+    close.addEventListener('click', function(){ dlg.close(); });
+    var head = document.createElement('div'); head.className = 'svc-head';
+    var ic = card.querySelector('.ic'), h = card.querySelector('h3');
+    if (ic) head.appendChild(ic.cloneNode(true));
+    var title = document.createElement('h3'); title.id = 'svcTitle'; title.textContent = h ? h.textContent : '';
+    head.appendChild(title);
+    var body = card.querySelector('.feat-text').cloneNode(true);
+    body.className = 'svc-text';
+    box.appendChild(close); box.appendChild(head); box.appendChild(body);
+    var list = card.querySelector('ul'); if (list) box.appendChild(list.cloneNode(true));
+    var cta = card.querySelector('.feat-link');
+    if (cta) {
+      var go = cta.cloneNode(true); go.className = 'btn btn-gold svc-cta';
+      go.addEventListener('click', function(){ dlg.close(); });   // the form preselects the service as usual
+      box.appendChild(go);
+    }
+    dlg.setAttribute('aria-labelledby', 'svcTitle');
+    dlg.appendChild(box);
+    dlg.showModal();
+    box.scrollTop = 0;
+  }
+  function fitCards(){
+    cards.forEach(function(card){
+      var text = card.querySelector('.feat-text'), more = card.querySelector('.feat-more');
+      if (!text || !more) return;
+      text.classList.add('clamp');
+      var long = text.scrollHeight > text.clientHeight + 4;
+      text.classList.toggle('cut', long);
+      if (!long) text.classList.remove('clamp');
+      more.hidden = !long;
+    });
+  }
+  if (cards.length && window.HTMLDialogElement) {
+    fitCards();
+    var lastW = window.innerWidth;
+    window.addEventListener('resize', function(){
+      if (window.innerWidth === lastW) return;   // phones fire resize while scrolling (address bar)
+      lastW = window.innerWidth;
+      cards.forEach(function(c){ var t = c.querySelector('.feat-text'); if (t) t.classList.remove('clamp', 'cut'); });
+      fitCards();
+    });
+    document.addEventListener('click', function(e){
+      var more = e.target.closest('.feat-more');
+      if (more) openCard(more.closest('.feat'));
+    });
+  }
+
   // spotlight follows the pointer on featured cards
   document.querySelectorAll('.feat').forEach(function(card){
     card.addEventListener('pointermove', function(e){
@@ -197,7 +263,10 @@
     document.getElementById('waClose').addEventListener('click', closeBubble);
     bub.querySelector('.wa-cta').addEventListener('click', closeBubble);
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && bub.classList.contains('show')) closeBubble(); });
-    if (!closed) {
+    // on phones the bubble would cover the main buttons: there only the "1" badge appears on the green button
+    var small = window.matchMedia && matchMedia('(max-width: 600px)').matches;
+    if (!closed && small) setTimeout(function(){ dock.classList.add('badge'); }, 5000);
+    if (!closed && !small) {
       setTimeout(function(){
         dock.classList.add('badge'); setOpen(true);
         setTimeout(function(){ bub.classList.add('typed'); }, reduce ? 0 : 1600);
