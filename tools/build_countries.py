@@ -10,12 +10,11 @@ Usage:  python3 tools/build_countries.py   (also refreshes sitemap.xml)
 import html
 import json
 import os
-import shutil
 import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_blog import ROOT, L, SITE, chrome, page, page_title, write, update_sitemap, build as build_blog  # noqa: E402
+from build_blog import RED_LINE, ROOT, L, SITE, remove_page, chrome, page, page_title, write, update_sitemap, build as build_blog  # noqa: E402
 from countries import COUNTRIES  # noqa: E402
 from content import load  # noqa: E402
 from icons import ICONS  # noqa: E402
@@ -49,6 +48,7 @@ def wa(text):
 
 
 def build():
+    check_slugs()
     out = []
     for lang in ("ar", "en"):
         d, t = L[lang], T[lang]
@@ -150,17 +150,36 @@ def sync_vercel():
             f.write(out)
 
 
+MARK = 'class="post-hero country-hero"'
+
+
+def is_country_page(folder):
+    page_file = os.path.join(ROOT, folder, "index.html")
+    if not os.path.isfile(page_file):
+        return False
+    with open(page_file, encoding="utf-8") as f:
+        return MARK in f.read()
+
+
+def check_slugs():
+    """A country page may only take a folder that is free or already a country page."""
+    for c in COUNTRIES:
+        for folder in (c["slug"], "en/" + c["slug"]):
+            full = os.path.join(ROOT, folder)
+            if os.path.exists(full) and not is_country_page(folder):
+                raise RuntimeError(f"country link {c['slug']!r} clashes with the existing {folder!r}")
+
+
 def prune():
     """Delete the pages of countries that were removed from content/countries.json."""
     keep = {c["slug"] for c in COUNTRIES}
     for base in ("", "en"):
         for name in os.listdir(os.path.join(ROOT, base) if base else ROOT):
-            page_file = os.path.join(ROOT, base, name, "index.html")
-            if name in keep or name.startswith(("wedding", "فرح", ".")) or not os.path.isfile(page_file):
+            folder = os.path.join(base, name) if base else name
+            if name in keep or name.casefold().startswith(RED_LINE) or name.startswith("."):
                 continue
-            with open(page_file, encoding="utf-8") as f:
-                if 'class="post-hero country-hero"' in f.read():
-                    shutil.rmtree(os.path.join(ROOT, base, name))
+            if is_country_page(folder):
+                remove_page(folder)
 
 
 if __name__ == "__main__":

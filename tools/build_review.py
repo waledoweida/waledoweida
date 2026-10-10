@@ -7,9 +7,10 @@ Never touches wedding/ or فرح/.
 
 Usage:  python3 tools/build_review.py
 """
-import re
+import html
 
-from build_blog import L, chrome, page, read, write
+from build_blog import L, chrome, page, write
+from content import load
 
 T = {
     "ar": dict(
@@ -38,9 +39,9 @@ T = {
 
 
 def options(lang):
-    """Service names, taken from the home page form so they stay in sync."""
-    src = read(L[lang]["src"])
-    return re.findall(r"<option>(.*?)</option>", src)[:11]
+    """Service names, the same list as the home page request form (content/home.json)."""
+    s = load("home")[lang]["services"]
+    return [html.escape(x.get("form_name") or x["title"], quote=False) for x in s["featured"] + s["others"]]
 
 
 def build():

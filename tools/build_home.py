@@ -14,7 +14,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_blog import read, write  # noqa: E402
+from build_blog import fit_title, read, write  # noqa: E402
 from content import attr, esc, inline, ld_json, load, phone  # noqa: E402
 from icons import ICONS  # noqa: E402
 
@@ -37,7 +37,7 @@ def wa_link(site, text=None):
 
 def hero(c):
     h = c["hero"]
-    title = esc(h["title_start"]) + f' <span class="gold-text">{esc(h["title_gold"])}</span>' + (" " + esc(h["title_end"]) if h["title_end"] else "")
+    title = esc(h["title_start"]) + f' <span class="gold-text">{esc(h["title_gold"])}</span>' + (" " + esc(h["title_end"]) if h.get("title_end") else "")
     trust = "\n".join(f"          <span>{CHECK}{esc(t)}</span>" for t in h["trust"])
     return f"""  <section class="hero" id="about">
     <div class="wrap hero-grid">
@@ -128,7 +128,8 @@ def regions(c, lang, countries):
 
 
 def nbsp(s):
-    return re.sub(r"[ \u00a0]", "&nbsp;", esc(s))
+    """Text inside a tel: link: html-validate wants no-break spaces and hyphens there."""
+    return re.sub(r"[ \u00a0]", "&nbsp;", esc(s)).replace("-", "&#8209;")
 
 
 def form_name(x):
@@ -330,7 +331,7 @@ def build():
         for name in SECTIONS:
             src = sub(src, rf"(?<=<!-- ===== {name} ===== -->\n)  <section.*?</section>", parts[name])
         seo = c["seo"]
-        src = sub(src, r"<title>.*?</title>", f"<title>{esc(seo['title'])}</title>")
+        src = sub(src, r"<title>.*?</title>", f"<title>{esc(fit_title(seo['title']))}</title>")
         src = sub(src, r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{attr(seo["description"])}">')
         src = sub(src, r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{attr(seo["share_title"])}">')
         src = sub(src, r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{attr(seo["share_description"])}">')

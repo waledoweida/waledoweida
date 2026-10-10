@@ -3,6 +3,7 @@
 //   GET ?status=1  → publish status only
 //   PUT {file, data, sha} → validates and commits content/<file>.json; the "Build pages"
 //                    workflow then regenerates the pages and Vercel publishes them.
+import { createHash } from 'node:crypto';
 import type { ApiRequest as VercelRequest, ApiResponse as VercelResponse } from './_lib/types';
 import { jsonBody, sameOrigin, sendJson } from './_lib/http';
 import { adminConfigured, hasSession } from './_lib/session';
@@ -48,7 +49,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       throw e;
     }
     const text = JSON.stringify(clean, null, 2) + '\n';
-    if (text.length > 900_000) return sendJson(res, 413, { ok: false, error: 'too_large' });
+    const bytes = Buffer.from(text, 'utf8');
+    if (bytes.length > 900_000) return sendJson(res, 413, { ok: false, error: 'too_large' });
+    // nothing changed after cleaning (e.g. only spaces were added): no commit, nothing to rebuild
+    const blobSha = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+    if (blobSha === sha) return sendJson(res, 200, { ok: true, sha, data: clean, unchanged: true });
     const newSha = await writeFile(`content/${file}.json`, text, sha, SAVE_PREFIX + 'update ' + LABEL[file]);
     return sendJson(res, 200, { ok: true, sha: newSha, data: clean });
   } catch (e) {

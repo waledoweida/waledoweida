@@ -153,11 +153,13 @@ export function validate(f: Field, v: unknown, icons: Set<string>, path = ''): u
     case 'text': case 'area': case 'body': case 'match': {
       if (typeof v !== 'string') return bad('not text');
       const keepLines = f.t === 'area' || f.t === 'body';
+      if (/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(v)) return bad('broken character');
       let s = v.replace(/\r\n?/g, '\n').replace(keepLines ? /[\u0000-\u0009\u000b-\u001f\u007f]/g : /[\u0000-\u001f\u007f]/g, ' ').trim();
       if (s.length > f.max) return bad('too long');
       if (f.t === 'match') { if (!new RegExp(f.re).test(s)) return bad('wrong format'); }
       else if (!s && !f.optional) return bad('empty');
       if (f.t === 'text') s = s.replace(/\s+/g, ' ');
+      else s = s.replace(/[ \t]+\n/g, '\n');
       return s;
     }
     case 'num': {
@@ -190,13 +192,21 @@ export function validateFile(name: string, data: unknown, icons: Set<string>): u
   const clean = validate(SCHEMA[name], data, icons, name);
   if (name === 'countries' || name === 'articles') {
     const rows = clean as { slug: string; code?: string }[];
-    const reserved = new Set(['en', 'blog', 'admin', 'api', 'review', 'fonts', 'wedding', 'فرح']);
+    // folders that already exist at the top of the site (a country page there would clash);
+    // anything starting with "wedding" is the red line
+    const reserved = new Set(['en', 'blog', 'admin', 'api', 'review', 'fonts', 'content', 'tools', 'tests', 'node_modules']);
     const slugs = rows.map((r) => r.slug);
     if (new Set(slugs).size !== slugs.length) throw new Invalid(`${name}: duplicate link`);
     if (name === 'countries') {
-      if (slugs.some((s) => reserved.has(s))) throw new Invalid(`${name}: reserved link`);
+      if (slugs.some((s) => reserved.has(s) || s.startsWith('wedding'))) throw new Invalid(`${name}: reserved link`);
       const codes = rows.map((r) => r.code);
       if (new Set(codes).size !== codes.length) throw new Invalid(`${name}: duplicate code`);
+    }
+  }
+  if (name === 'home') {
+    for (const l of ['ar', 'en'] as const) {
+      const h = (clean as Record<string, { platforms: { aria: string }; stats: { aria: string } }>)[l];
+      if (h.platforms.aria === h.stats.aria) throw new Invalid(`home.${l}.stats.aria: same as platforms.aria`);
     }
   }
   return clean;

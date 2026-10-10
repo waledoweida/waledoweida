@@ -56,10 +56,12 @@
   function pub(s){
     var p = $('pub'); p.hidden = false;
     if (s.state === 'building') {
-      var late = savedAt && Date.now() - savedAt > 8 * 60e3;
+      // a rebuild takes 2–3 minutes; past 8 minutes since the save commit something went wrong
+      var since = Date.parse(s.since) || savedAt;
+      var late = since && Date.now() - since > 8 * 60e3;
       p.className = 'pub ' + (late ? 'bad' : 'wait');
-      p.textContent = late ? 'التحديث اتأخر — بلّغ وليد/المطور' : 'الموقع بيتحدث دلوقتي… (دقيقتين تلاتة)';
-      clearTimeout(pollTimer); pollTimer = setTimeout(poll, 15000);
+      p.textContent = late ? 'التحديث اتأخر — في مشكلة في البناء، ابعت للمطور' : 'الموقع بيتحدث دلوقتي… (دقيقتين تلاتة)';
+      clearTimeout(pollTimer); pollTimer = setTimeout(poll, late ? 60000 : 15000);
     } else {
       p.className = 'pub ok';
       p.textContent = 'الموقع محدّث ✓';
@@ -333,9 +335,11 @@
   }
   function uniq(file, data, errs){
     if (file !== 'countries' && file !== 'articles') return;
-    var seen = {};
+    var seen = {}, reserved = ['en', 'blog', 'admin', 'api', 'review', 'fonts', 'content', 'tools', 'tests', 'node_modules'];
     data.forEach(function(x, i){
       if (seen[x.slug]) errs.push({ path: file + '[' + i + '].slug', msg: 'الرابط "' + x.slug + '" متكرر' });
+      else if (file === 'countries' && (reserved.indexOf(x.slug) >= 0 || /^wedding/.test(x.slug)))
+        errs.push({ path: file + '[' + i + '].slug', msg: 'الرابط "' + x.slug + '" محجوز للموقع، اختار رابط تاني' });
       seen[x.slug] = 1;
     });
   }
@@ -366,24 +370,29 @@
       if (errs.length) { focusError(errs[0]); return; }
     }
     $('save').disabled = true; $('saveMsg').textContent = 'بيتحفظ…'; $('saveMsg').className = '';
-    var chain = Promise.resolve();
+    var chain = Promise.resolve(), committed = 0;
     files.forEach(function(f){
       chain = chain.then(function(){
         return fetch(API, { method: 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ file: f, sha: state.files[f].sha, data: state.files[f].data }) })
           .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(b){ return { r: r, b: b }; }); })
           .then(function(x){
-            if (x.r.ok) { state.files[f].sha = x.b.sha; state.files[f].data = x.b.data; saved[f] = JSON.stringify(x.b.data); return; }
+            if (x.r.ok) {
+              state.files[f].sha = x.b.sha; state.files[f].data = x.b.data; saved[f] = JSON.stringify(x.b.data);
+              if (!x.b.unchanged) committed++;
+              return;
+            }
             var e = new Error(x.b.error || x.r.status); e.status = x.r.status; e.body = x.b; throw e;
           });
       });
     });
     chain.then(function(){
-      $('save').disabled = false; savedAt = Date.now();
+      $('save').disabled = false;
       render();
-      $('savebar').hidden = false; $('saveMsg').textContent = 'اتحفظ ✓ الموقع هيتحدث خلال دقيقتين تلاتة'; $('saveMsg').className = 'good';
+      $('savebar').hidden = false; $('saveMsg').className = 'good';
+      $('saveMsg').textContent = committed ? 'اتحفظ ✓ الموقع هيتحدث خلال دقيقتين تلاتة' : 'مفيش تغيير فعلي يتنشر (المسافات الزيادة بتتشال لوحدها)';
       setTimeout(function(){ if (!dirtyFiles().length) $('savebar').hidden = true; }, 6000);
-      pub({ state: 'building' });
+      if (committed) { savedAt = Date.now(); pub({ state: 'building', since: new Date().toISOString() }); }
     }).catch(function(e){
       $('save').disabled = false;
       var msg = e.status === 401 ? 'خلصت مدة الدخول. ادخل تاني (تعديلاتك هتضيع لو قفلت الصفحة).'

@@ -8,7 +8,6 @@ Never touches wedding/ or فرح/.
 Usage:  python3 tools/build_blog.py
 """
 import html
-import json
 import math
 import os
 import re
@@ -59,9 +58,22 @@ def read(p):
         return f.read()
 
 
+RED_LINE = ("wedding", "فرح")
+
+
+def safe_path(p):
+    """Absolute path for a generated file. Refuses anything outside the repo and anything in the
+    wedding invitation (wedding/, فرح/), whatever the spelling (../, ./, symlinks, letter case)."""
+    full = os.path.realpath(os.path.join(ROOT, p))
+    rel = os.path.relpath(full, os.path.realpath(ROOT))
+    top = rel.split(os.sep)[0].casefold()
+    if rel == "." or top == ".." or os.path.isabs(rel) or top.startswith(RED_LINE):
+        raise RuntimeError(f"red line: refusing to write {p!r}")
+    return full
+
+
 def write(p, s):
-    full = os.path.join(ROOT, p)
-    assert not p.startswith(("wedding", "فرح")), "red line: never write the wedding pages"
+    full = safe_path(p)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, "w", encoding="utf-8") as f:
         f.write(s)
@@ -109,10 +121,20 @@ def minutes(body):
     return max(1, math.ceil(words / 200))
 
 
+def fit_title(title, limit=70):
+    """The title, cut at a word boundary (with …) if its escaped form is over `limit` characters."""
+    if len(html.escape(title)) <= limit:
+        return title
+    words = title.split()
+    while words and len(html.escape(" ".join(words) + "…")) > limit:
+        words.pop()
+    return (" ".join(words) + "…") if words else title[:limit - 1] + "…"
+
+
 def page_title(title, short):
     """'<title> | <name>' when that fits in 70 characters, otherwise just the title (search engines cut longer ones)."""
     full = f"{title} | {short}"
-    return full if len(html.escape(full)) <= 70 else title
+    return full if len(html.escape(full)) <= 70 else fit_title(title)
 
 
 def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
@@ -274,14 +296,21 @@ def build():
     return out
 
 
+def remove_page(folder):
+    """Delete a generated page (folder/index.html), and the folder only if nothing else is in it."""
+    page_file = safe_path(os.path.join(folder, "index.html"))
+    os.remove(page_file)
+    if not os.listdir(os.path.dirname(page_file)):
+        os.rmdir(os.path.dirname(page_file))
+
+
 def prune():
     """Delete the pages of articles that were removed from content/articles.json."""
-    import shutil
     keep = {a["slug"] for a in ARTICLES}
     for blog in ("blog", "en/blog"):
         for name in os.listdir(os.path.join(ROOT, blog)):
-            if os.path.isdir(os.path.join(ROOT, blog, name)) and name not in keep:
-                shutil.rmtree(os.path.join(ROOT, blog, name))
+            if name not in keep and os.path.isfile(os.path.join(ROOT, blog, name, "index.html")):
+                remove_page(os.path.join(blog, name))
 
 
 def update_sitemap(paths):

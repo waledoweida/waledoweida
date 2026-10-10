@@ -13,9 +13,29 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+
+
+def _tidy(v):
+    """Strings: drop spaces before line breaks (html-validate rejects trailing whitespace)
+    and replace lone surrogates (they can't be written as UTF-8)."""
+    if isinstance(v, str):
+        return re.sub(r"[ \t]+\n", "\n", v).encode("utf-8", "replace").decode("utf-8")
+    if isinstance(v, list):
+        return [_tidy(x) for x in v]
+    if isinstance(v, dict):
+        return {k: _tidy(x) for k, x in v.items()}
+    return v
+
+
 def load(name):
     with open(os.path.join(ROOT, "content", name + ".json"), encoding="utf-8") as f:
-        return json.load(f)
+        data = _tidy(json.load(f))
+    if name in ("countries", "articles"):
+        for row in data:
+            if not SLUG.match(row.get("slug", "")):
+                raise ValueError(f"content/{name}.json: bad link {row.get('slug')!r} (a-z, 0-9 and - only)")
+    return data
 
 
 def esc(s):

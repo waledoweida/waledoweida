@@ -103,8 +103,11 @@ test('changing ADMIN_KEY invalidates existing sessions', async () => {
 const fs = require('node:fs');
 const path = require('node:path');
 const repoFiles = new Map();
+// git blob ids, like GitHub's file "sha"
+const blob = (text) => { const b = Buffer.from(text); return require('node:crypto').createHash('sha1').update(`blob ${b.length}\0`).update(b).digest('hex'); };
 for (const f of ['site', 'home', 'countries', 'articles', 'icons']) {
-  repoFiles.set(`content/${f}.json`, { text: fs.readFileSync(path.join(__dirname, '..', 'content', f + '.json'), 'utf8'), sha: f.padEnd(40, '0').replace(/[^0-9a-f]/g, 'a') });
+  const text = fs.readFileSync(path.join(__dirname, '..', 'content', f + '.json'), 'utf8');
+  repoFiles.set(`content/${f}.json`, { text, sha: blob(text) });
 }
 const commits = [];
 const redisFetch = global.fetch;
@@ -122,8 +125,8 @@ global.fetch = async (url, opt = {}) => {
     const b = JSON.parse(opt.body), f = repoFiles.get(m[1]);
     if (!f) return json(404, {});
     if (b.sha !== f.sha) return json(409, {});
-    const sha = (commits.length + 1).toString(16).padStart(40, 'c');
-    repoFiles.set(m[1], { text: Buffer.from(b.content, 'base64').toString('utf8'), sha });
+    const text = Buffer.from(b.content, 'base64').toString('utf8'), sha = blob(text);
+    repoFiles.set(m[1], { text, sha });
     commits.push(b.message);
     return json(200, { content: { sha } });
   }
@@ -192,4 +195,48 @@ test('content: PUT refuses bad data, unknown files, cross-site requests', async 
   assert.equal((await put('../package', {})).status, 400);
   assert.equal((await put('site', site, { origin: 'https://evil.example' })).status, 403);
   assert.equal((await call(content, { method: 'DELETE', headers: h })).status, 405);
+});
+
+test('content: more refusals (wedding-like links, repo folders, broken characters) and no-op saves', async () => {
+  const h = await session();
+  const g = await call(content, { headers: h });
+  const put = (file, data) => call(content, { method: 'PUT', headers: h, body: { file, sha: g.body.files[file].sha, data } });
+  const countries = g.body.files.countries.data;
+  for (const slug of ['weddings', 'wedding-planner', 'tools', 'content', 'tests']) {
+    assert.equal((await put('countries', [{ ...countries[0], slug }, ...countries.slice(1)])).status, 422, slug);
+  }
+  const home = JSON.parse(JSON.stringify(g.body.files.home.data));
+  home.ar.faq.items[0].a = 'نص \ud83d مكسور';
+  assert.equal((await put('home', home)).status, 422);
+  // spaces only: cleaned back to the same file, so nothing is committed
+  const before = commits.length;
+  const same = JSON.parse(JSON.stringify(g.body.files.home.data));
+  same.ar.faq.items[0].q += '   ';
+  const r = await put('home', same);
+  assert.equal(r.status, 200);
+  assert.equal(r.body.unchanged, true);
+  assert.equal(commits.length, before);
+  // trailing spaces before line breaks are removed
+  const area = JSON.parse(JSON.stringify(g.body.files.home.data));
+  area.ar.faq.items[0].a = 'سطر أول   \nسطر تاني';
+  const r2 = await put('home', area);
+  assert.equal(r2.status, 200);
+  assert.equal(r2.body.data.ar.faq.items[0].a, 'سطر أول\nسطر تاني');
+});
+
+test('login refuses (503) instead of allowing unlimited guesses when storage fails', async () => {
+  const saved = global.fetch;
+  global.fetch = async (url, opt) => { if (String(url).startsWith('https://redis.test')) throw new Error('down'); return saved(url, opt); };
+  const r = await call(login, { method: 'POST', body: { password: 'guess' }, headers: { 'x-forwarded-for': '7.7.7.7' } });
+  global.fetch = saved;
+  assert.equal(r.status, 503);
+});
+
+test('the content files in the repo match the schema exactly (so the admin panel can save them)', () => {
+  const { validateFile, FILES } = require('../.build/_lib/schema.js');
+  const icons = new Set(Object.keys(JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content', 'icons.json'), 'utf8'))));
+  for (const f of FILES) {
+    const text = fs.readFileSync(path.join(__dirname, '..', 'content', f + '.json'), 'utf8');
+    assert.equal(JSON.stringify(validateFile(f, JSON.parse(text), icons), null, 2) + '\n', text, `content/${f}.json`);
+  }
 });
