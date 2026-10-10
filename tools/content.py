@@ -52,7 +52,7 @@ def years(lang, since=None):
     """Years of experience (it goes up every 1 January, Cairo time) and the word that goes with it."""
     if since is None:
         with open(os.path.join(ROOT, "content", "site.json"), encoding="utf-8") as f:
-            since = json.load(f)["experience_since"]
+            since = json.load(f).get("experience_since", 2017)   # missing by mistake: keep the original start year
     now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2))).year   # Cairo, winter time
     n = max(1, now - since)
     if lang == "ar":
