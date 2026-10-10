@@ -1,0 +1,606 @@
+{
+  "ar": {
+    "name": "وليد أبوعويضة",
+    "seo": {
+      "title": "وليد أحمد علي أبوعويضة | تسويق إلكتروني وتصميم مواقع",
+      "description": "وليد أحمد علي أبوعويضة — إعلانات ممولة، تصميم مواقع ومتاجر إلكترونية، SEO، هوية بصرية وإدارة السوشيال ميديا لعملاء في مصر وليبيا ودول الخليج. تواصل على واتساب 01025926261.",
+      "share_title": "وليد أحمد علي أبوعويضة | تسويق إلكتروني وتصميم مواقع",
+      "share_description": "إعلانات ممولة، تصميم مواقع ومتاجر، ظهور في جوجل، وإدارة السوشيال ميديا",
+      "job_title": "تسويق إلكتروني وتصميم مواقع"
+    },
+    "hero": {
+      "badge": "متاح لمشاريع جديدة",
+      "title_start": "بساعدك تكبّر مشروعك",
+      "title_gold": "وتوصل لعملاء أكتر",
+      "title_end": "أونلاين",
+      "intro": "أنا **وليد أحمد علي أبوعويضة**، متخصص في التسويق الإلكتروني وتصميم المواقع: إعلانات ممولة على كل المنصات، مواقع ومتاجر احترافية، ظهور في جوجل، وإدارة كاملة للسوشيال ميديا.",
+      "button_main": "ابدأ مشروعك",
+      "button_second": "استكشف الخدمات",
+      "trust": [
+        "عملاء في مصر وليبيا والخليج",
+        "تواصل مباشر معايا",
+        "سعر واضح قبل البدء",
+        "متابعة بعد التسليم"
+      ],
+      "photo_alt": "وليد أحمد علي أبوعويضة",
+      "chip_seo_title": "ظهور في جوجل",
+      "chip_seo_text": "SEO وخرايط جوجل",
+      "chip_social_title": "سوشيال ميديا",
+      "chip_social_text": "محتوى وتصميم ونشر",
+      "chip_ads_title": "حملة إعلانية",
+      "chip_ads_text": "استهداف دقيق • نتايج قابلة للقياس"
+    },
+    "platforms": {
+      "label": "بشتغل على كل المنصات",
+      "items": [
+        "Facebook",
+        "Instagram",
+        "TikTok",
+        "Snapchat",
+        "Google Ads",
+        "YouTube",
+        "Google Maps",
+        "WhatsApp Business",
+        "Shopify",
+        "WordPress"
+      ],
+      "aria": "المنصات"
+    },
+    "stats": {
+      "counter_label": "خدمة تم تنفيذها",
+      "items": [
+        {
+          "value": "8",
+          "label": "دول: مصر وليبيا والخليج"
+        },
+        {
+          "value": "+10",
+          "label": "منصات إعلانية وتقنية"
+        },
+        {
+          "value": "2",
+          "label": "لغات: عربي وإنجليزي"
+        }
+      ],
+      "aria": "أرقام"
+    },
+    "regions": {
+      "eyebrow": "أعمالي",
+      "title": "خبرة حقيقية في أسواق مصر وليبيا وجميع دول الخليج",
+      "lead": "اشتغلت مع عملاء وشركات في أكتر من دولة، وبفهم طبيعة كل سوق ولهجته وجمهوره، عشان إعلانك وموقعك يكلّموا عميلك بلغته.",
+      "more": "اعرف أكتر",
+      "note": "الشغل كله أونلاين، فأقدر أخدمك من أي مكان."
+    },
+    "services": {
+      "eyebrow": "الخدمات",
+      "title": "كل اللي مشروعك محتاجه عشان يكبر أونلاين",
+      "lead": "من أول فكرة لحد ما العميل يوصلك: تسويق، مواقع، وتصميم تحت سقف واحد.",
+      "featured_title": "الخدمات الأساسية",
+      "featured": [
+        {
+          "icon": "ads",
+          "title": "إعلانات ممولة",
+          "text": "إدارة حملات إعلانية ممولة على كل المنصات: فيسبوك، إنستجرام، تيك توك، سناب شات وجوجل، باستهداف دقيق وميزانية محسوبة توصّلك لعملاء حقيقيين.",
+          "points": [
+            "فيسبوك وإنستجرام",
+            "تيك توك وسناب شات",
+            "إعلانات جوجل ويوتيوب",
+            "استهداف دقيق وميزانية محسوبة"
+          ],
+          "form_name": ""
+        },
+        {
+          "icon": "web",
+          "title": "تصميم مواقع",
+          "text": "تصميم مواقع احترافية سريعة ومتوافقة مع الموبايل، مجهزة للظهور في جوجل، لشركتك أو مشروعك أو متجرك.",
+          "points": [
+            "سريع ومتوافق مع الموبايل",
+            "مجهز للظهور في جوجل",
+            "عربي وإنجليزي",
+            "زرار واتساب وفورم طلبات"
+          ],
+          "form_name": ""
+        },
+        {
+          "icon": "social",
+          "title": "خدمات السوشيال ميديا",
+          "text": "إدارة صفحاتك على السوشيال ميديا: تصميم بوستات، كتابة محتوى، جدولة النشر، والرد على العملاء.",
+          "points": [
+            "تصميم بوستات",
+            "كتابة محتوى",
+            "جدولة النشر",
+            "الرد على العملاء"
+          ],
+          "form_name": ""
+        }
+      ],
+      "others_title": "خدمات تانية",
+      "others": [
+        {
+          "icon": "seo",
+          "title": "ظهور في جوجل (SEO)",
+          "text": "تطلع في أول نتايج جوجل لما العملاء يدوّروا على خدمتك.",
+          "form_name": ""
+        },
+        {
+          "icon": "store",
+          "title": "متاجر إلكترونية",
+          "text": "متجر كامل بالسلة والدفع والشحن، تديره بنفسك بسهولة.",
+          "form_name": ""
+        },
+        {
+          "icon": "maps",
+          "title": "تسجيل على جوجل ماب",
+          "text": "نشاطك يظهر على خرايط جوجل لكل اللي بيدوّر في منطقتك.",
+          "form_name": ""
+        },
+        {
+          "icon": "design",
+          "title": "تصميم جرافيك وهوية بصرية",
+          "text": "لوجو وهوية بصرية تدّي البراند شكل احترافي يفتكره العميل.",
+          "form_name": ""
+        },
+        {
+          "icon": "idea",
+          "title": "استشارات تسويق",
+          "text": "خطة واضحة: مين عميلك، توصله إزاي، وتصرف فلوسك فين.",
+          "form_name": ""
+        },
+        {
+          "icon": "mail",
+          "title": "دعوات أفراح ومناسبات أونلاين",
+          "text": "دعوة بلينك واحد فيها عد تنازلي وخريطة وموسيقى لكل المعازيم.",
+          "form_name": ""
+        },
+        {
+          "icon": "translate",
+          "title": "ترجمة المواقع للإنجليزي",
+          "text": "نسخة إنجليزي احترافية من موقعك توصّلك لعملاء أكتر.",
+          "form_name": ""
+        },
+        {
+          "icon": "card",
+          "title": "مواقع تعريف شخصية وبيزنس كارد أونلاين",
+          "text": "صفحة شخصية أنيقة تحط لينكها في البايو أو على كارتك.",
+          "form_name": ""
+        }
+      ],
+      "order": "اطلب الخدمة"
+    },
+    "why": {
+      "eyebrow": "ليه تشتغل معايا",
+      "title": "شغل احترافي، وتعامل واضح من أول يوم",
+      "lead": "هدفي إن مشروعك يكسب فعلاً، مش مجرد شكل حلو. عشان كده بشتغل على كل حاجة بنفسي وبتابع معاك خطوة بخطوة.",
+      "button": "كلّمني عن مشروعك",
+      "items": [
+        {
+          "icon": "chat",
+          "title": "تواصل مباشر",
+          "text": "بتتكلم معايا أنا على طول، من غير وسطاء ولا انتظار."
+        },
+        {
+          "icon": "money",
+          "title": "سعر واضح",
+          "text": "عرض سعر محدد قبل ما نبدأ، ومن غير أي تكاليف مخفية."
+        },
+        {
+          "icon": "shield",
+          "title": "على مقاس مشروعك",
+          "text": "مفيش قوالب جاهزة، كل شغل بيتعمل حسب نشاطك وجمهورك."
+        },
+        {
+          "icon": "refresh",
+          "title": "متابعة مستمرة",
+          "text": "بعد التسليم بفضل معاك لو احتجت تعديل أو مساعدة."
+        }
+      ]
+    },
+    "steps": {
+      "eyebrow": "خطوات العمل",
+      "title": "من أول رسالة لحد التسليم",
+      "lead": "أربع خطوات بسيطة، وكل حاجة واضحة قدامك.",
+      "items": [
+        {
+          "title": "تواصل",
+          "text": "ابعتلي على واتساب أو املا فورم \"اطلب خدمة\" وقولّي محتاج إيه."
+        },
+        {
+          "title": "خطة وعرض سعر",
+          "text": "أدرس مشروعك وأبعتلك خطة واضحة وسعر محدد قبل ما نبدأ."
+        },
+        {
+          "title": "تنفيذ",
+          "text": "أبدأ الشغل وأوريك كل مرحلة، وأعدّل على ملاحظاتك."
+        },
+        {
+          "title": "تسليم ومتابعة",
+          "text": "أسلّمك الشغل كامل، وأفضل معاك لو احتجت أي حاجة بعدها."
+        }
+      ]
+    },
+    "audit": {
+      "tag": "تقييم مجاني",
+      "title": "قيّملك صفحتك أو موقعك ببلاش",
+      "text": "ابعتلي لينك صفحتك أو موقعك، وهراجعه بنفسي وأقولك بالظبط إيه اللي ممكن يتحسّن عشان يجيبلك عملاء أكتر.",
+      "checks": [
+        "شكل الصفحة وسرعتها على الموبايل",
+        "ظهورك في جوجل وخرايط جوجل",
+        "الكلام والعروض وطريقة عرض خدماتك",
+        "إعلاناتك وصفحاتك على السوشيال ميديا"
+      ],
+      "badges": [
+        "من غير أي التزام",
+        "مراجعة شخصية مني"
+      ],
+      "form_title": "ابعت طلبك",
+      "link_label": "لينك صفحتك أو موقعك",
+      "link_placeholder": "facebook.com/yourpage",
+      "name_label": "اسمك",
+      "name_placeholder": "مثلاً: أحمد محمد",
+      "button": "اطلب التقييم المجاني",
+      "note": "هيتفتح واتساب برسالة جاهزة، تدوس إرسال وبس.",
+      "done": "تمام! اتفتح واتساب بطلبك، دوس إرسال وهبعتلك التقييم."
+    },
+    "contact": {
+      "eyebrow": "اطلب خدمة",
+      "title": "جاهز نبدأ مشروعك؟",
+      "lead": "املا البيانات وطلبك هيوصلني على واتساب على طول، أو تواصل معايا مباشرة.",
+      "whatsapp_label": "واتساب",
+      "call_label": "اتصال مباشر",
+      "form_title": "ابعتلي طلبك",
+      "name_label": "اسمك",
+      "name_placeholder": "مثلاً: أحمد محمد",
+      "service_label": "الخدمة المطلوبة",
+      "service_choose": "اختار الخدمة",
+      "service_other": "أكتر من خدمة / حاجة تانية",
+      "details_label": "تفاصيل الطلب",
+      "details_hint": "(اختياري)",
+      "details_placeholder": "اكتب نبذة عن مشروعك واللي محتاجه",
+      "button": "ابعت الطلب على واتساب",
+      "done": "تمام! اتفتح واتساب برسالتك، دوس إرسال وهرد عليك في أقرب وقت."
+    },
+    "faq": {
+      "eyebrow": "أسئلة شائعة",
+      "title": "عندك سؤال؟",
+      "lead": "دي أكتر الأسئلة اللي بتجيلي. لو سؤالك مش موجود، ابعتهولي على واتساب.",
+      "items": [
+        {
+          "q": "أبدأ إزاي؟",
+          "a": "ابعتلي على واتساب أو املا فورم \"اطلب خدمة\" اللي فوق، وهرد عليك ونتفق على كل التفاصيل."
+        },
+        {
+          "q": "الأسعار كام؟",
+          "a": "كل مشروع وله سعره حسب المطلوب. ابعتلي تفاصيل اللي محتاجه وأبعتلك عرض سعر واضح من غير أي تكاليف مخفية."
+        },
+        {
+          "q": "الموقع بياخد وقت قد إيه؟",
+          "a": "حسب حجمه: صفحة تعريف أو بيزنس كارد أونلاين بتجهز في وقت قصير، والمواقع والمتاجر الأكبر بنتفق على مدتها قبل البدء."
+        },
+        {
+          "q": "بتشتغل مع عملاء برا مصر؟",
+          "a": "أيوه، عندي شغل كتير في ليبيا والكويت وجميع دول الخليج. الشغل كله أونلاين، ونتابع مع بعض على واتساب من أي بلد."
+        },
+        {
+          "q": "ممكن أطلب أكتر من خدمة مع بعض؟",
+          "a": "أكيد، وده غالبًا الأفضل: موقع وإعلانات وسوشيال ميديا شغالين مع بعض بيجيبوا نتيجة أحسن من كل واحد لوحده."
+        }
+      ]
+    },
+    "footer": {
+      "about": "تسويق إلكتروني وتصميم مواقع: إعلانات ممولة، مواقع ومتاجر، SEO، وسوشيال ميديا.",
+      "rights": "وليد أحمد علي أبوعويضة. كل الحقوق محفوظة."
+    },
+    "chat": {
+      "status": "متاح دلوقتي على واتساب",
+      "message": "أهلاً بيك 👋\nمحتاج موقع، إعلانات، أو إدارة سوشيال ميديا؟ ابعتلي وهرد عليك بسرعة.",
+      "button": "ابدأ المحادثة",
+      "prefill": "أهلاً وليد، جاي من موقعك وعايز أستفسر عن خدمة",
+      "aria": "واتساب",
+      "bubble_aria": "رسالة من وليد",
+      "close": "إغلاق",
+      "fab_aria": "تواصل على واتساب"
+    }
+  },
+  "en": {
+    "name": "Waled Abu Oweida",
+    "seo": {
+      "title": "Waled Ahmed Ali Abu Oweida | Digital Marketing & Web Design",
+      "description": "Waled Ahmed Ali Abu Oweida — paid ads, website and online store design, SEO, branding and social media management for clients in Egypt, Libya and the Gulf. WhatsApp +20 102 592 6261.",
+      "share_title": "Waled Ahmed Ali Abu Oweida | Digital Marketing & Web Design",
+      "share_description": "Paid ads, websites and online stores, Google visibility, and social media management",
+      "job_title": "Digital Marketing & Web Design"
+    },
+    "hero": {
+      "badge": "Available for new projects",
+      "title_start": "I help your business grow",
+      "title_gold": "and reach more customers",
+      "title_end": "online",
+      "intro": "I'm **Waled Ahmed Ali Abu Oweida**, a digital marketing and web design specialist: paid ads on every platform, professional websites and online stores, Google visibility, and full social media management.",
+      "button_main": "Start your project",
+      "button_second": "Explore services",
+      "trust": [
+        "Clients in Egypt, Libya & the Gulf",
+        "Work directly with me",
+        "Clear price upfront",
+        "Support after delivery"
+      ],
+      "photo_alt": "Waled Ahmed Ali Abu Oweida",
+      "chip_seo_title": "Google visibility",
+      "chip_seo_text": "SEO & Google Maps",
+      "chip_social_title": "Social media",
+      "chip_social_text": "Content, design & posting",
+      "chip_ads_title": "Ad campaign",
+      "chip_ads_text": "Precise targeting • Measurable results"
+    },
+    "platforms": {
+      "label": "I work on every platform",
+      "items": [
+        "Facebook",
+        "Instagram",
+        "TikTok",
+        "Snapchat",
+        "Google Ads",
+        "YouTube",
+        "Google Maps",
+        "WhatsApp Business",
+        "Shopify",
+        "WordPress"
+      ],
+      "aria": "Platforms"
+    },
+    "stats": {
+      "counter_label": "Services delivered",
+      "items": [
+        {
+          "value": "8",
+          "label": "Countries: Egypt, Libya & the Gulf"
+        },
+        {
+          "value": "+10",
+          "label": "Ad and tech platforms"
+        },
+        {
+          "value": "2",
+          "label": "Languages: Arabic & English"
+        }
+      ],
+      "aria": "Numbers"
+    },
+    "regions": {
+      "eyebrow": "My work",
+      "title": "Proven experience across Egypt, Libya and all the Gulf countries",
+      "lead": "I've worked with clients and businesses in several countries, and I understand each market's dialect, culture and audience — so your ads and website speak your customers' language.",
+      "more": "Learn more",
+      "note": "All the work is online, so I can serve you wherever you are."
+    },
+    "services": {
+      "eyebrow": "Services",
+      "title": "Everything your business needs to grow online",
+      "lead": "From the first idea to the customer reaching you: marketing, websites and design under one roof.",
+      "featured_title": "Core services",
+      "featured": [
+        {
+          "icon": "ads",
+          "title": "Paid Advertising",
+          "text": "Paid ad campaigns on every platform — Facebook, Instagram, TikTok, Snapchat and Google — with precise targeting and a well-planned budget that brings you real customers.",
+          "points": [
+            "Facebook & Instagram",
+            "TikTok & Snapchat",
+            "Google & YouTube Ads",
+            "Precise targeting, planned budget"
+          ],
+          "form_name": ""
+        },
+        {
+          "icon": "web",
+          "title": "Website Design",
+          "text": "Fast, professional, mobile-friendly websites built to show up on Google — for your company, project or shop.",
+          "points": [
+            "Fast and mobile-friendly",
+            "Built to rank on Google",
+            "Arabic & English",
+            "WhatsApp button & request form"
+          ],
+          "form_name": ""
+        },
+        {
+          "icon": "social",
+          "title": "Social Media Management",
+          "text": "Running your social media pages: post design, copywriting, scheduling, and replying to customers.",
+          "points": [
+            "Post design",
+            "Copywriting",
+            "Scheduling",
+            "Replying to customers"
+          ],
+          "form_name": ""
+        }
+      ],
+      "others_title": "More services",
+      "others": [
+        {
+          "icon": "seo",
+          "title": "Search Engine Optimization (SEO)",
+          "text": "Rank at the top of Google when customers search for what you offer.",
+          "form_name": "SEO"
+        },
+        {
+          "icon": "store",
+          "title": "Online Stores",
+          "text": "A complete store with cart, payments and shipping — easy to run yourself.",
+          "form_name": "Online Store"
+        },
+        {
+          "icon": "maps",
+          "title": "Google Maps Listing",
+          "text": "Your business on Google Maps for everyone searching nearby.",
+          "form_name": ""
+        },
+        {
+          "icon": "design",
+          "title": "Graphic Design & Branding",
+          "text": "A logo and visual identity that make your brand professional and memorable.",
+          "form_name": ""
+        },
+        {
+          "icon": "idea",
+          "title": "Marketing Consulting",
+          "text": "A clear plan: who your customer is, how to reach them, where to spend.",
+          "form_name": ""
+        },
+        {
+          "icon": "mail",
+          "title": "Online Wedding & Event Invitations",
+          "text": "One link with a countdown, venue map and music for all your guests.",
+          "form_name": "Online Invitation"
+        },
+        {
+          "icon": "translate",
+          "title": "Website Translation to English",
+          "text": "A professional English version of your site to reach more customers.",
+          "form_name": "Website Translation"
+        },
+        {
+          "icon": "card",
+          "title": "Personal Profile Sites & Digital Business Cards",
+          "text": "An elegant personal page for your bio link or business card.",
+          "form_name": "Profile Site / Digital Business Card"
+        }
+      ],
+      "order": "Request this service"
+    },
+    "why": {
+      "eyebrow": "Why work with me",
+      "title": "Professional work, clear dealings from day one",
+      "lead": "My goal is for your business to actually profit, not just look good. That's why I handle everything myself and keep you updated every step of the way.",
+      "button": "Tell me about your project",
+      "items": [
+        {
+          "icon": "chat",
+          "title": "Direct contact",
+          "text": "You talk to me directly — no middlemen, no waiting."
+        },
+        {
+          "icon": "money",
+          "title": "Clear pricing",
+          "text": "A fixed quote before we start, with no hidden costs."
+        },
+        {
+          "icon": "shield",
+          "title": "Tailored to you",
+          "text": "No ready-made templates — every job is built around your business and audience."
+        },
+        {
+          "icon": "refresh",
+          "title": "Ongoing support",
+          "text": "After delivery I'm still here if you need changes or help."
+        }
+      ]
+    },
+    "steps": {
+      "eyebrow": "How it works",
+      "title": "From first message to delivery",
+      "lead": "Four simple steps, with everything clear along the way.",
+      "items": [
+        {
+          "title": "Get in touch",
+          "text": "Message me on WhatsApp or fill in the request form and tell me what you need."
+        },
+        {
+          "title": "Plan & quote",
+          "text": "I study your project and send a clear plan and a fixed price before we start."
+        },
+        {
+          "title": "Build",
+          "text": "I start the work, show you every stage, and adjust based on your feedback."
+        },
+        {
+          "title": "Delivery & support",
+          "text": "You get the finished work, and I stay available if you need anything afterwards."
+        }
+      ]
+    },
+    "audit": {
+      "tag": "Free review",
+      "title": "Get a free review of your page or website",
+      "text": "Send me the link to your page or website. I'll review it myself and tell you exactly what can be improved to bring you more customers.",
+      "checks": [
+        "Design and speed on mobile",
+        "Visibility on Google and Google Maps",
+        "Copy, offers and how your services come across",
+        "Your ads and social media pages"
+      ],
+      "badges": [
+        "No commitment",
+        "Reviewed personally by me"
+      ],
+      "form_title": "Send your request",
+      "link_label": "Link to your page or website",
+      "link_placeholder": "instagram.com/yourbrand",
+      "name_label": "Your name",
+      "name_placeholder": "e.g. Sarah Ahmed",
+      "button": "Get my free review",
+      "note": "WhatsApp opens with a ready message — just hit send.",
+      "done": "Done! WhatsApp opened with your request — hit send and I'll get back to you with the review."
+    },
+    "contact": {
+      "eyebrow": "Get a quote",
+      "title": "Ready to start your project?",
+      "lead": "Fill in the form and your request comes straight to my WhatsApp, or contact me directly.",
+      "whatsapp_label": "WhatsApp",
+      "call_label": "Call",
+      "form_title": "Send your request",
+      "name_label": "Your name",
+      "name_placeholder": "e.g. John Smith",
+      "service_label": "Service",
+      "service_choose": "Choose a service",
+      "service_other": "Several services / Something else",
+      "details_label": "Details",
+      "details_hint": "(optional)",
+      "details_placeholder": "Tell me about your project and what you need",
+      "button": "Send via WhatsApp",
+      "done": "Done! WhatsApp opened with your message — just hit send and I'll get back to you soon."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Have a question?",
+      "lead": "These are the questions I get most. If yours isn't here, send it to me on WhatsApp.",
+      "items": [
+        {
+          "q": "How do I get started?",
+          "a": "Message me on WhatsApp or fill in the request form above — I'll reply and we'll agree on all the details."
+        },
+        {
+          "q": "How much does it cost?",
+          "a": "Every project is priced on what it needs. Send me the details and I'll send a clear quote with no hidden costs."
+        },
+        {
+          "q": "How long does a website take?",
+          "a": "It depends on the size: a profile page or digital business card is ready quickly, while for larger websites and stores we agree on the timeline before starting."
+        },
+        {
+          "q": "Do you work with clients outside Egypt?",
+          "a": "Yes — I have lots of work in Libya, Kuwait and all the Gulf countries. All the work is online, and we keep in touch on WhatsApp wherever you are."
+        },
+        {
+          "q": "Can I order more than one service?",
+          "a": "Of course — and that's usually best: a website, ads and social media working together get better results than each one alone."
+        }
+      ]
+    },
+    "footer": {
+      "about": "Digital marketing and web design: paid ads, websites and stores, SEO, and social media.",
+      "rights": "Waled Ahmed Ali Abu Oweida. All rights reserved."
+    },
+    "chat": {
+      "status": "Available now on WhatsApp",
+      "message": "Hi there 👋\nNeed a website, ads or social media management? Message me and I’ll reply quickly.",
+      "button": "Start chat",
+      "prefill": "Hi Waled, I found you on your website and I'd like to ask about a service",
+      "aria": "WhatsApp",
+      "bubble_aria": "Message from Waled",
+      "close": "Close",
+      "fab_aria": "Chat on WhatsApp"
+    }
+  }
+}

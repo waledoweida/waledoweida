@@ -17,9 +17,11 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from articles import ARTICLES  # noqa: E402
+from content import ld_json, load  # noqa: E402
+from icons import ICONS  # noqa: E402
 
 SITE = "https://waledoweida.com"
-WA = "https://wa.me/201025926261"
+WA = "https://wa.me/" + load("site")["whatsapp"]
 
 L = {
     "ar": dict(
@@ -50,14 +52,6 @@ L = {
     ),
 }
 
-ICONS = {
-    "ads": '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
-    "web": '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    "maps": '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
-    "price": '<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
-    "store": '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H5.1"/>',
-    "seo": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-}
 
 
 def read(p):
@@ -156,7 +150,7 @@ def page(lang, *, title, desc, path, alt_path, og_type, ld, body, ch):
 <meta name="twitter:card" content="summary_large_image">
 {pre}
 <script type="application/ld+json">
-{json.dumps(ld, ensure_ascii=False)}
+{ld_json(ld)}
 </script>
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="{ch['css']}">
@@ -278,6 +272,16 @@ def build():
                        og_type="article", ld=ld, body=body, ch=ch))
             out.append(path)
     return out
+
+
+def prune():
+    """Delete the pages of articles that were removed from content/articles.json."""
+    import shutil
+    keep = {a["slug"] for a in ARTICLES}
+    for blog in ("blog", "en/blog"):
+        for name in os.listdir(os.path.join(ROOT, blog)):
+            if os.path.isdir(os.path.join(ROOT, blog, name)) and name not in keep:
+                shutil.rmtree(os.path.join(ROOT, blog, name))
 
 
 def update_sitemap(paths):

@@ -1,0 +1,54 @@
+# Rebuilds the pages after content/ changes (saves from the admin panel at /admin/).
+# Runs tools/build_all.py, checks the result, and commits the generated pages to main;
+# Vercel then publishes that commit. The wedding invitation (wedding/, فرح/) is never touched:
+# the build refuses to write there, and this job fails if anything under those paths changed.
+name: Build pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["content/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - name: Build pages from content
+        run: python3 tools/build_all.py
+      - name: Wedding invitation untouched
+        run: |
+          git config core.quotepath off
+          test -z "$(git status --porcelain -- 'wedding/' 'فرح/')"
+      - name: HTML validation
+        run: npm run lint:html
+      - name: Commit the pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- . ':(exclude)wedding' ':(exclude)فرح'
+          # always commit (even with no page change) so the admin panel sees the save was processed
+          git commit --allow-empty -m "Rebuild pages from content"
+          for i in 1 2 3; do
+            git push origin HEAD:main && exit 0
+            git pull --rebase origin main
+          done
+          exit 1

@@ -98,3 +98,98 @@ test('changing ADMIN_KEY invalidates existing sessions', async () => {
   process.env.ADMIN_KEY = 'a new password';
   assert.equal((await call(stats, { headers: { cookie: value } })).status, 401);
 });
+
+// ---------- /api/content (admin editor) with a stand-in for the GitHub contents API ----------
+const fs = require('node:fs');
+const path = require('node:path');
+const repoFiles = new Map();
+for (const f of ['site', 'home', 'countries', 'articles', 'icons']) {
+  repoFiles.set(`content/${f}.json`, { text: fs.readFileSync(path.join(__dirname, '..', 'content', f + '.json'), 'utf8'), sha: f.padEnd(40, '0').replace(/[^0-9a-f]/g, 'a') });
+}
+const commits = [];
+const redisFetch = global.fetch;
+global.fetch = async (url, opt = {}) => {
+  if (!String(url).startsWith('https://api.github.com/')) return redisFetch(url, opt);
+  assert.equal(opt.headers.Authorization, 'Bearer gh-test-token');
+  const u = new URL(url);
+  const m = u.pathname.match(/^\/repos\/waledoweida\/waledoweida\/contents\/(.+)$/);
+  const json = (status, body) => ({ ok: status < 300, status, json: async () => body });
+  if (m && (!opt.method || opt.method === 'GET')) {
+    const f = repoFiles.get(m[1]);
+    return f ? json(200, { content: Buffer.from(f.text).toString('base64'), sha: f.sha }) : json(404, {});
+  }
+  if (m && opt.method === 'PUT') {
+    const b = JSON.parse(opt.body), f = repoFiles.get(m[1]);
+    if (!f) return json(404, {});
+    if (b.sha !== f.sha) return json(409, {});
+    const sha = (commits.length + 1).toString(16).padStart(40, 'c');
+    repoFiles.set(m[1], { text: Buffer.from(b.content, 'base64').toString('utf8'), sha });
+    commits.push(b.message);
+    return json(200, { content: { sha } });
+  }
+  if (u.pathname === '/repos/waledoweida/waledoweida/commits/main') {
+    return json(200, { commit: { message: commits.length ? commits[commits.length - 1] : 'Rebuild pages from content', committer: { date: '2026-10-10T10:00:00Z' } } });
+  }
+  return json(404, {});
+};
+const content = load('content.js');
+
+async function session() {
+  const r = await call(login, { method: 'POST', body: { password: process.env.ADMIN_KEY }, headers: { 'x-forwarded-for': '6.6.6.6' } });
+  return { cookie: r.headers['set-cookie'].split(';')[0] };
+}
+
+test('content: needs a session and the GitHub token', async () => {
+  assert.equal((await call(content)).status, 401);
+  const h = await session();
+  delete process.env.GITHUB_TOKEN;
+  assert.equal((await call(content, { headers: h })).body.error, 'no_github_token');
+  process.env.GITHUB_TOKEN = 'gh-test-token';
+});
+
+test('content: GET returns every file, the schema and the publish status', async () => {
+  const h = await session();
+  const r = await call(content, { headers: h });
+  assert.equal(r.status, 200);
+  assert.deepEqual(Object.keys(r.body.files).sort(), ['articles', 'countries', 'home', 'site']);
+  assert.equal(r.body.files.site.data.whatsapp, '201025926261');
+  assert.ok(r.body.schema.home && r.body.icons.ads);
+  assert.equal(r.body.status.state, 'live');
+});
+
+test('content: PUT validates, cleans and commits; then reports building', async () => {
+  const h = await session();
+  const g = await call(content, { headers: h });
+  const home = g.body.files.home.data;
+  home.ar.faq.items.push({ q: '  سؤال جديد؟  ', a: 'إجابة <script>alert(1)</script>\r\nسطر تاني' });
+  const r = await call(content, { method: 'PUT', headers: { ...h, origin: 'https://waledoweida.com' }, body: { file: 'home', sha: g.body.files.home.sha, data: home } });
+  assert.equal(r.status, 200);
+  const savedFaq = JSON.parse(repoFiles.get('content/home.json').text).ar.faq.items.at(-1);
+  assert.equal(savedFaq.q, 'سؤال جديد؟');                       // trimmed
+  assert.equal(savedFaq.a, 'إجابة <script>alert(1)</script>\nسطر تاني');   // stored as text; the build escapes it
+  assert.equal(commits.at(-1), 'Admin: update home page');
+  const st = await call(content, { headers: h, query: { status: '1' } });
+  assert.equal(st.body.status.state, 'building');
+  // a save based on an old version is refused instead of overwriting
+  const stale = await call(content, { method: 'PUT', headers: h, body: { file: 'home', sha: g.body.files.home.sha, data: home } });
+  assert.equal(stale.status, 409);
+});
+
+test('content: PUT refuses bad data, unknown files, cross-site requests', async () => {
+  const h = await session();
+  const g = await call(content, { headers: h });
+  const put = (file, data, extra = {}) => call(content, { method: 'PUT', headers: { ...h, ...extra }, body: { file, sha: g.body.files[file] ? g.body.files[file].sha : 'a'.repeat(40), data } });
+  const site = g.body.files.site.data;
+  assert.equal((await put('site', { ...site, whatsapp: '+20 10' })).status, 422);
+  assert.equal((await put('site', { ...site, counter: { ...site.counter, base: -5 } })).status, 422);
+  const countries = g.body.files.countries.data;
+  assert.equal((await put('countries', [...countries, countries[0]])).status, 422);                       // duplicate link
+  assert.equal((await put('countries', [{ ...countries[0], slug: 'wedding' }, ...countries.slice(1)])).status, 422); // reserved
+  assert.equal((await put('countries', [{ ...countries[0], slug: '../x' }, ...countries.slice(1)])).status, 422);
+  const arts = g.body.files.articles.data;
+  assert.equal((await put('articles', [{ ...arts[0], icon: '<svg onload=x>' }, ...arts.slice(1)])).status, 422);
+  assert.equal((await put('icons', {})).status, 400);
+  assert.equal((await put('../package', {})).status, 400);
+  assert.equal((await put('site', site, { origin: 'https://evil.example' })).status, 403);
+  assert.equal((await call(content, { method: 'DELETE', headers: h })).status, 405);
+});

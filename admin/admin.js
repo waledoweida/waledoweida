@@ -1,5 +1,5 @@
 (function(){
-  // Summary endpoint (Vercel function api/stats.js); the key is sent as a Bearer header.
+  // Stats tab + login + tab switching. The editor tabs live in editor.js (window.woEditor).
   var STATS_URL = '/api/stats';
   var $ = function(id){ return document.getElementById(id); };
   function get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -15,7 +15,32 @@
   var SRC_DEVICE = { mobile: 'موبايل', desktop: 'كمبيوتر', tablet: 'تابلت' };
   var CLICK = { whatsapp: 'واتساب', phone: 'اتصال', form: 'فورم الطلب' };
 
-  function show(id){ ['login', 'setup', 'dash', 'controls'].forEach(function(x){ $(x).hidden = x !== id && !(id === 'dash' && x === 'controls'); }); }
+  var tab = 'stats';
+  // view: 'login' | 'setup' (stats storage missing) | 'dash' (stats) | 'editor'
+  function show(id){
+    var inApp = id !== 'login';
+    $('login').hidden = inApp;
+    $('tabs').hidden = $('logout').hidden = !inApp;
+    $('setup').hidden = id !== 'setup';
+    $('dash').hidden = $('controls').hidden = id !== 'dash';
+    if (id !== 'editor') { $('editor').hidden = true; $('noGithub').hidden = true; }
+    if (!inApp) $('err').hidden = true;
+  }
+  window.woShowLogin = function(){ show('login'); };
+  function openTab(name){
+    if (tab !== name && window.woEditor && !window.woEditor.canLeave()) return;
+    tab = name;
+    document.querySelectorAll('#tabs button').forEach(function(b){
+      if (b.getAttribute('data-tab') === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    try { sessionStorage.setItem('wo_tab', name); } catch (e) {}
+    if (name === 'stats') { load(); return; }
+    show('editor');
+    window.woEditor.open(name);
+  }
+  document.querySelectorAll('#tabs button').forEach(function(b){
+    b.addEventListener('click', function(){ openTab(b.getAttribute('data-tab')); });
+  });
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function dur(s){ s = +s || 0; if (s < 60) return s + ' ث'; var m = Math.floor(s / 60), r = s % 60; return m + ' د' + (r ? ' ' + r + ' ث' : ''); }
 
@@ -90,6 +115,7 @@
   }
 
   function load(){
+    if (tab !== 'stats') return;
     $('err').hidden = true;
     $('updated').textContent = 'جاري التحميل…';
     fetch(STATS_URL + '?days=' + days, { credentials: 'same-origin', cache: 'no-store' })
@@ -99,7 +125,7 @@
         if (!r.ok) throw new Error(r.status);
         return r.json();
       })
-      .then(function(s){ if (s) { show('dash'); render(s); } })
+      .then(function(s){ if (s && tab === 'stats') { show('dash'); render(s); } })
       .catch(function(){ show('dash'); $('err').textContent = 'تعذّر تحميل البيانات. اتأكد من الإنترنت وجرّب تاني.'; $('err').hidden = false; });
   }
 
@@ -109,7 +135,7 @@
     var pw = $('key').value; $('key').value = '';
     fetch('/api/login', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }) })
       .then(function(r){
-        if (r.ok) { load(); return; }
+        if (r.ok) { openTab(tab); return; }
         $('loginErr').textContent = r.status === 429 ? 'محاولات كتير غلط. استنى ربع ساعة وجرّب تاني.'
           : r.status === 503 ? 'لوحة التحكم مش متظبطة لسه.' : 'كلمة السر غلط.';
         $('loginErr').hidden = false;
@@ -121,6 +147,7 @@
   });
   put('wo_admin_key', null); // old versions kept the password in the browser; remove it
   $('refresh').addEventListener('click', load);
+  window.addEventListener('beforeunload', function(e){ if (window.woEditor && window.woEditor.dirty()) { e.preventDefault(); e.returnValue = ''; } });
   document.querySelectorAll('.seg button').forEach(function(b){
     b.setAttribute('aria-pressed', +b.getAttribute('data-days') === days ? 'true' : 'false');
     b.addEventListener('click', function(){
@@ -133,5 +160,10 @@
     var t = $(this.getAttribute('data-table')); t.hidden = !t.hidden;
     this.textContent = t.hidden ? 'عرض كجدول' : 'إخفاء الجدول';
   });
-  load();
+  try { tab = sessionStorage.getItem('wo_tab') || 'stats'; } catch (e) {}
+  // first paint: ask the server whether the session is still valid
+  fetch('/api/content?status=1', { credentials: 'same-origin', cache: 'no-store' }).then(function(r){
+    if (r.status === 401) { show('login'); return; }
+    openTab(tab);
+  }).catch(function(){ openTab(tab); });
 })();
