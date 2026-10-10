@@ -17,6 +17,7 @@
       "button_main": "ابدأ مشروعك",
       "button_second": "استكشف الخدمات",
       "trust": [
+        "خبرة 9 سنين",
         "عملاء في مصر وليبيا والخليج",
         "تواصل مباشر معايا",
         "سعر واضح قبل البدء",
@@ -50,16 +51,16 @@
       "counter_label": "خدمة تم تنفيذها",
       "items": [
         {
+          "value": "9",
+          "label": "سنين خبرة"
+        },
+        {
           "value": "8",
           "label": "دول: مصر وليبيا والخليج"
         },
         {
           "value": "+10",
           "label": "منصات إعلانية وتقنية"
-        },
-        {
-          "value": "2",
-          "label": "لغات: عربي وإنجليزي"
         }
       ],
       "aria": "أرقام"
@@ -319,6 +320,7 @@
       "button_main": "Start your project",
       "button_second": "Explore services",
       "trust": [
+        "9 years' experience",
         "Clients in Egypt, Libya & the Gulf",
         "Work directly with me",
         "Clear price upfront",
@@ -352,16 +354,16 @@
       "counter_label": "Services delivered",
       "items": [
         {
+          "value": "9",
+          "label": "Years of experience"
+        },
+        {
           "value": "8",
           "label": "Countries: Egypt, Libya & the Gulf"
         },
         {
           "value": "+10",
           "label": "Ad and tech platforms"
-        },
-        {
-          "value": "2",
-          "label": "Languages: Arabic & English"
         }
       ],
       "aria": "Numbers"
