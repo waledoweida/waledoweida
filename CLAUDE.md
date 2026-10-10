@@ -26,6 +26,8 @@ changes these paths.
 - `index.html` — Arabic home (RTL), `en/index.html` — English home (LTR)
 - `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed). The WhatsApp number in `main.js` (`var WA`) is written by the build from `content/site.json`: change it there, not in `main.js`.
 - `404.html`, `robots.txt`, `sitemap.xml`, icons, `og.png`, `profile.jpg`, `avatar.jpg`
+- Photos: `python3 tools/make_photos.py PHOTO --hero X1,Y1,X2,Y2 --face X1,Y1,X2,Y2` makes the hero photo, the avatar,
+  the round photo in `og.png` and all the icons from one portrait; then bump the `?v=` of `og.png` and the icons.
 - Home pages carry a Content-Security-Policy meta; keep styles out of inline `style=""` attributes.
 - `.vercelignore` keeps repo-only files (`CLAUDE.md`, `tools/`, `tests/`, …) off the published site.
 - **Content lives in `content/*.json`** (`site`, `home`, `countries`, `articles`, `icons`); the generated pages are committed.
