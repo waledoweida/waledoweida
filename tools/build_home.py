@@ -136,19 +136,31 @@ def form_name(x):
     return x.get("form_name") or x["title"]
 
 
+def points(x):
+    """The check list of a featured service (left out when it has no points)."""
+    if not x["points"]:
+        return ""
+    return "\n            <ul>" + "".join(f"<li>{CHECK}{esc(p)}</li>" for p in x["points"]) + "</ul>"
+
+
 def services(c):
     s = c["services"]
     feat = "\n".join(f"""          <article class="feat reveal">
             <div class="ic"><svg class="i">{ICONS[x['icon']]}</svg></div>
             <h3>{esc(x['title'])}</h3>
-            <p>{esc(x['text'])}</p>
-            <ul>{''.join(f'<li>{CHECK}{esc(p)}</li>' for p in x['points'])}</ul>
+            <p>{esc(x['text'])}</p>{points(x)}
             <a class="feat-link" href="#contact" data-service="{attr(form_name(x))}">{esc(s['order'])} {ARROW}</a>
           </article>""" for x in s["featured"])
     mini = "\n".join(f"""          <a class="mini reveal" href="#contact" data-service="{attr(form_name(x))}">
             <div class="ic"><svg class="i">{ICONS[x['icon']]}</svg></div>
             <div><h3>{esc(x['title'])}</h3><p>{esc(x['text'])}</p></div>
           </a>""" for x in s["others"])
+    # the "other services" group is left out when the owner removed all of them
+    others = f"""
+      <div class="group-title reveal">{esc(s['others_title'])}</div>
+      <div class="mini-grid">
+{mini}
+      </div>""" if s["others"] else ""
     return f"""  <section id="services">
     <div class="wrap">
 {head(s)}
@@ -156,11 +168,7 @@ def services(c):
       <div class="group-title reveal">{esc(s['featured_title'])}</div>
       <div class="feat-grid">
 {feat}
-      </div>
-      <div class="group-title reveal">{esc(s['others_title'])}</div>
-      <div class="mini-grid">
-{mini}
-      </div>
+      </div>{others}
     </div>
   </section>"""
 
@@ -205,6 +213,7 @@ def audit(c):
     a = c["audit"]
     checks = "\n".join(f"            <li>{CHECK}{esc(x)}</li>" for x in a["checks"])
     badges = "".join(f"<span>{esc(x)}</span>" for x in a["badges"])
+    badges = f'\n          <div class="audit-badges">{badges}</div>' if badges else ""
     return f"""  <section class="audit-wrap" id="audit">
     <div class="wrap">
       <div class="audit-card reveal">
@@ -214,8 +223,7 @@ def audit(c):
           <p>{esc(a['text'])}</p>
           <ul class="audit-list">
 {checks}
-          </ul>
-          <div class="audit-badges">{badges}</div>
+          </ul>{badges}
         </div>
         <form class="audit-form" id="auditForm" novalidate>
           <h3>{esc(a['form_title'])}</h3>

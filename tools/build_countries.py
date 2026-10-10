@@ -77,6 +77,16 @@ def build():
             others = " ".join(
                 f'<a href="{path_for(o, lang)}"><span>{o["code"]}</span>{esc(o[lang]["name"])}</a>'
                 for o in COUNTRIES if o is not c)
+            # a list the owner emptied leaves out its section instead of showing a bare heading
+            faq_section = f"""  <section class="country-faq">
+    <div class="wrap narrow">
+      <h2 class="reveal">{t['faq_h']}</h2>{faq}
+    </div>
+  </section>
+
+""" if x["faq"] else ""
+            others_nav = f"""
+      <nav class="c-others" aria-label="{t['others']}"><b>{t['others']}</b>{others}</nav>""" if others else ""
             body = f"""  <section class="post-hero country-hero">
     <div class="wrap narrow">
       <div class="crumbs"><a href="{d['home']}">{d['crumbs_home']}</a> / <a href="{d['home']}#work">{t['markets']}</a> / <span>{esc(x['name'])}</span></div>
@@ -105,19 +115,12 @@ def build():
     </div>
   </section>
 
-  <section class="country-faq">
-    <div class="wrap narrow">
-      <h2 class="reveal">{t['faq_h']}</h2>{faq}
-    </div>
-  </section>
-
-  <section class="band-wrap">
+{faq_section}  <section class="band-wrap">
     <div class="wrap">
       <div class="band reveal">
         <div class="band-text"><h2>{esc(x['cta_h'])}</h2><p>{esc(x['cta_p'])}</p></div>
         <div class="btns"><a class="btn btn-dark" href="{esc(wa(x['wa_text']))}" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>{t['wa_btn']}</a></div>
-      </div>
-      <nav class="c-others" aria-label="{t['others']}"><b>{t['others']}</b>{others}</nav>
+      </div>{others_nav}
     </div>
   </section>"""
             ld = {"@context": "https://schema.org", "@type": "Service", "name": x["title"],

@@ -5,6 +5,7 @@ The admin panel (/admin/) edits these JSON files through the GitHub API; the
 Everything written by the owner is HTML-escaped here; the only formatting is
 **bold**, and in articles: "## " headings, "- " / "1. " lists and "> " tips.
 """
+import datetime
 import html
 import json
 import os
@@ -20,6 +21,17 @@ RULES = {
     "countries": [(lambda r: r["code"], re.compile(r"[A-Z]{2,4}"), "code"), (lambda r: r["slug"], SLUG, "slug")],
     "articles": [(lambda r: r["date"], re.compile(r"\d{4}-\d{2}-\d{2}"), "date"), (lambda r: r["slug"], SLUG, "slug")],
 }
+# checks a pattern can't express: the article date must exist on the calendar
+EXTRA = {
+    "articles": [(lambda r: _real_day(r["date"]), "date")],
+}
+
+
+def _real_day(s):
+    try:
+        return datetime.date.fromisoformat(s).isoformat() == s
+    except (TypeError, ValueError):
+        return False
 
 
 def _tidy(v):
@@ -37,6 +49,10 @@ def _tidy(v):
 def load(name):
     with open(os.path.join(ROOT, "content", name + ".json"), encoding="utf-8") as f:
         data = _tidy(json.load(f))
+    for check, field in EXTRA.get(name, []):
+        for row in data:
+            if not check(row):
+                raise ValueError(f"content/{name}.json: bad {field} in {row.get('slug')!r}")
     for get, rule, field in RULES.get(name, []):
         for row in (data if isinstance(data, list) else [data]):
             value = get(row)

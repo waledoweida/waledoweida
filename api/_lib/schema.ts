@@ -3,7 +3,7 @@
 export type Field =
   | { t: 'text' | 'area' | 'body'; label: string; max: number; hint?: string; optional?: boolean; adv?: boolean; ltr?: boolean }
   | { t: 'num'; label: string; min: number; max: number; hint?: string }
-  | { t: 'match'; label: string; re: string; max: number; hint?: string; ltr?: boolean }
+  | { t: 'match'; label: string; re: string; max: number; hint?: string; ltr?: boolean; when?: 'day' | 'time' }
   | { t: 'icon'; label: string }
   | { t: 'list'; label: string; of: Field; min: number; max: number; item?: string; hint?: string; adv?: boolean }
   | { t: 'obj'; label?: string; fields: Record<string, Field>; hint?: string; adv?: boolean };
@@ -125,7 +125,7 @@ export const SCHEMA: Record<string, Field> = {
     whatsapp: { t: 'match', label: 'رقم الواتساب بالكود الدولي', re: '^[1-9][0-9]{7,14}$', max: 15, hint: 'أرقام بس، من غير + ولا مسافات. مثال: 201025926261', ltr: true },
     counter: obj({
       base: { t: 'num', label: 'رقم عداد الخدمات دلوقتي', min: 0, max: 100000000, hint: 'العداد بيزيد لوحده من الرقم ده' },
-      start: { t: 'match', label: 'العداد بدأ من', re: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$', max: 40, ltr: true, hint: 'بيتظبط لوحده لما تغيّر الرقم' },
+      start: { t: 'match', label: 'العداد بدأ من', re: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$', max: 40, ltr: true, when: 'time', hint: 'بيتظبط لوحده لما تغيّر الرقم' },
     }, 'عداد الخدمات'),
   }),
   home: obj({ ar: homeLang, en: homeLang }),
@@ -136,7 +136,7 @@ export const SCHEMA: Record<string, Field> = {
   }), 1, 20, 'code'),
   articles: list('المقالات', obj({
     slug: { t: 'match', label: 'رابط المقال', re: SLUG, max: 60, ltr: true, hint: 'حروف إنجليزي صغيرة وشرطة. مثال: instagram-tips' },
-    date: { t: 'match', label: 'التاريخ', re: '^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$', max: 10, ltr: true, hint: 'سنة-شهر-يوم' },
+    date: { t: 'match', label: 'التاريخ', re: '^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$', max: 10, ltr: true, when: 'day', hint: 'سنة-شهر-يوم' },
     icon: { t: 'icon', label: 'الأيقونة' },
     ar: articleLang, en: articleLang,
   }), 1, 100, 'slug'),
@@ -145,6 +145,16 @@ export const SCHEMA: Record<string, Field> = {
 export const FILES = Object.keys(SCHEMA);
 
 export class Invalid extends Error {}
+
+/** A date that exists on the calendar (no 30 February), or a time between 2020 and 2100. */
+export function realDate(s: string, when: 'day' | 'time'): boolean {
+  if (when === 'day') {
+    const d = new Date(s + 'T00:00:00Z');
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }
+  const t = Date.parse(s);
+  return !Number.isNaN(t) && t >= Date.UTC(2020, 0, 1) && t < Date.UTC(2100, 0, 1);
+}
 
 /** Returns a clean copy of `v` that matches `f`, or throws Invalid naming the field. */
 export function validate(f: Field, v: unknown, icons: Set<string>, path = ''): unknown {
@@ -156,7 +166,7 @@ export function validate(f: Field, v: unknown, icons: Set<string>, path = ''): u
       if (/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(v)) return bad('broken character');
       let s = v.replace(/\r\n?/g, '\n').replace(keepLines ? /[\u0000-\u0009\u000b-\u001f\u007f]/g : /[\u0000-\u001f\u007f]/g, ' ').trim();
       if (s.length > f.max) return bad('too long');
-      if (f.t === 'match') { if (!new RegExp(f.re).test(s)) return bad('wrong format'); }
+      if (f.t === 'match') { if (!new RegExp(f.re).test(s) || (f.when && !realDate(s, f.when))) return bad('wrong format'); }
       else if (!s && !f.optional) return bad('empty');
       if (f.t === 'text') s = s.replace(/\s+/g, ' ');
       else s = s.replace(/[ \t]+\n/g, '\n');

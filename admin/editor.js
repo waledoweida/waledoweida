@@ -362,9 +362,14 @@
     if (f.t === 'num') { if (!(Number.isInteger(v) && v >= f.min && v <= f.max)) errs.push({ path: path, msg: f.label + ': رقم مش مظبوط' }); return; }
     if (f.t === 'icon') return;
     var s = String(v == null ? '' : v).trim();
-    if (f.t === 'match') { if (!new RegExp(f.re).test(s)) errs.push({ path: path, msg: f.label + ': الشكل مش مظبوط' + (f.hint ? ' (' + f.hint + ')' : '') }); return; }
+    if (f.t === 'match') { if (!new RegExp(f.re).test(s) || (f.when && !realDate(s, f.when))) errs.push({ path: path, msg: f.label + ': الشكل مش مظبوط' + (f.hint ? ' (' + f.hint + ')' : '') }); return; }
     if (!s && !f.optional) errs.push({ path: path, msg: f.label + ': فاضية' });
     else if (s.length > f.max) errs.push({ path: path, msg: f.label + ': أطول من ' + f.max + ' حرف' });
+  }
+  // same rule as realDate() in api/_lib/schema.ts
+  function realDate(s, when){
+    if (when === 'day') { var d = new Date(s + 'T00:00:00Z'); return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s; }
+    var t = Date.parse(s); return !isNaN(t) && t >= Date.UTC(2020, 0, 1) && t < Date.UTC(2100, 0, 1);
   }
   function uniq(file, data, errs){
     if (file !== 'countries' && file !== 'articles') return;

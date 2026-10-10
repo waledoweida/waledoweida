@@ -248,6 +248,16 @@ def build():
             alt = f"{o['blog']}{a['slug']}/"
             ch = chrome(lang, alt)
             others = "".join(card(x, lang) for x in ARTICLES if x is not a)
+            # "more articles" only when there is another article to show
+            more = f"""
+
+  <section class="posts">
+    <div class="wrap">
+      <div class="group-title">{d['more']}</div>
+      <div class="post-grid">{others}
+      </div>
+    </div>
+  </section>""" if others else ""
             body = f"""  <section class="post-hero">
     <div class="wrap narrow">
       <div class="crumbs"><a href="{d['home']}">{d['crumbs_home']}</a> / <a href="{d['blog']}">{d['blog_title']}</a></div>
@@ -275,15 +285,7 @@ def build():
         <a class="btn btn-line" href="{d['home']}#audit">{d['cta_audit']}</a>
       </div>
     </div>
-  </section>
-
-  <section class="posts">
-    <div class="wrap">
-      <div class="group-title">{d['more']}</div>
-      <div class="post-grid">{others}
-      </div>
-    </div>
-  </section>"""
+  </section>{more}"""
             ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": t["title"],
                   "description": t["desc"], "datePublished": a["date"], "dateModified": a["date"],
                   "inLanguage": lang, "mainEntityOfPage": SITE + path, "image": SITE + "/og.png",
