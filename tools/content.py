@@ -28,10 +28,12 @@ EXTRA = {
 
 
 def _real_day(s):
+    """A day that exists on the calendar, in 2000–2099 (the same rule as the admin API)."""
     try:
-        return datetime.date.fromisoformat(s).isoformat() == s
+        d = datetime.date.fromisoformat(s)
     except (TypeError, ValueError):
         return False
+    return d.isoformat() == s and 2000 <= d.year < 2100
 
 
 def _tidy(v):
