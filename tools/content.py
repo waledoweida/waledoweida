@@ -48,9 +48,40 @@ def _tidy(v):
     return v
 
 
+def years(lang, since=None):
+    """Years of experience (it goes up every 1 January, Cairo time) and the word that goes with it."""
+    if since is None:
+        with open(os.path.join(ROOT, "content", "site.json"), encoding="utf-8") as f:
+            since = json.load(f)["experience_since"]
+    now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2))).year   # Cairo, winter time
+    n = max(1, now - since)
+    if lang == "ar":
+        unit = "سنين" if 3 <= n <= 10 else ("سنتين" if n == 2 else "سنة")
+    else:
+        unit = "year" if n == 1 else "years"
+    return n, unit
+
+
+def fill_years(v, lang, since=None):
+    """Replace {years} (the number) and {years_unit} (سنين / سنة, years) in every string of `v`."""
+    n, unit = years(lang, since)
+    if isinstance(v, str):
+        return v.replace("{years}", str(n)).replace("{years_unit}", unit)
+    if isinstance(v, list):
+        return [fill_years(x, lang, since) for x in v]
+    if isinstance(v, dict):
+        return {k: fill_years(x, lang, since) for k, x in v.items()}
+    return v
+
+
 def load(name):
     with open(os.path.join(ROOT, "content", name + ".json"), encoding="utf-8") as f:
         data = _tidy(json.load(f))
+    if name in ("home", "countries", "articles"):
+        rows = [data] if name == "home" else data
+        for row in rows:
+            for lang in ("ar", "en"):
+                row[lang] = fill_years(row[lang], lang)
     for check, field in EXTRA.get(name, []):
         for row in data:
             if not check(row):

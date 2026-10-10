@@ -1,4 +1,5 @@
-# Rebuilds the pages after content/ changes (saves from the admin panel at /admin/).
+# Rebuilds the pages after content/ changes (saves from the admin panel at /admin/), and once a year
+# on 1 January so the years of experience go up.
 # Runs tools/build_all.py, checks the result, and commits the generated pages to main;
 # Vercel then publishes that commit. The wedding invitation (wedding/, فرح/) is never touched:
 # the build refuses to write there, and this job fails if anything under those paths changed.
@@ -8,6 +9,9 @@ on:
   push:
     branches: [main]
     paths: ["content/**"]
+  # every 1 January at 00:05 Cairo time: the years of experience go up by one
+  schedule:
+    - cron: "5 22 31 12 *"
   workflow_dispatch:
 
 permissions:

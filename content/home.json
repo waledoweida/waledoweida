@@ -17,7 +17,7 @@
       "button_main": "ابدأ مشروعك",
       "button_second": "استكشف الخدمات",
       "trust": [
-        "خبرة 9 سنين",
+        "خبرة {years} {years_unit}",
         "عملاء في مصر وليبيا والخليج",
         "تواصل مباشر معايا",
         "سعر واضح قبل البدء",
@@ -51,8 +51,8 @@
       "counter_label": "خدمة تم تنفيذها",
       "items": [
         {
-          "value": "9",
-          "label": "سنين خبرة"
+          "value": "{years}",
+          "label": "{years_unit} خبرة"
         },
         {
           "value": "8",
@@ -320,7 +320,7 @@
       "button_main": "Start your project",
       "button_second": "Explore services",
       "trust": [
-        "9 years' experience",
+        "{years} {years_unit}' experience",
         "Clients in Egypt, Libya & the Gulf",
         "Work directly with me",
         "Clear price upfront",
@@ -354,7 +354,7 @@
       "counter_label": "Services delivered",
       "items": [
         {
-          "value": "9",
+          "value": "{years}",
           "label": "Years of experience"
         },
         {

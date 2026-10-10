@@ -36,6 +36,8 @@ changes these paths.
   (`tools/build_countries.py`, also keeps their `vercel.json` header rules in sync and deletes pages of removed countries),
   the blog (`tools/build_blog.py`; article bodies use the simple text format in `tools/content.py`), `sitemap.xml` and the
   review page. Edit the JSON (or use `/admin/`), run `build_all.py` (Python 3.11+), commit both.
+- Years of experience: `content/site.json` `experience_since` (2017). In any content text `{years}` becomes the count and
+  `{years_unit}` the word (سنين/سنة, years); `build-pages.yml` also runs every 1 January so the number goes up by itself.
 - Page writes and deletes go through `build_blog.write()` / `safe_path()` / `remove_page()`, which refuse paths outside the repo or under `wedding/` / `فرح/`; `sync_vercel()` rewrites only `vercel.json`.
 
 ## Hosting (Vercel) and visitor stats
