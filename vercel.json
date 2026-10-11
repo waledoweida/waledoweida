@@ -859,5 +859,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(tsconfig\\.json|tsconfig\\.test\\.json)",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }
