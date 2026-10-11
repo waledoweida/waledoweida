@@ -16,7 +16,8 @@
   },
   "devDependencies": {
     "@types/node": "20.16.11",
-    "typescript": "5.6.3",
-    "html-validate": "8.24.1"
+    "html-validate": "8.24.1",
+    "terser": "5.36.0",
+    "typescript": "5.6.3"
   }
 }

@@ -8,3 +8,4 @@ tsconfig.test.json
 .htmlvalidate.json
 .htmlvalidateignore
 content/
+src/

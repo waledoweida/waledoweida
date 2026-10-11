@@ -25,6 +25,11 @@ changes these paths.
 
 - `index.html` — Arabic home (RTL), `en/index.html` — English home (LTR)
 - `style.css`, `main.js` — shared by both home pages (bump the `?v=` query when changed). The WhatsApp number in `main.js` (`var WA`) is written by the build from `content/site.json`: change it there, not in `main.js`.
+- Scripts: edit the readable sources in `src/` (`src/main.js`, `src/admin/*.js`; kept off the site by `.vercelignore`).
+  `tools/build_js.py` (part of `build_all.py`, needs `npm ci` for terser) writes the minified `main.js` and `admin/*.js`
+  with no comments, so the browser's F12 shows nothing of how the site works. Never edit the minified files.
+- Services counter: `content/site.json` `counter` (base + start). The build writes `api/_lib/counter-start.ts`;
+  `api/counter.ts` works out the live number on the server (`api/_lib/counter.ts`) and the page only fetches the result.
 - `404.html`, `robots.txt`, `sitemap.xml`, icons, `og.png`, `profile.jpg`, `avatar.jpg`
 - Photos: `python3 tools/make_photos.py PHOTO --hero X1,Y1,X2,Y2 --face X1,Y1,X2,Y2` makes the hero photo, the avatar,
   the round photo in `og.png` and all the icons from one portrait; then bump the `?v=` of `og.png` and the icons.
@@ -35,7 +40,7 @@ changes these paths.
   fills the sections in place; head/header/scripts stay hand-written in the HTML), the country pages
   (`tools/build_countries.py`, also keeps their `vercel.json` header rules in sync and deletes pages of removed countries),
   the blog (`tools/build_blog.py`; article bodies use the simple text format in `tools/content.py`), `sitemap.xml` and the
-  review page. Edit the JSON (or use `/admin/`), run `build_all.py` (Python 3.11+), commit both.
+  review page. Edit the JSON (or use `/admin/`), run `npm ci` once, then `build_all.py` (Python 3.11+), commit both.
 - Years of experience: `content/site.json` `experience_since` (2017). In any content text `{years}` becomes the count and
   `{years_unit}` the word (سنين/سنة, years); `build-pages.yml` also runs every 1 January so the number goes up by itself.
 - Page writes and deletes go through `build_blog.write()` / `safe_path()` / `remove_page()`, which refuse paths outside the repo or under `wedding/` / `فرح/`; `sync_vercel()` rewrites only `vercel.json`.
@@ -46,7 +51,7 @@ changes these paths.
 - `api/` is TypeScript (`npm run typecheck`, `npm test`). `track.ts` stores anonymous events (views, contact clicks, visible time; country/city from Vercel's IP headers) in Redis; `login.ts` checks `ADMIN_KEY` (5 wrong tries per 15 min per address) and sets a signed HttpOnly session cookie; `stats.ts` needs that session.
 - Security headers live in `vercel.json` as an explicit list of the site's paths. `wedding/` and `فرح/` are intentionally not listed so their responses stay untouched.
 - Vercel env vars: `REDIS_URL` (set by Vercel's Redis integration; or `KV_REST_API_URL` + `KV_REST_API_TOKEN` for Upstash REST), `ADMIN_KEY` and `GITHUB_TOKEN`. Never commit their values. `package.json` holds the `redis` client plus dev-only TypeScript tooling.
-- The tracker lives at the top of `main.js` (`TRACK_URL`); `/admin/` is noindex and disallowed in `robots.txt`.
+- The tracker lives at the top of `src/main.js` (`TRACK_URL`); `/admin/` is noindex (deliberately not named in `robots.txt`).
 - `/admin/` is the owner's control panel: stats plus a content editor (`admin/editor.js`) drawn from the schema in
   `api/_lib/schema.ts`. `api/content.ts` (session required) validates a save against that schema and commits
   `content/<file>.json` through the GitHub contents API using the `GITHUB_TOKEN` env var (fine-grained, this repo only,
