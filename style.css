@@ -255,6 +255,8 @@ nav a:hover{color:var(--gold)}
 /* ---------- faq ---------- */
 .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
 @media (max-width:900px){.faq-grid{grid-template-columns:1fr;gap:32px}}
+.faq-page{padding:40px 0 88px}
+.faq-cta{margin-top:28px;justify-content:center}
 details{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-bottom:12px;transition:border-color .2s}
 details[open]{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
 summary{list-style:none;cursor:pointer;padding:18px 22px;font-family:"Readex Pro",sans-serif;font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:12px}
