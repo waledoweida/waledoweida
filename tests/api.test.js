@@ -16,6 +16,7 @@ global.fetch = async (url, opt) => {
       case 'LRANGE': return store.get(key) || [];
       case 'INCR': { const n = (Number(store.get(key)) || 0) + 1; store.set(key, n); return n; }
       case 'GET': return store.has(key) ? String(store.get(key)) : null;
+      case 'LTRIM': { const l = store.get(key) || []; const n = l.length, s = Number(a[0]), e = Number(a[1]); store.set(key, l.slice(s < 0 ? Math.max(n + s, 0) : s, (e < 0 ? n + e : e) + 1)); return 'OK'; }
       case 'EXPIRE': return 1;
       case 'DEL': return store.delete(key) ? 1 : 0;
       default: throw new Error('unexpected ' + cmd);
@@ -57,10 +58,41 @@ test('track rejects bad input, bots and wrong methods', async () => {
   assert.equal((await call(track, { method: 'POST', body: view(), headers: { 'user-agent': 'Googlebot' } })).status, 204);
 });
 
-test('track is rate limited per address', async () => {
+test('track is rate limited per address (IPv6: per /64 network)', async () => {
   let last;
-  for (let i = 0; i < 121; i++) last = await call(track, { method: 'POST', body: view(), headers: { 'x-forwarded-for': '9.9.9.9' } });
+  for (let i = 0; i < 61; i++) last = await call(track, { method: 'POST', body: view(), headers: { 'x-forwarded-for': '9.9.9.9' } });
   assert.equal(last.status, 429);
+  for (let i = 0; i < 61; i++) last = await call(track, { method: 'POST', body: view(), headers: { 'x-forwarded-for': '2001:db8:1:2::' + i.toString(16) } });
+  assert.equal(last.status, 429);
+  const { limitKey } = require('../.build/_lib/http.js');
+  const k = (ip) => limitKey({ headers: { 'x-forwarded-for': ip } });
+  assert.equal(k('1.2.3.4'), '1.2.3.4');
+  assert.equal(k('2001:db8:1:2:aaaa:bbbb:cccc:dddd'), '2001:db8:1:2::/64');
+  assert.equal(k('2001:0db8:0001:0002::1'), '2001:db8:1:2::/64');
+  assert.equal(k('2001:db8::1'), '2001:db8:0:0::/64');
+  assert.equal(k('::1'), '0:0:0:0::/64');
+});
+
+test('track refuses odd paths and keeps at most DAY_CAP events a day', async () => {
+  assert.equal((await call(track, { method: 'POST', body: view({ path: 'no-slash' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
+  assert.equal((await call(track, { method: 'POST', body: view({ path: '/<img src=x>' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
+  assert.equal((await call(track, { method: 'POST', body: view({ path: '/%E0%A4%A' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
+  const { DAY_CAP } = require('../.build/_lib/stats.js');
+  const day = [...store.keys()].find((k) => k.startsWith('ev:'));
+  const saved = store.get(day);
+  store.set(day, Array(DAY_CAP).fill(saved[0]));
+  assert.equal((await call(track, { method: 'POST', body: view({ path: '/newest' }), headers: { 'x-forwarded-for': '10.0.0.2' } })).status, 204);
+  assert.equal(store.get(day).length, DAY_CAP);
+  assert.equal(JSON.parse(store.get(day)[DAY_CAP - 1]).path, '/newest'); // the newest events stay
+  store.set(day, saved);
+});
+
+test('stats ignore unknown click kinds (no fake keys like toString)', () => {
+  const { summarize } = require('../.build/_lib/stats.js');
+  const ts = new Date().toISOString();
+  const s = summarize([{ ...view(), ts }, { ...view(), ts, type: 'click', value: 'toString:x' }, { ...view(), ts, type: 'click', value: 'whatsapp:hero' }], 1, Date.now());
+  assert.equal(JSON.stringify(s).includes('toString'), false);
+  assert.equal(s.clicks.whatsapp, 1);
 });
 
 test('stats requires a session', async () => {

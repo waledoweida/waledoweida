@@ -1,6 +1,6 @@
 // POST /api/login {password} — starts an admin session. Rate limited per address.
 import type { ApiRequest as VercelRequest, ApiResponse as VercelResponse } from './_lib/types';
-import { clientIp, jsonBody, sameOrigin, sendJson } from './_lib/http';
+import { jsonBody, limitKey, sameOrigin, sendJson } from './_lib/http';
 import { clear, hit } from './_lib/ratelimit';
 import { storageConfigured } from './_lib/redis';
 import { adminConfigured, passwordMatches, startSession } from './_lib/session';
@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   // every attempt is counted (atomically, before the password is checked) so parallel
   // requests can't slip past the limit; a correct password clears the count again
-  const key = 'login:' + clientIp(req);
+  const key = 'login:' + limitKey(req);
   let allowed: boolean;
   try { allowed = await hit(key, MAX_FAILS, WINDOW, true); } catch { return sendJson(res, 503, { ok: false, error: 'storage' }); }
   if (!allowed) {

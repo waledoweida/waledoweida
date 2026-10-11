@@ -49,6 +49,8 @@
   document.querySelectorAll('#tabs button').forEach(function(b){
     b.addEventListener('click', function(){ openTab(b.getAttribute('data-tab')); });
   });
+  // known names only: a visitor-sent value like "constructor" must not read a built-in property
+  function label(map, k){ return Object.prototype.hasOwnProperty.call(map, k) ? map[k] : k; }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function dur(s){ s = +s || 0; if (s < 60) return s + ' ث'; var m = Math.floor(s / 60), r = s % 60; return m + ' د' + (r ? ' ' + r + ' ث' : ''); }
 
@@ -111,13 +113,13 @@
     daily(s.daily);
     bars($('sources'), s.sources);
     bars($('countries'), s.countries);
-    bars($('devices'), s.devices, function(n){ return SRC_DEVICE[n] || n; });
-    bars($('pages'), s.pages, function(p){ return decodeURI(p); });
+    bars($('devices'), s.devices, function(n){ return label(SRC_DEVICE, n); });
+    bars($('pages'), s.pages, function(p){ try { return decodeURI(p); } catch (e) { return p; } });
     bars($('clicks'), Object.keys(s.clicks).map(function(k){ return { name: k, count: s.clicks[k] }; })
-      .filter(function(x){ return x.count; }).sort(function(a, b){ return b.count - a.count; }), function(k){ return CLICK[k] || k; });
+      .filter(function(x){ return x.count; }).sort(function(a, b){ return b.count - a.count; }), function(k){ return label(CLICK, k); });
     $('recent').querySelector('tbody').innerHTML = s.recent.length ? s.recent.map(function(r){
-      return '<tr><td>' + esc(r.time) + '</td><td>' + esc(r.source) + '</td><td>' + esc(r.country) + '</td><td>' + esc(SRC_DEVICE[r.device] || r.device) +
-        '</td><td>' + r.pages + '</td><td>' + dur(r.secs) + '</td><td>' + (r.contacted ? '<span class="yes">' + esc(CLICK[r.contacted] || r.contacted) + '</span>' : '–') + '</td></tr>';
+      return '<tr><td>' + esc(r.time) + '</td><td>' + esc(r.source) + '</td><td>' + esc(r.country) + '</td><td>' + esc(label(SRC_DEVICE, r.device)) +
+        '</td><td>' + r.pages + '</td><td>' + dur(r.secs) + '</td><td>' + (r.contacted ? '<span class="yes">' + esc(label(CLICK, r.contacted)) + '</span>' : '–') + '</td></tr>';
     }).join('') : '<tr><td colspan="7" class="empty">لسه مفيش زيارات.</td></tr>';
     $('updated').textContent = 'آخر تحديث: ' + s.generated;
   }

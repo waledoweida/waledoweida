@@ -154,11 +154,11 @@ def services(c):
     # main.js shortens long texts to a few lines and shows the "more" button, which opens the whole text
     feat = "\n".join(f"""          <article class="feat reveal">
             <div class="ic"><svg class="i">{ICONS[x['icon']]}</svg></div>
-            <h3>{esc(x['title'])}</h3>
+            <h3 id="feat-{i}">{esc(x['title'])}</h3>
             <div class="feat-text">{paragraphs(x['text'])}</div>
-            <button class="feat-more" type="button" hidden>{esc(s['more'])}</button>{points(x)}
+            <button class="feat-more" type="button" aria-haspopup="dialog" aria-describedby="feat-{i}" hidden>{esc(s['more'])}</button>{points(x)}
             <a class="feat-link" href="#contact" data-service="{attr(form_name(x))}">{esc(s['order'])} {ARROW}</a>
-          </article>""" for x in s["featured"])
+          </article>""" for i, x in enumerate(s["featured"], 1))
     mini = "\n".join(f"""          <a class="mini reveal" href="#contact" data-service="{attr(form_name(x))}">
             <div class="ic"><svg class="i">{ICONS[x['icon']]}</svg></div>
             <div><h3>{esc(x['title'])}</h3><p>{esc(x['text'])}</p></div>

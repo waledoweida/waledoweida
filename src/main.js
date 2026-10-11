@@ -77,7 +77,7 @@
     function setMenu(open){ mn.hidden = !open; mb.setAttribute('aria-expanded', open); hdr.classList.toggle('menu-open', open); }
     mb.addEventListener('click', function(){ setMenu(mn.hidden); });
     mn.addEventListener('click', function(e){ if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !mn.hidden) { var inside = mn.contains(document.activeElement); setMenu(false); if (inside) mb.focus(); } });
   }
 
   // request form -> WhatsApp
