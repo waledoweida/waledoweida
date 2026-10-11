@@ -105,7 +105,9 @@
     if (f.t === 'list') return listEditor(f, get(), path);
     var wrap = el('div', 'fld' + (f.adv ? ' adv' : ''));
     var id = 'f_' + path.replace(/[^a-z0-9]/gi, '_');
-    var lab = el('label', null, f.label); lab.htmlFor = id;
+    var lab = el('label', null, f.label);
+    // a label can't name a group of buttons: the icon picker points back at it with aria-labelledby
+    if (f.t === 'icon') { lab.id = id + '_l'; lab.addEventListener('click', function(){ var c = input.querySelector('[aria-checked="true"]') || input.querySelector('button'); if (c) c.focus(); }); } else lab.htmlFor = id;
     wrap.appendChild(lab);
     var input;
     if (f.t === 'icon') {
@@ -242,7 +244,7 @@
   function swapOpen(path, a, b){ remapOpen(path, function(i){ return i === a ? b : i === b ? a : i; }); }
 
   function iconPicker(value, set, id){
-    var box = el('div', 'icons'); box.id = id; box.setAttribute('role', 'radiogroup');
+    var box = el('div', 'icons'); box.id = id; box.setAttribute('role', 'radiogroup'); box.setAttribute('aria-labelledby', id + '_l');
     Object.keys(state.icons).forEach(function(k){
       var b = el('button', 'ico'); b.type = 'button'; b.title = k; b.setAttribute('role', 'radio');
       b.setAttribute('aria-label', k); b.setAttribute('aria-checked', String(k === value));

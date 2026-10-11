@@ -9,6 +9,10 @@ const BOT = /bot|crawl|spider|slurp|preview|lighthouse|headless/i;
 const ID = /^[a-z0-9]{6,40}$/i;
 const PATH = /^\/[^\s<>"']*$/;
 
+function decodable(p: string): boolean {
+  try { decodeURI(p); return true; } catch { return false; }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return sendEmpty(res, 405); }
   if (BOT.test(String(req.headers['user-agent'] || ''))) return sendEmpty(res, 204);
@@ -17,7 +21,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const type = clean(d?.type, 10) as EventType;
   const vid = clean(d?.vid, 40);
   const path = clean(d?.path, 120);
-  if (!d || !EVENT_TYPES.includes(type) || !ID.test(vid) || !PATH.test(path)) return sendEmpty(res, 400);
+  if (!d || !EVENT_TYPES.includes(type) || !ID.test(vid) || !PATH.test(path) || !decodable(path)) return sendEmpty(res, 400);
 
   // at most 60 events per minute from one address (IPv6: per /64)
   if (!(await hit('track:' + limitKey(req), 60, 60))) return sendEmpty(res, 429);
@@ -34,9 +38,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   };
   try {
     const key = 'ev:' + dayKey(now);
-    // a fixed cap per day keeps storage small even if someone floods this endpoint
+    // a fixed cap per day (the newest events stay) keeps storage small even if someone floods this endpoint
     // (storage that fills up would also stop the admin login, which needs it)
-    await redis([['RPUSH', key, JSON.stringify(ev)], ['LTRIM', key, 0, DAY_CAP - 1], ['EXPIRE', key, KEEP_SECONDS]]);
+    await redis([['RPUSH', key, JSON.stringify(ev)], ['LTRIM', key, -DAY_CAP, -1], ['EXPIRE', key, KEEP_SECONDS]]);
     return sendEmpty(res, 204);
   } catch {
     return sendEmpty(res, 503);

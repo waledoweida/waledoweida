@@ -16,7 +16,7 @@ global.fetch = async (url, opt) => {
       case 'LRANGE': return store.get(key) || [];
       case 'INCR': { const n = (Number(store.get(key)) || 0) + 1; store.set(key, n); return n; }
       case 'GET': return store.has(key) ? String(store.get(key)) : null;
-      case 'LTRIM': { const l = store.get(key) || []; store.set(key, l.slice(Number(a[0]), Number(a[1]) + 1)); return 'OK'; }
+      case 'LTRIM': { const l = store.get(key) || []; const n = l.length, s = Number(a[0]), e = Number(a[1]); store.set(key, l.slice(s < 0 ? Math.max(n + s, 0) : s, (e < 0 ? n + e : e) + 1)); return 'OK'; }
       case 'EXPIRE': return 1;
       case 'DEL': return store.delete(key) ? 1 : 0;
       default: throw new Error('unexpected ' + cmd);
@@ -76,12 +76,14 @@ test('track is rate limited per address (IPv6: per /64 network)', async () => {
 test('track refuses odd paths and keeps at most DAY_CAP events a day', async () => {
   assert.equal((await call(track, { method: 'POST', body: view({ path: 'no-slash' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
   assert.equal((await call(track, { method: 'POST', body: view({ path: '/<img src=x>' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
+  assert.equal((await call(track, { method: 'POST', body: view({ path: '/%E0%A4%A' }), headers: { 'x-forwarded-for': '10.0.0.1' } })).status, 400);
   const { DAY_CAP } = require('../.build/_lib/stats.js');
   const day = [...store.keys()].find((k) => k.startsWith('ev:'));
   const saved = store.get(day);
   store.set(day, Array(DAY_CAP).fill(saved[0]));
-  assert.equal((await call(track, { method: 'POST', body: view(), headers: { 'x-forwarded-for': '10.0.0.2' } })).status, 204);
+  assert.equal((await call(track, { method: 'POST', body: view({ path: '/newest' }), headers: { 'x-forwarded-for': '10.0.0.2' } })).status, 204);
   assert.equal(store.get(day).length, DAY_CAP);
+  assert.equal(JSON.parse(store.get(day)[DAY_CAP - 1]).path, '/newest'); // the newest events stay
   store.set(day, saved);
 });
 
