@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Measuring marketing like a pro: pixels and conversions</title>
+<meta name="description" content="Likes aren&#x27;t results. Learn how pixels, server-side tracking, clear conversions and key metrics like CPA and ROAS make every pound or dinar of your ad budget count.">
+<meta name="theme-color" content="#0b0d12">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo='; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="https://waledoweida.com/en/blog/tracking-pixels-conversions/">
+<link rel="alternate" hreflang="ar" href="https://waledoweida.com/blog/tracking-pixels-conversions/">
+<link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/tracking-pixels-conversions/">
+<link rel="alternate" hreflang="x-default" href="https://waledoweida.com/blog/tracking-pixels-conversions/">
+<link rel="icon" href="/favicon.ico?v=3" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=3">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Waled Abu Oweida">
+<meta property="og:title" content="Measuring marketing like a pro: pixels and conversions">
+<meta property="og:description" content="Likes aren&#x27;t results. Learn how pixels, server-side tracking, clear conversions and key metrics like CPA and ROAS make every pound or dinar of your ad budget count.">
+<meta property="og:url" content="https://waledoweida.com/en/blog/tracking-pixels-conversions/">
+<meta property="og:image" content="https://waledoweida.com/og.png?v=3">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/fonts/readex-pro-latin-f0cddb.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Measuring marketing like a pro: pixels and conversions", "description": "Likes aren't results. Learn how pixels, server-side tracking, clear conversions and key metrics like CPA and ROAS make every pound or dinar of your ad budget count.", "datePublished": "2026-10-11", "dateModified": "2026-10-11", "inLanguage": "en", "mainEntityOfPage": "https://waledoweida.com/en/blog/tracking-pixels-conversions/", "image": "https://waledoweida.com/og.png", "author": {"@type": "Person", "name": "Waled Ahmed Ali Abu Oweida", "url": "https://waledoweida.com/en/"}, "publisher": {"@type": "Person", "name": "Waled Ahmed Ali Abu Oweida"}}
+</script>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/style.css?v=22">
+</head>
+<body>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.6-.1 1.2z"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+</svg>
+
+<div class="progress" aria-hidden="true"></div>
+<header id="top">
+  <div class="wrap">
+    <a href="/en/" class="brand"><img class="avatar" src="/avatar.jpg" alt="" width="40" height="40">Waled Oweida</a>
+    <nav aria-label="Main navigation">
+      <a href="/en/#work">My work</a>
+      <a href="/en/#services">Services</a>
+      <a href="/en/#why">Why me</a>
+      <a href="/en/#how">How it works</a>
+      <a href="/en/faq/">FAQ</a>
+      <a href="/en/blog/">Blog</a>
+    </nav>
+    <div class="hact">
+      <a class="lang" href="/blog/tracking-pixels-conversions/" hreflang="ar" lang="ar" title="العربية">ع</a>
+      <a href="/en/#contact" class="btn btn-gold hbtn">Get a quote</a>
+      <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><svg class="i"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <div class="mnav" id="mnav" hidden>
+    <a href="/en/#work">My work</a>
+    <a href="/en/#services">Services</a>
+    <a href="/en/#why">Why me</a>
+    <a href="/en/#how">How it works</a>
+    <a href="/en/faq/">FAQ</a>
+    <a href="/en/blog/">Blog</a>
+    <a href="/en/#contact" class="btn btn-gold">Get a quote</a>
+  </div>
+</header>
+
+<main>
+  <section class="post-hero">
+    <div class="wrap narrow">
+      <div class="crumbs"><a href="/en/">Home</a> / <a href="/en/blog/">Blog</a></div>
+      <h1>Measuring marketing like a pro: pixels and conversions</h1>
+      <div class="byline">
+        <img class="avatar" src="/avatar.jpg" alt="" width="40" height="40">
+        <span>By <b>Waled Abu Oweida</b><br><time datetime="2026-10-11">October 11, 2026</time> · 6 min read</span>
+      </div>
+    </div>
+  </section>
+
+  <article class="prose wrap narrow">
+<p>"The ad got loads of likes" is something I hear a lot, and honestly, it isn't a result. Likes don't pay rent or salaries. A real result is a customer who called, an order that came in, or a WhatsApp chat that turned into a sale. In this article I'll show you how to measure your marketing like a pro, so every pound or dinar you spend on ads is accounted for.</p>
+
+<h2>Why likes aren't enough</h2>
+
+<p>Likes and comments are engagement metrics. They tell you the message reached people, but they don't prove anyone bought. One ad can get huge engagement and bring zero customers, while a quiet one brings in orders every day. That's why we measure what happens after the click, not before it.</p>
+
+<h2>What is a pixel?</h2>
+
+<p>A pixel is a small piece of code on your website that tells the ad platform about the important steps a visitor takes: viewing a page, adding to cart, filling in a form, buying. The main ones:</p>
+
+<ul>
+  <li><strong>Meta Pixel:</strong> for Facebook and Instagram ads.</li>
+  <li><strong>TikTok Pixel:</strong> for TikTok ads.</li>
+  <li><strong>Google Tag:</strong> for Google Ads and connecting your site to Google Analytics.</li>
+</ul>
+
+<p>The benefit is that the platform learns who actually buys, shows your ads to similar people, and lets you retarget visitors who left without buying.</p>
+
+<h2>Server-side tracking: why it's now essential</h2>
+
+<p>Modern browsers, iPhone privacy updates and ad blockers now stop part of the pixel's signals, so platforms see fewer sales than really happened. The fix is server-side tracking: your website sends the event to the platform directly, through Meta's <strong>Conversions API</strong> or TikTok's <strong>Events API</strong>. Ideally you run both, pixel and server, with deduplication, so the numbers stay closer to reality and the algorithm learns from cleaner data.</p>
+
+<h2>Define what a "conversion" means for you</h2>
+
+<p>Before any ad goes live, we agree on what counts as success. It depends on the business:</p>
+
+<ul>
+  <li><strong>Purchase:</strong> for online stores, along with the order value.</li>
+  <li><strong>Lead form:</strong> if you're collecting contact details from potential customers.</li>
+  <li><strong>WhatsApp click:</strong> vital in Egypt, Libya and the Gulf, where many people prefer to message you directly.</li>
+  <li><strong>Call:</strong> a tap on the call button.</li>
+  <li><strong>Add to cart:</strong> a mid-funnel step that shows interest even when the purchase isn't completed.</li>
+</ul>
+
+<blockquote class="tip"><strong>Tip:</strong> Pick one primary conversion for the campaign to optimise for and track the rest as secondary. A campaign chasing five goals loses its way.</blockquote>
+
+<h2>Who brought the customer? UTMs and GA4</h2>
+
+<p>If you advertise in more than one place, you need to know where each customer came from. That's what <strong>UTM parameters</strong> are for: short tags at the end of your ad link that state the source (Facebook, say), the medium (paid ads) and the campaign name. When the visitor lands, <strong>Google Analytics 4</strong> reads those tags and shows how many visits and conversions each channel delivered. Now you can compare channels on the same footing instead of trusting each platform's own report.</p>
+
+<h2>The numbers that matter, in plain words</h2>
+
+<ul>
+  <li><strong>Impressions:</strong> how many times the ad was shown.</li>
+  <li><strong>Reach:</strong> how many different people saw it.</li>
+  <li><strong>CPM:</strong> the cost per thousand impressions, showing how expensive your audience is to reach.</li>
+  <li><strong>CTR:</strong> the share of viewers who clicked, a measure of the ad's own strength.</li>
+  <li><strong>CPC:</strong> the cost of a single click.</li>
+  <li><strong>Conversion rate:</strong> the share of visitors who converted, a measure of your page or offer.</li>
+  <li><strong>CPL:</strong> cost per lead.</li>
+  <li><strong>CPA:</strong> cost per acquisition, meaning each conversion or sale.</li>
+  <li><strong>ROAS:</strong> return on ad spend, how much revenue each unit of spend brought back.</li>
+  <li><strong>Customer lifetime value (LTV):</strong> everything a customer spends with you over the whole relationship, not just the first order.</li>
+</ul>
+
+<h2>How they connect</h2>
+
+<p>Think of it as a funnel: people see the ad, some click, some of those become customers, and some customers come back to buy again. If CTR is weak, the problem is usually the ad itself (the visual, the copy or the audience). If clicks are healthy but conversions are weak, look at the page, the price or the offer. And if CPA is higher than your profit on the first sale but customers buy repeatedly, LTV can still make the campaign profitable over time.</p>
+
+<h2>Sales that close on WhatsApp or the phone</h2>
+
+<p>Many customers here ask on WhatsApp and close the deal by phone, so the platform never learns that a sale happened. The answer is <strong>offline conversions</strong>: record those sales on your side (in a sheet or a simple system) and upload them to the platform or send them from your server. That way the platform knows which ads bring real buyers, not just people asking questions.</p>
+
+<h2>A simple weekly report</h2>
+
+<p>You don't need a complicated dashboard. One sheet, updated every week, with:</p>
+
+<ol>
+  <li>Spend per campaign.</li>
+  <li>Number of conversions (messages, leads, sales).</li>
+  <li>Cost per conversion (CPL or CPA).</li>
+  <li>Actual sales and ROAS.</li>
+  <li>A short note: what changed and what's next.</li>
+</ol>
+
+<p>If you like, connect the data to a Looker Studio dashboard that updates itself.</p>
+
+<h2>Why platforms never agree</h2>
+
+<p>You'll notice Meta says one thing, Google another and GA4 a third. The main reason is that each platform uses its own <strong>attribution window</strong>: it credits itself with a sale that happens within a set number of days after a click or a view. And each platform claims the sale if the customer saw its ad, even if they saw others too. So never add the platforms' numbers together. Rely on one source of truth, your actual sales, and use GA4 to compare channels.</p>
+
+<h2>Kill, fix or scale</h2>
+
+<p>Numbers are only worth the decisions they drive:</p>
+
+<ul>
+  <li><strong>Kill:</strong> an ad that has spent enough to judge and brought few or no conversions.</li>
+  <li><strong>Fix:</strong> an ad with good signals (strong clicks, say) but weak conversions, so we test a different page, offer or audience.</li>
+  <li><strong>Scale:</strong> an ad whose cost per conversion is below what you can afford, so we raise the budget gradually and keep watching.</li>
+</ul>
+
+<blockquote class="tip"><strong>Tip:</strong> Don't judge an ad on day one or two. Give it enough time and budget, then decide based on the numbers, not on gut feeling.</blockquote>
+
+<h2>Privacy and consent</h2>
+
+<p>Tracking has to be respectful. Publish a privacy policy that explains what data you collect and why, and ask for visitor consent where the markets you target require it. Never send sensitive data to the platforms, and when you send an email or phone number from your server, it goes hashed. Trust is part of your brand.</p>
+
+<h2>The bottom line</h2>
+
+<p>Marketing without measurement is driving with your eyes closed. With a working pixel, server-side tracking, clear conversions and a simple weekly report, you'll know where every pound or dinar goes and put more behind what actually works. If you'd like me to review your tracking setup or build it properly from scratch, message me on WhatsApp with what your business does and where you advertise.</p>
+  </article>
+
+  <section class="wrap narrow post-end">
+    <div class="author-box">
+      <img src="/avatar.jpg" alt="" width="64" height="64" loading="lazy">
+      <div><b>Waled Ahmed Ali Abu Oweida</b><p>Digital marketing and web design specialist with 9 years of experience, working with clients in Egypt, Libya and the Gulf.</p></div>
+    </div>
+    <div class="band post-cta">
+      <div class="band-text"><h2>Want to apply this to your business?</h2><p>Message me on WhatsApp, or ask for a free review of your page or website.</p></div>
+      <div class="btns">
+        <a class="btn btn-dark" href="https://wa.me/201025926261" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>Chat on WhatsApp</a>
+        <a class="btn btn-line" href="/en/#audit">Get a free review</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="posts">
+    <div class="wrap">
+      <div class="group-title">More articles</div>
+      <div class="post-grid">
+        <a class="post-card reveal" href="/en/blog/landing-pages-that-convert/">
+          <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7h2c3 0 5.5-2.5 5.5-5.5C22 6 17.5 2 12 2z"/><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/></svg></div>
+          <h3>Landing pages that turn ad clicks into customers</h3>
+          <p>Paying for ads but getting few messages? Learn what a landing page is, the elements that get visitors to reach out, and how to track and test it so your ad budget brings real results.</p>
+          <span class="post-meta"><time datetime="2026-10-11">October 11, 2026</time> · 7 min read</span>
+          <span class="post-more">Read article <svg class="i"><use href="#arrow"/></svg></span>
+        </a>
+        <a class="post-card reveal" href="/en/blog/website-cost/">
+          <div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div>
+          <h3>How much does a website cost? What actually sets the price</h3>
+          <p>Why do website prices vary so much? Learn the factors that drive the cost and how to get the best value without surprises.</p>
+          <span class="post-meta"><time datetime="2026-10-09">October 9, 2026</time> · 3 min read</span>
+          <span class="post-more">Read article <svg class="i"><use href="#arrow"/></svg></span>
+        </a>
+        <a class="post-card reveal" href="/en/blog/online-store-vs-whatsapp/">
+          <div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L22 7H5.1"/></svg></div>
+          <h3>Online store or selling on WhatsApp and social media?</h3>
+          <p>When is selling on WhatsApp and Instagram enough, and when does an online store become necessary? A practical comparison to help you choose.</p>
+          <span class="post-meta"><time datetime="2026-10-09">October 9, 2026</time> · 2 min read</span>
+          <span class="post-more">Read article <svg class="i"><use href="#arrow"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="/en/" class="brand"><img class="avatar" src="/avatar.jpg" alt="" width="40" height="40" loading="lazy">Waled Oweida</a>
+        <p>Digital marketing and web design: paid ads, websites and stores, SEO, and social media.</p>
+      </div>
+      <div>
+        <h2>Links</h2>
+        <ul>
+          <li><a href="/en/#services">Services</a></li>
+          <li><a href="/en/#why">Why me</a></li>
+          <li><a href="/en/#how">How it works</a></li>
+          <li><a href="/en/faq/">FAQ</a></li>
+          <li><a href="/en/#audit">Free review</a></li>
+          <li><a href="/en/blog/">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href="https://wa.me/201025926261" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="tel:+201025926261">+20&nbsp;102&nbsp;592&nbsp;6261</a></li>
+          <li><a href="/en/#contact">Get a quote</a></li>
+          <li><a href="/" hreflang="ar" lang="ar">العربية</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© <span id="y">2026</span> Waled Ahmed Ali Abu Oweida. All rights reserved.</span>
+      <span>waledoweida.com</span>
+    </div>
+  </div>
+</footer>
+
+<aside aria-label="WhatsApp" class="wa-dock" id="waDock"><div class="wa-bubble" id="waBubble" role="dialog" aria-label="Message from Waled" aria-hidden="true"><div class="wa-head"><img class="wa-av" src="/avatar.jpg" alt="" width="40" height="40" loading="lazy"><div><b>Waled Oweida</b><small><i class="wa-on"></i>Available now on WhatsApp</small></div><button class="wa-close" id="waClose" type="button" aria-label="Close" tabindex="-1">&times;</button></div><div class="wa-body"><div class="wa-msg"><span class="wa-typing" aria-hidden="true"><i></i><i></i><i></i></span><p>Hi there 👋<br>Need a website, ads or social media management? Message me and I’ll reply quickly.</p></div></div><a class="wa-cta" href="https://wa.me/201025926261?text=Hi%20Waled%2C%20I%20found%20you%20on%20your%20website%20and%20I%27d%20like%20to%20ask%20about%20a%20service" target="_blank" rel="noopener" tabindex="-1"><svg><use href="#wa"/></svg>Start chat</a></div><a class="fab" href="https://wa.me/201025926261?text=Hi%20Waled%2C%20I%20found%20you%20on%20your%20website%20and%20I%27d%20like%20to%20ask%20about%20a%20service" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span class="fab-ring" aria-hidden="true"></span><svg><use href="#wa"/></svg><span class="fab-badge" aria-hidden="true">1</span></a></aside>
+
+<script src="/main.js?v=13" defer></script>
+</body>
+</html>
