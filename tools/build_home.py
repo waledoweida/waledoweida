@@ -98,7 +98,8 @@ def platforms(c):
 def stats(c, site):
     s, n = c["stats"], site["counter"]
     base = int(n["base"])
-    first = (f'<div class="stat reveal"><b data-count="+{base}" data-live-base="{base}" data-live-start="{attr(n["start"])}">'
+    # main.js swaps in the live number from /api/counter; the starting number stays as the fallback
+    first = (f'<div class="stat reveal"><b data-count="+{base}" data-live>'
              f'+{base:,}</b><span>{esc(s["counter_label"])}</span></div>')
     rest = "".join(f'<div class="stat reveal"><b data-count="{attr(x["value"])}">{esc(x["value"])}</b><span>{esc(x["label"])}</span></div>'
                    for x in s["items"])
@@ -365,9 +366,14 @@ def build():
         # header brand name
         src = re.sub(r'(<a href="#" class="brand"><img class="avatar" src="/avatar.jpg" alt="" width="40" height="40">)[^<]*(</a>)', lambda m: m.group(1) + esc(c["name"]) + m.group(2), src, count=1)
         write(path, src)
-    # the forms in main.js send to this number
-    js = read("main.js")
-    write("main.js", re.sub(r"var WA = '[^']*';", f"var WA = '{site['whatsapp']}';", js, count=1))
+    # the forms in main.js send to this number (src/main.js is the readable source; build_js.py minifies it)
+    js = read("src/main.js")
+    write("src/main.js", re.sub(r"var WA = '[^']*';", f"var WA = '{site['whatsapp']}';", js, count=1))
+    # the counter's start for /api/counter (api/_lib/counter.ts works out the live number on the server)
+    n = site["counter"]
+    write("api/_lib/counter-start.ts",
+          "// Written by tools/build_home.py from content/site.json (counter). Do not edit by hand.\n"
+          f"export const COUNTER = {{ base: {int(n['base'])}, start: {json.dumps(str(n['start']))} }};\n")
     return [p for p, _ in PAGES.values()]
 
 

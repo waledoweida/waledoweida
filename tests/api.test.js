@@ -258,3 +258,23 @@ test('the content files in the repo match the schema exactly (so the admin panel
     assert.equal(JSON.stringify(validateFile(f, JSON.parse(text), icons), null, 2) + '\n', text, `content/${f}.json`);
   }
 });
+
+test('the services counter is worked out on the server: same numbers as before, never goes down', async () => {
+  const { liveCount } = require('../.build/_lib/counter.js');
+  const start = '2026-10-11T02:36:00+03:00';
+  assert.equal(liveCount(32187, start, Date.parse(start)), 32187);
+  // the values the old in-browser counter showed for these moments
+  assert.equal(liveCount(32187, start, Date.parse('2026-10-12T00:00:00Z')), 32231);
+  assert.equal(liveCount(32187, start, Date.parse('2026-12-25T10:00:00Z')), 36027);
+  assert.equal(liveCount(86745, '2026-10-09T12:00:00+03:00', Date.parse('2026-10-11T02:36:00+03:00')), 86814);
+  let last = 0;
+  for (let t = Date.parse(start); t < Date.parse(start) + 30 * 864e5; t += 36e5) {
+    const n = liveCount(32187, start, t); assert.ok(n >= last); last = n;
+  }
+  const counter = load('counter.js');
+  const r = await call(counter);
+  assert.equal(r.status, 200);
+  assert.equal(typeof r.body.n, 'number');
+  assert.ok(r.body.n >= require('../.build/_lib/counter-start.js').COUNTER.base);
+  assert.equal((await call(counter, { method: 'POST' })).status, 405);
+});
