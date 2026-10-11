@@ -40,7 +40,8 @@ changes these paths.
   fills the sections in place; head/header/scripts stay hand-written in the HTML), the country pages
   (`tools/build_countries.py`, also keeps their `vercel.json` header rules in sync and deletes pages of removed countries),
   the blog (`tools/build_blog.py`; article bodies use the simple text format in `tools/content.py`), `sitemap.xml` and the
-  review page. Edit the JSON (or use `/admin/`), run `npm ci` once, then `build_all.py` (Python 3.11+), commit both.
+  review page, plus the FAQ page (`tools/build_faq.py`: `faq/`, `en/faq/` from `home.json` faq; the home page has no FAQ
+  section, the menu and footer link to it). Edit the JSON (or use `/admin/`), run `npm ci` once, then `build_all.py` (Python 3.11+), commit both.
 - Years of experience: `content/site.json` `experience_since` (2017). In any content text `{years}` becomes the count and
   `{years_unit}` the word (سنين/سنة, years); `build-pages.yml` also runs every 1 January so the number goes up by itself.
 - Page writes and deletes go through `build_blog.write()` / `safe_path()` / `remove_page()`, which refuse paths outside the repo or under `wedding/` / `فرح/`; `sync_vercel()` rewrites only `vercel.json`.

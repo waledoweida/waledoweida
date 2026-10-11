@@ -295,25 +295,6 @@ def contact(c, lang, site):
   </section>"""
 
 
-def faq(c):
-    f = c["faq"]
-    items = "\n".join(f"""        <details class="reveal">
-          <summary>{esc(x['q'])}</summary>
-          <p>{esc(x['a'])}</p>
-        </details>""" for x in f["items"])
-    return f"""  <section id="faq">
-    <div class="wrap faq-grid">
-      <div class="reveal">
-        <span class="eyebrow">{esc(f['eyebrow'])}</span>
-        <h2>{esc(f['title'])}</h2>
-        <p class="lead">{esc(f['lead'])}</p>
-      </div>
-      <div>
-{items}
-      </div>
-    </div>
-  </section>"""
-
 
 def dock(c, site):
     k = c["chat"]
@@ -326,7 +307,7 @@ def dock(c, site):
             f'<a class="fab" href="{attr(link)}" target="_blank" rel="noopener" aria-label="{attr(k["fab_aria"])}"><span class="fab-ring" aria-hidden="true"></span><svg><use href="#wa"/></svg><span class="fab-badge" aria-hidden="true">1</span></a></aside>')
 
 
-SECTIONS = ["HERO", "PLATFORMS", "STATS", "REGIONS", "SERVICES", "WHY", "STEPS", "CTA BAND", "CONTACT", "FAQ"]
+SECTIONS = ["HERO", "PLATFORMS", "STATS", "REGIONS", "SERVICES", "WHY", "STEPS", "CTA BAND", "CONTACT"]
 
 
 def sub(src, pattern, repl):
@@ -343,7 +324,7 @@ def build():
         src = read(path)
         parts = {"HERO": hero(c, site), "PLATFORMS": platforms(c), "STATS": stats(c, site), "REGIONS": regions(c, lang, countries),
                  "SERVICES": services(c), "WHY": why(c), "STEPS": steps(c), "CTA BAND": audit(c),
-                 "CONTACT": contact(c, lang, site), "FAQ": faq(c)}
+                 "CONTACT": contact(c, lang, site)}
         for name in SECTIONS:
             src = sub(src, rf"(?<=<!-- ===== {name} ===== -->\n)  <section.*?</section>", parts[name])
         seo = c["seo"]

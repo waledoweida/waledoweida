@@ -81,6 +81,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/blog/google-maps-business-listing/"/>
   </url>
   <url>
+    <loc>https://waledoweida.com/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/faq/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/faq/"/>
+  </url>
+  <url>
+    <loc>https://waledoweida.com/en/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/faq/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/faq/"/>
+  </url>
+  <url>
     <loc>https://waledoweida.com/egypt/</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/egypt/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/egypt/"/>
