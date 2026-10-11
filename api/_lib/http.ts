@@ -20,6 +20,19 @@ export function clientIp(req: VercelRequest): string {
   return fwd || String(req.headers['x-real-ip'] || 'unknown');
 }
 
+/**
+ * The address used for rate limits: IPv4 as is, IPv6 cut to its /64 network, because one
+ * machine usually owns a whole /64 and could otherwise switch address for every request.
+ */
+export function limitKey(req: VercelRequest): string {
+  const ip = clientIp(req);
+  if (!ip.includes(':')) return ip;
+  const [head, tail = ''] = ip.toLowerCase().split('::');
+  const a = head ? head.split(':') : [], b = tail ? tail.split(':') : [];
+  const full = ip.includes('::') ? [...a, ...Array(Math.max(8 - a.length - b.length, 0)).fill('0'), ...b] : a;
+  return full.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, '')).join(':') + '::/64';
+}
+
 /** Rejects cross-site state-changing requests: Origin (when present) must be this site. */
 export function sameOrigin(req: VercelRequest): boolean {
   const origin = req.headers.origin;

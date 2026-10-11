@@ -112,7 +112,7 @@
     bars($('sources'), s.sources);
     bars($('countries'), s.countries);
     bars($('devices'), s.devices, function(n){ return SRC_DEVICE[n] || n; });
-    bars($('pages'), s.pages, function(p){ return decodeURI(p); });
+    bars($('pages'), s.pages, function(p){ try { return decodeURI(p); } catch (e) { return p; } });
     bars($('clicks'), Object.keys(s.clicks).map(function(k){ return { name: k, count: s.clicks[k] }; })
       .filter(function(x){ return x.count; }).sort(function(a, b){ return b.count - a.count; }), function(k){ return CLICK[k] || k; });
     $('recent').querySelector('tbody').innerHTML = s.recent.length ? s.recent.map(function(r){

@@ -10,7 +10,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   if (!adminConfigured() || !storageConfigured()) return sendJson(res, 503, { ok: false, error: 'not_configured' });
   if (!hasSession(req)) return sendJson(res, 401, { ok: false, error: 'unauthorized' });
 
-  const days = Math.min(Math.max(parseInt(String(req.query.days ?? ''), 10) || 7, 1), 365);
+  const days = Math.min(Math.max(parseInt(String(req.query.days ?? ''), 10) || 7, 1), 90);
   const now = Date.now();
   const keys: string[] = [];
   for (let i = 0; i < days; i++) keys.push('ev:' + dayKey(new Date(now - i * 864e5)));

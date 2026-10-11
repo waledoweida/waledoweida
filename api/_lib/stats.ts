@@ -1,8 +1,10 @@
 // Visitor events and the summary shown on /admin/.
-// Events are kept in one Redis list per day ("ev:YYYY-MM-DD", Cairo time) for ~13 months.
+// Events are kept in one Redis list per day ("ev:YYYY-MM-DD", Cairo time) for ~3 months
+// (the panel shows at most 90 days), at most DAY_CAP events a day.
 
 export const TZ = 'Africa/Cairo';
-export const KEEP_SECONDS = 400 * 24 * 3600;
+export const KEEP_SECONDS = 92 * 24 * 3600;
+export const DAY_CAP = 3000;
 
 export type EventType = 'view' | 'click' | 'time';
 export const EVENT_TYPES: readonly EventType[] = ['view', 'click', 'time'];
@@ -125,7 +127,8 @@ export function summarize(events: VisitEvent[], days: number, now: number): Summ
       if (!s.src) s.src = sourceOf(e.ref, e.source);
     } else if (e.type === 'click') {
       const kind = String(e.value).split(':')[0] as keyof typeof clicks;
-      if (kind in clicks) clicks[kind]++;
+      if (!Object.prototype.hasOwnProperty.call(clicks, kind)) continue;
+      clicks[kind]++;
       if (!s.contacted) s.contacted = kind;
     } else if (e.type === 'time') {
       s.secs += Math.min(parseInt(e.value, 10) || 0, 3600);
