@@ -251,7 +251,9 @@ def build():
             path = f"{d['blog']}{a['slug']}/"
             alt = f"{o['blog']}{a['slug']}/"
             ch = chrome(lang, alt)
-            others = "".join(card(x, lang) for x in ARTICLES if x is not a)
+            # three suggestions: the articles that follow this one in the list (wrapping around)
+            i = ARTICLES.index(a)
+            others = "".join(card(x, lang) for x in (ARTICLES[i + 1:] + ARTICLES[:i])[:3])
             # "more articles" only when there is another article to show
             more = f"""
 
