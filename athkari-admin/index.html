@@ -225,9 +225,10 @@
       <div class="grid2">
         <div class="card">
           <h2>⬆️ إعلان نسخة جديدة</h2>
-          <p class="hint">لما تنزل نسخة جديدة، اكتب رقم البناء بتاعها، وأي موبايل عليه نسخة أقدم هيظهرله «تحديث جديد متاح».</p>
-          <label for="latestBuild">رقم آخر بناء (0 = إيقاف التنبيه)</label>
-          <input id="latestBuild" type="number" min="0" step="1" dir="ltr">
+          <p class="hint">لما تنزل نسخة جديدة، اكتب رقم البناء بتاعها، وأي موبايل عليه نسخة أقدم هيظهرله «تحديث جديد متاح» أول ما يفتح التطبيق.</p>
+          <label for="latestBuild">رقم آخر بناء — رقم صحيح، مش رقم الإصدار (0 = إيقاف التنبيه)</label>
+          <input id="latestBuild" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="18" dir="ltr">
+          <p class="hint">النسخة 1.6.0 رقم بنائها <b>18</b>.</p>
           <label for="updateMessage">رسالة التحديث (اختياري)</label>
           <textarea id="updateMessage" class="plain" rows="3" maxlength="300" placeholder="نسخة جديدة فيها مميزات وتحسينات 🌿"></textarea>
           <label for="updateUrl">رابط التحديث (اختياري)</label>
@@ -258,6 +259,6 @@
 
 <script src="adhkar-data.js?v=1"></script>
 <script src="asma-data.js?v=1"></script>
-<script src="admin.js?v=1"></script>
+<script src="admin.js?v=2"></script>
 </body>
 </html>
