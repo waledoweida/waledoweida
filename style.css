@@ -743,3 +743,7 @@ html:has(dialog[open]){overflow:hidden}
 .tst-dua{text-align:center;font-weight:600;margin-bottom:6px}
 .app-dl.btn-ghost .i{fill:none;stroke:currentColor;stroke-width:2.2}
 .tst-step code{overflow-wrap:anywhere;word-break:normal}
+.tst-shots{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.tst-shots figure{flex:0 1 200px;margin:0;text-align:center}
+.tst-shots img{width:100%;height:auto;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.tst-shots figcaption{font-size:.82rem;color:var(--muted);margin-top:6px}
