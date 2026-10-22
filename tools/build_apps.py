@@ -47,6 +47,10 @@ ICON = {
     "compass": '<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
     "calendar": '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
     "star": '<path d="m12 2 2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/>',
+    "users": '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/>',
+    "repeat": '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "share": '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
     "android": '<path d="M17.6 9.5 19.4 6.3a.4.4 0 0 0-.7-.4l-1.9 3.2A11.4 11.4 0 0 0 12 8.1c-1.8 0-3.4.4-4.9 1L5.2 5.9a.4.4 0 1 0-.7.4l1.9 3.2A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.5zM7 15.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6zm10 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6z"/>',
 }
 
@@ -64,6 +68,7 @@ def paths():
     for lang in T:
         out.append(T[lang]["path"])
         out += [T[lang]["path"] + a["slug"] + "/" for a in apps()]
+    out += [T["ar"]["path"] + a["slug"] + "/test/" for a in apps() if a.get("testing")]
     return out
 
 
@@ -150,6 +155,8 @@ def app_page(lang, a):
         (t["updated"], fmt_date(a["updated"], lang)),
     ]
     facts_html = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>" for k, v in facts)
+    test_btn = (f"""\n            <a class="btn btn-ghost app-dl" href="{t['path']}{slug}/test/">{svg('check')}<span>{esc(a['testing']['cta'])}<small>{esc(a['testing']['cta_small'])}</small></span></a>"""
+                if lang == "ar" and a.get("testing") else "")
     dl = f"""<a class="btn btn-gold app-dl" href="{a['download']}" download>{svg('android')}<span>{esc(t['download'])}<small>{esc(t['free'])} • {esc(t['apk'])} • {a['size_mb']} {esc(t['mb'])}</small></span></a>"""
     body = f"""  <section class="post-hero app-hero">
     <div class="wrap">
@@ -162,7 +169,7 @@ def app_page(lang, a):
           <p class="lead">{esc(x['summary'])}</p>
           <ul class="app-badges">{badges}</ul>
           <div class="app-cta">
-            {dl}
+            {dl}{test_btn}
           </div>
           <dl class="app-facts">{facts_html}</dl>
         </div>
@@ -268,6 +275,89 @@ def khatma_page(a):
                 ch=chrome("ar", T["en"]["path"] + slug + "/"))
 
 
+def testing_page(a):
+    """/apps/<slug>/test/ — how to join the app's Google Play closed test: the features, the two links
+    (the testers' Google Group, then Google Play's opt-in page) and the download, step by step."""
+    t, d, x = T["ar"], L["ar"], a["ar"]
+    k = a["testing"]
+    slug = a["slug"]
+    path = t["path"] + slug + "/test/"
+    group, optin = k["group"], k["optin"]
+    feats = "\n".join(f"""        <div class="app-feat">
+          <span class="ic">{svg(f['icon'])}</span>
+          <h3>{esc(f['t'])}</h3>
+          <p>{esc(f['d'])}</p>
+        </div>""" for f in k["features"])
+    def step(st):
+        rows = [f"          <b>{esc(st['t'])}</b>", f"          <span>{esc(st['d'])}</span>"]
+        rows += [f"          <em>{esc(n)}</em>" for n in st.get("notes", [])]
+        if st.get("url"):
+            rows.append(f"""          <a class="btn btn-gold" href="{attr(st['url'])}" target="_blank" rel="noopener">{svg(st['icon'])}{esc(st['btn'])}</a>""")
+            rows.append(f"""          <code dir="ltr">{esc(st['url'].split('://')[1])}</code>""")
+        return '        <li class="tst-step">\n' + "\n".join(rows) + "\n        </li>"
+    steps = "\n".join(step(st) for st in k["steps"])
+    notes = "\n".join(f"""        <li><b>{esc(n['t'])}</b><span>{esc(n['d'])}</span></li>""" for n in k["notes"])
+    badges = "".join(f"<li>{esc(b)}</li>" for b in k["badges"])
+    share = "https://wa.me/?text=" + __import__("urllib.parse").parse.quote(k["share"] + "\n" + SITE + path)
+    body = f"""  <section class="post-hero app-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}">{esc(t['title'])}</a> / <a href="{t['path']}{slug}/">{esc(x['name'])}</a> / <span>{esc(k['crumb'])}</span></div>
+      <div class="app-head">
+        <img class="app-icon big" src="{img(slug, 'icon')}" alt="{attr(x['name'])}" width="112" height="112">
+        <div>
+          <h1>{esc(k['h1'])}</h1>
+          <p class="app-tag">{esc(k['tag'])}</p>
+          <p class="lead">{esc(k['lead'])}</p>
+          <ul class="app-badges">{badges}</ul>
+          <div class="app-cta">
+            <a class="btn btn-gold" href="#steps">{svg('check')}{esc(k['start'])}</a>
+            <a class="btn btn-ghost" href="{attr(share)}" target="_blank" rel="noopener">{svg('share')}{esc(k['share_btn'])}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-feats-sec">
+    <div class="wrap">
+      <h2 class="app-h2">{esc(k['feats_h'])}</h2>
+      <div class="app-feats">
+{feats}
+      </div>
+    </div>
+  </section>
+
+  <section class="app-install" id="steps">
+    <div class="wrap narrow">
+      <h2 class="app-h2">{esc(k['steps_h'])}</h2>
+      <p class="tst-lead">{esc(k['steps_lead'])}</p>
+      <ol class="tst-steps">
+{steps}
+      </ol>
+
+      <h2 class="app-h2 tst-h2">{esc(k['notes_h'])}</h2>
+      <ul class="tst-notes">
+{notes}
+      </ul>
+
+      <div class="tst-alt">
+        <p>{esc(k['alt'])}</p>
+        <a class="btn btn-line" href="{t['path']}{slug}/">{svg('android')}{esc(k['alt_btn'])}</a>
+      </div>
+
+      <p class="tst-dua">{esc(k['dua'])}</p>
+      <div class="app-cta center"><a class="btn btn-gold" href="{attr(share)}" target="_blank" rel="noopener">{svg('share')}{esc(k['share_btn'])}</a></div>
+      <p class="app-made">{esc(t['made'])}<br><a class="app-phone" href="{attr(WA)}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg><span dir="ltr">0102 592 6261</span></a></p>
+    </div>
+  </section>"""
+    ld = {"@context": "https://schema.org", "@type": "HowTo", "inLanguage": "ar", "name": k["h1"], "url": SITE + path,
+          "description": k["lead"],
+          "step": [{"@type": "HowToStep", "position": i + 1, "name": st["t"], "text": st["d"]} for i, st in enumerate(k["steps"])]}
+    return page("ar", title=page_title(f"{k['h1']} — {x['name']}", d["short"]), desc=k["lead"], path=path,
+                alt_path=T["en"]["path"] + slug + "/", og_type="website", ld=ld, body=body,
+                ch=chrome("ar", T["en"]["path"] + slug + "/"))
+
+
 def build():
     for lang, t in T.items():
         write(t["path"].strip("/") + "/index.html", list_page(lang))
@@ -277,6 +367,8 @@ def build():
             if missing:
                 raise SystemExit(f"apps/{a['slug']}/img/: missing {missing}")
             write(t["path"].strip("/") + "/" + a["slug"] + "/index.html", app_page(lang, a))
+            if lang == "ar" and a.get("testing"):
+                write(f"apps/{a['slug']}/test/index.html", testing_page(a))
             if lang == "ar" and a.get("khatma"):
                 write(f"apps/{a['slug']}/khatma/index.html", khatma_page(a))
     return paths()

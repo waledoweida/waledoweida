@@ -722,3 +722,24 @@ html:has(dialog[open]){overflow:hidden}
 }
 .khatma-code{margin:4px 0 18px;font-size:1.1rem;color:var(--ink-text)}
 .khatma-code b{font-size:1.6rem;letter-spacing:.18em;color:var(--gold);padding:2px 12px;border-radius:10px;background:var(--ink-2);border:1px solid var(--ink-line);margin-inline-start:6px}
+.tst-lead{color:var(--muted);margin:-8px 0 22px}
+.tst-steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:16px;margin-bottom:48px}
+.tst-step{counter-increment:s;position:relative;padding:22px 22px 22px 22px;padding-inline-start:76px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.tst-step::before{content:counter(s);position:absolute;inset-inline-start:20px;top:20px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16130c;font-weight:800;font-size:1.15rem}
+.tst-step b{font-size:1.12rem}
+.tst-step span{color:var(--text)}
+.tst-step em{font-style:normal;color:var(--muted);font-size:.9rem}
+.tst-step em::before{content:"• "}
+.tst-step .btn{margin-top:10px}
+.tst-step .btn .i{width:20px;height:20px}
+.tst-step code{font-size:.8rem;color:var(--muted);word-break:break-all}
+.tst-h2{margin-top:8px}
+.tst-notes{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px}
+@media (max-width:560px){.tst-notes{grid-template-columns:1fr}.tst-step{padding-inline-start:22px;padding-top:72px}}
+.tst-notes li{padding:16px 18px;border-radius:14px;background:var(--accent-soft);display:flex;flex-direction:column;gap:2px}
+.tst-notes span{color:var(--muted);font-size:.93rem}
+.tst-alt{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-radius:14px;border:1px dashed var(--line);margin-bottom:28px}
+.tst-alt p{color:var(--muted);margin:0}
+.tst-dua{text-align:center;font-weight:600;margin-bottom:6px}
+.app-dl.btn-ghost .i{fill:none;stroke:currentColor;stroke-width:2.2}
+.tst-step code{overflow-wrap:anywhere;word-break:normal}
