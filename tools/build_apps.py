@@ -288,12 +288,14 @@ def testing_page(a):
           <h3>{esc(f['t'])}</h3>
           <p>{esc(f['d'])}</p>
         </div>""" for f in k["features"])
-    steps = "\n".join(f"""        <li class="tst-step">
-          <b>{esc(st['t'])}</b>
-          <span>{esc(st['d'])}</span>
-          {''.join(f'<em>{esc(n)}</em>' for n in st.get('notes', []))}
-          {f'<a class="btn btn-gold" href="{attr(st["url"])}" target="_blank" rel="noopener">{svg(st["icon"])}{esc(st["btn"])}</a><code dir="ltr">{esc(st["url"].split("://")[1])}</code>' if st.get('url') else ''}
-        </li>""" for st in k["steps"])
+    def step(st):
+        rows = [f"          <b>{esc(st['t'])}</b>", f"          <span>{esc(st['d'])}</span>"]
+        rows += [f"          <em>{esc(n)}</em>" for n in st.get("notes", [])]
+        if st.get("url"):
+            rows.append(f"""          <a class="btn btn-gold" href="{attr(st['url'])}" target="_blank" rel="noopener">{svg(st['icon'])}{esc(st['btn'])}</a>""")
+            rows.append(f"""          <code dir="ltr">{esc(st['url'].split('://')[1])}</code>""")
+        return '        <li class="tst-step">\n' + "\n".join(rows) + "\n        </li>"
+    steps = "\n".join(step(st) for st in k["steps"])
     notes = "\n".join(f"""        <li><b>{esc(n['t'])}</b><span>{esc(n['d'])}</span></li>""" for n in k["notes"])
     badges = "".join(f"<li>{esc(b)}</li>" for b in k["badges"])
     share = "https://wa.me/?text=" + __import__("urllib.parse").parse.quote(k["share"] + "\n" + SITE + path)
