@@ -220,4 +220,9 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/apps/athkari/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/apps/athkari/"/>
   </url>
+  <url>
+    <loc>https://waledoweida.com/apps/athkari/test/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://waledoweida.com/apps/athkari/test/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://waledoweida.com/en/apps/athkari/test/"/>
+  </url>
 </urlset>
