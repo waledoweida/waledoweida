@@ -720,3 +720,5 @@ html:has(dialog[open]){overflow:hidden}
   .app-facts{grid-template-columns:repeat(2,auto);gap:10px 24px}
   .shot{width:62vw;max-width:240px}
 }
+.khatma-code{margin:4px 0 18px;font-size:1.1rem;color:var(--ink-text)}
+.khatma-code b{font-size:1.6rem;letter-spacing:.18em;color:var(--gold);padding:2px 12px;border-radius:10px;background:var(--ink-2);border:1px solid var(--ink-line);margin-inline-start:6px}
