@@ -1,8 +1,8 @@
 [
   {
     "slug": "athkari",
-    "version": "1.5.0",
-    "size_mb": 48,
+    "version": "1.6.0",
+    "size_mb": 58,
     "android": "7.0",
     "updated": "2026-10-22",
     "download": "/apps/athkari/download",
@@ -56,7 +56,7 @@
         {
           "icon": "headphones",
           "t": "استمع بصوت 12 قارئ",
-          "d": "العفاسي، الحصري، المنشاوي، عبد الباسط وغيرهم، مع تمييز الآية وتقليب الصفحة تلقائيًا."
+          "d": "العفاسي، الحصري، المنشاوي، عبد الباسط وغيرهم. التلاوة تكمل في الخلفية مع التحكم من الإشعار، وتقدر تحمّلها وتسمعها من غير نت."
         },
         {
           "icon": "sun",
@@ -66,7 +66,12 @@
         {
           "icon": "mosque",
           "t": "مواقيت الصلاة والأذان",
-          "d": "أذان بصوت جميل في وقت كل صلاة، وتنبيه قبل الصلاة، وحساب دقيق حسب مدينتك."
+          "d": "اختار صوت الأذان من أكثر من مؤذن واسمعه قبل ما تختار، وتنبيه قبل الصلاة، وحساب دقيق حسب مدينتك."
+        },
+        {
+          "icon": "book",
+          "t": "خطة ختمة ووضع الحفظ",
+          "d": "حدد هتختم في كام يوم والتطبيق يقسّم وردك، ووضع حفظ بالتكرار وإخفاء الآيات، وورد يومي تتابعه."
         },
         {
           "icon": "heart",
@@ -87,6 +92,11 @@
           "icon": "star",
           "t": "صدقة جارية",
           "d": "أسماء أحبابك تظهر في التطبيق مع دعاء ورجاء بقراءة الفاتحة لهم."
+        },
+        {
+          "icon": "heart",
+          "t": "ختمة جماعية",
+          "d": "اعمل ختمة مع أهلك وأصحابك صدقة جارية: كل واحد يحجز جزء، والكل يشوف التقدم لحظة بلحظة."
         }
       ],
       "steps": [
@@ -146,7 +156,7 @@
         {
           "icon": "headphones",
           "t": "12 reciters",
-          "d": "Alafasy, Al-Husary, Al-Minshawi, Abdul Basit and more, with ayah highlighting and automatic page turns."
+          "d": "Alafasy, Husary, Minshawi, Abdul Basit and more. Recitation keeps playing in the background with controls in the notification, and you can download it to listen offline."
         },
         {
           "icon": "sun",
@@ -156,7 +166,12 @@
         {
           "icon": "mosque",
           "t": "Prayer times & adhan",
-          "d": "A beautiful adhan at every prayer time, a reminder before prayer, and accurate times for your city."
+          "d": "Pick the adhan voice from several muezzins and preview it first, a reminder before each prayer, and accurate times for your city."
+        },
+        {
+          "icon": "book",
+          "t": "Khatma plan & memorization",
+          "d": "Choose how many days to finish the Quran and the app splits your daily portion, plus a memorization mode with repetition and hidden verses, and a daily checklist."
         },
         {
           "icon": "heart",
@@ -177,6 +192,11 @@
           "icon": "star",
           "t": "Sadaqah jariyah",
           "d": "Names of your loved ones shown in the app with a dua and a request to read Al-Fatiha for them."
+        },
+        {
+          "icon": "heart",
+          "t": "Group khatma",
+          "d": "Complete the Quran together with family and friends as sadaqah jariyah: everyone claims a juz and sees the progress live."
         }
       ],
       "steps": [
