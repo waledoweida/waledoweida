@@ -20,7 +20,8 @@ interface ServiceAccount { client_email: string; private_key: string }
 export function serviceAccount(raw = process.env.ATHKARI_SERVICE_ACCOUNT): ServiceAccount | null {
   if (!raw) return null;
   try {
-    const text = raw.trim().startsWith('{') ? raw : Buffer.from(raw, 'base64').toString('utf8');
+    raw = raw.trim().replace(/^['"`]+|['"`]+$/g, '').trim(); // tolerate a value pasted with quotes around it
+    const text = raw.startsWith('{') ? raw : Buffer.from(raw, 'base64').toString('utf8');
     const j = JSON.parse(text) as Partial<ServiceAccount>;
     if (typeof j.client_email !== 'string' || typeof j.private_key !== 'string') return null;
     return { client_email: j.client_email, private_key: j.private_key.replace(/\\n/g, '\n') };
