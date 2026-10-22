@@ -301,6 +301,8 @@ def testing_page(a):
             rows.append(f"""          <div class="tst-shots">{figs}</div>""")
         return '        <li class="tst-step">\n' + "\n".join(rows) + "\n        </li>"
     steps = "\n".join(step(st) for st in k["steps"])
+    notes_html = "" if not k.get("notes") else (f"""      <h2 class="app-h2 tst-h2">{esc(k['notes_h'])}</h2>\n      <ul class="tst-notes">\n"""
+        + "\n".join(f"""        <li><b>{esc(n['t'])}</b><span>{esc(n['d'])}</span></li>""" for n in k["notes"]) + "\n      </ul>\n")
     notes = "\n".join(f"""        <li><b>{esc(n['t'])}</b><span>{esc(n['d'])}</span></li>""" for n in k["notes"])
     badges = "".join(f"<li>{esc(b)}</li>" for b in k["badges"])
     share = "https://wa.me/?text=" + __import__("urllib.parse").parse.quote(k["share"] + "\n" + SITE + path)
@@ -331,11 +333,7 @@ def testing_page(a):
 {steps}
       </ol>
 
-      <h2 class="app-h2 tst-h2">{esc(k['notes_h'])}</h2>
-      <ul class="tst-notes">
-{notes}
-      </ul>
-    </div>
+{notes_html}    </div>
   </section>
 
   <section class="app-feats-sec">
