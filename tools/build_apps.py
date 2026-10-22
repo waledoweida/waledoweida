@@ -214,6 +214,60 @@ def app_page(lang, a):
                 og_type="website", ld=ld, body=body, ch=chrome(lang, alt))
 
 
+KHATMA = dict(
+    title="ختمة جماعية", h1="انضم للختمة الجماعية",
+    lead="اتدعيت تشارك في ختمة قرآن جماعية على تطبيق أذكاري: كل واحد يحجز جزء ويقراه، ونكمّل الختمة سوا صدقة جارية.",
+    code="كود الختمة", open="افتح الختمة في التطبيق", no_app="لسه معندكش التطبيق؟",
+    steps=[
+        ("حمّل أذكاري", "لو التطبيق مش متثبّت عندك، حمّله مجانًا من الزرار اللي تحت."),
+        ("افتح الختمة", "دوس «افتح الختمة في التطبيق»، أو من التطبيق: الرئيسية ← ختمة جماعية ← انضم بكود، واكتب الكود."),
+        ("احجز جزءك", "اختار جزء فاضي، واكتب اسمك، ولما تخلّص قراءته علّمه «تم»."),
+    ],
+)
+
+
+def khatma_page(a):
+    """/apps/<slug>/khatma/?c=CODE — the link the app shares for a group khatma. join.js reads the code and points
+    the button at the app (athkari://khatma/CODE, falling back to this app's page when it isn't installed)."""
+    t, d, k = T["ar"], L["ar"], KHATMA
+    slug, x = a["slug"], a["ar"]
+    path = t["path"] + slug + "/khatma/"
+    steps = "\n".join(f"""        <li><b>{esc(h)}</b><span>{esc(b)}</span></li>""" for h, b in k["steps"])
+    dl = f"""<a class="btn btn-gold app-dl" href="{a['download']}" download>{svg('android')}<span>{esc(t['download'])}<small>{esc(t['free'])} • {esc(t['apk'])} • {a['size_mb']} {esc(t['mb'])}</small></span></a>"""
+    body = f"""  <section class="post-hero app-hero">
+    <div class="wrap narrow">
+      <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}{slug}/">{esc(x['name'])}</a> / <span>{esc(k['title'])}</span></div>
+      <div class="app-head">
+        <img class="app-icon big" src="{img(slug, 'icon')}" alt="{attr(x['name'])}" width="112" height="112">
+        <div>
+          <h1>{esc(k['h1'])}</h1>
+          <p class="lead">{esc(k['lead'])}</p>
+          <p class="khatma-code" id="khatma-code" hidden>{esc(k['code'])}: <b dir="ltr" id="khatma-code-val"></b></p>
+          <div class="app-cta">
+            <a class="btn btn-gold app-dl" id="khatma-open" href="{t['path']}{slug}/" data-fallback="{SITE}{t['path']}{slug}/">{svg('book-open')}<span>{esc(k['open'])}</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-install">
+    <div class="wrap narrow">
+      <h2 class="app-h2">{esc(k['no_app'])}</h2>
+      <ol class="app-steps">
+{steps}
+      </ol>
+      <div class="app-cta center">{dl}</div>
+      <p class="app-made">{esc(t['made'])}<br><a class="app-phone" href="{attr(WA)}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg><span dir="ltr">0102 592 6261</span></a></p>
+    </div>
+  </section>
+  <script src="/apps/{slug}/khatma/join.js" defer></script>"""
+    ld = {"@context": "https://schema.org", "@type": "WebPage", "inLanguage": "ar", "name": k["title"], "url": SITE + path}
+    return page("ar", title=page_title(f"{k['title']} — {x['name']}", d["short"]), desc=k["lead"], path=path,
+                alt_path=T["en"]["path"] + slug + "/", og_type="website", ld=ld, body=body,
+                ch=chrome("ar", T["en"]["path"] + slug + "/"))
+
+
 def build():
     for lang, t in T.items():
         write(t["path"].strip("/") + "/index.html", list_page(lang))
@@ -223,6 +277,8 @@ def build():
             if missing:
                 raise SystemExit(f"apps/{a['slug']}/img/: missing {missing}")
             write(t["path"].strip("/") + "/" + a["slug"] + "/index.html", app_page(lang, a))
+            if lang == "ar" and a.get("khatma"):
+                write(f"apps/{a['slug']}/khatma/index.html", khatma_page(a))
     return paths()
 
 
