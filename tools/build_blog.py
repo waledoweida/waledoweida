@@ -322,9 +322,10 @@ def prune():
 
 
 def update_sitemap(paths):
-    """Sitemap = home pages + the given blog paths + the country pages."""
+    """Sitemap = home pages + the given blog paths + the country pages + the apps pages."""
+    from build_apps import paths as app_paths
     from build_countries import paths as country_paths
-    paths = paths + country_paths()
+    paths = [p for p in paths if p not in app_paths()] + country_paths() + app_paths()
     urls = ["/", "/en/"] + paths
     pairs = {"/": "/en/", "/en/": "/"}
     for p in paths:
