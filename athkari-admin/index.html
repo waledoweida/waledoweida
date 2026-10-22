@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>لوحة تحكم أذكاري</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1B4332">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<link rel="icon" href="/apps/athkari/img/icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Cairo:wght@400;600;700;800&amp;display=swap">
+<link rel="stylesheet" href="admin.css?v=1">
+</head>
+<body>
+
+<div id="loginView" class="login hidden">
+  <img src="/apps/athkari/img/icon.webp" alt="" width="72" height="72">
+  <h1>لوحة تحكم <span>أذكاري</span></h1>
+  <p>سجّل الدخول بحساب الأدمن</p>
+  <form id="loginForm">
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" required autocomplete="username" dir="ltr">
+    <label for="password">كلمة المرور</label>
+    <input id="password" type="password" required autocomplete="current-password" dir="ltr">
+    <div class="err" id="loginErr" role="alert"></div>
+    <button class="btn btn-green wide" type="submit">دخول</button>
+  </form>
+</div>
+
+<div id="appView" class="hidden">
+  <aside class="side" id="side" aria-label="قائمة اللوحة">
+    <div class="brand"><img src="/apps/athkari/img/icon.webp" alt="" width="40" height="40"><div><b>أذكاري</b><small>لوحة التحكم</small></div></div>
+    <nav id="nav" aria-label="أقسام اللوحة">
+      <button type="button" data-tab="overview" class="on">📊 نظرة عامة</button>
+      <button type="button" data-tab="notify">🔔 الإشعارات</button>
+      <button type="button" data-tab="home">🏠 الرئيسية والبانر</button>
+      <button type="button" data-tab="campaigns">🌙 حملات المناسبات</button>
+      <button type="button" data-tab="adhkar">📿 الأذكار</button>
+      <button type="button" data-tab="ded">🕊️ صدقة جارية</button>
+      <button type="button" data-tab="khatmas">🤝 الختمات الجماعية</button>
+      <button type="button" data-tab="asma">✨ الأسماء الحسنى</button>
+      <button type="button" data-tab="update">⬆️ تحديث التطبيق</button>
+    </nav>
+    <div class="side-foot">
+      <span id="who"></span>
+      <button type="button" class="btn btn-ghost-dark" id="logoutBtn">خروج</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">نظرة عامة</h1>
+      <button type="button" class="btn btn-ghost" id="previewBtn">📱 معاينة</button>
+    </div>
+
+    <!-- نظرة عامة -->
+    <section class="tab" id="tab-overview">
+      <div class="tiles">
+        <div class="tile"><b id="stToday">—</b><span>مستخدم النهارده</span></div>
+        <div class="tile"><b id="st7">—</b><span>آخر 7 أيام</span></div>
+        <div class="tile"><b id="st30">—</b><span>آخر 30 يوم</span></div>
+        <div class="tile"><b id="stAll">—</b><span>كل الأجهزة</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>المحتوى</h2>
+          <ul class="facts" id="contentFacts"><li>…</li></ul>
+          <div id="importBanner" class="note hidden">
+            الأذكار لسه متستوردتش للوحة. التطبيق شغال بالأذكار اللي جواه، ولو عايز تعدّل عليها استوردها الأول.
+            <button type="button" class="btn btn-gold" id="importBtn">استيراد الأذكار الافتراضية</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>إجراءات سريعة</h2>
+          <div class="quick">
+            <button type="button" class="btn btn-gold" data-go="notify">🔔 إرسال إشعار</button>
+            <button type="button" class="btn btn-ghost" data-go="home">🖼️ تغيير البانر</button>
+            <button type="button" class="btn btn-ghost" data-go="campaigns">🌙 الحملات</button>
+            <button type="button" class="btn btn-ghost" data-go="ded">🕊️ اسم صدقة جارية</button>
+          </div>
+          <h2 class="mt">الإصدارات المستخدمة (آخر 30 يوم)</h2>
+          <div id="versions" class="versions"><span class="hint">…</span></div>
+        </div>
+      </div>
+      <p class="hint">العدّ مجهول تمامًا: كل موبايل بيبعت مرة في اليوم رقم عشوائي وتاريخ الفتح ورقم الإصدار بس.</p>
+    </section>
+
+    <!-- الإشعارات -->
+    <section class="tab hidden" id="tab-notify">
+      <div class="grid2">
+        <form class="card" id="pushForm">
+          <h2>🔔 إشعار لكل المستخدمين</h2>
+          <label for="pushTitle">العنوان</label>
+          <input type="text" id="pushTitle" maxlength="80" required placeholder="جمعة مباركة 🌿">
+          <label for="pushBody">الرسالة</label>
+          <textarea id="pushBody" class="plain" maxlength="400" rows="4" placeholder="لا تنسوا قراءة سورة الكهف والصلاة على النبي ﷺ"></textarea>
+          <div class="counter"><span id="pushCount">0</span>/400</div>
+          <fieldset class="when">
+            <legend>إمتى؟</legend>
+            <label class="radio"><input type="radio" name="when" value="now" checked> دلوقتي</label>
+            <label class="radio"><input type="radio" name="when" value="later"> في ميعاد محدد</label>
+          </fieldset>
+          <div id="laterWrap" class="hidden">
+            <label for="pushAt">الميعاد (بتوقيتك)</label>
+            <input id="pushAt" type="datetime-local" dir="ltr">
+            <p class="hint">الإشعار المجدول بيتسجل على موبايل كل مستخدم أول ما يفتح التطبيق، فيُفضّل تجدوله قبلها بيوم أو أكتر.</p>
+          </div>
+          <button type="submit" class="btn btn-green wide" id="pushSend">إرسال</button>
+          <div id="pushSetup" class="note hidden"></div>
+        </form>
+        <div class="card">
+          <h2>شكله على الموبايل</h2>
+          <div class="notif">
+            <img src="/apps/athkari/img/icon.webp" alt="" width="36" height="36">
+            <div><b id="pvTitle">جمعة مباركة 🌿</b><span id="pvBody">لا تنسوا قراءة سورة الكهف والصلاة على النبي ﷺ</span></div>
+            <small>أذكاري • الآن</small>
+          </div>
+          <h2 class="mt">إشعارات مجدولة</h2>
+          <div id="annList"></div>
+          <h2 class="mt">آخر إشعارات اتبعتت</h2>
+          <div id="pushList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- الرئيسية -->
+    <section class="tab hidden" id="tab-home">
+      <div class="grid2">
+        <div class="card">
+          <h2>📢 بانر أعلى الرئيسية</h2>
+          <p class="hint">تهنئة أو إعلان أو صورة تظهر لكل المستخدمين.</p>
+          <label class="switch"><input type="checkbox" id="bannerOn"> إظهار البانر</label>
+          <label for="bannerTitle">العنوان</label>
+          <input type="text" id="bannerTitle" maxlength="60" placeholder="رمضان كريم 🌙">
+          <label for="bannerText">النص</label>
+          <input type="text" id="bannerText" maxlength="160" placeholder="تقبّل الله منا ومنكم الصيام والقيام">
+          <span class="label">الصورة (اختياري)</span>
+          <div class="imgbox" id="imgBox">
+            <img id="bannerImg" alt="صورة البانر" class="hidden" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+            <div id="imgEmpty" class="hint">مفيش صورة. الأنسب صورة عرضية (مثلًا 1080×540).</div>
+          </div>
+          <div class="row-btns">
+            <label class="btn btn-ghost file" for="imgInput">🖼️ اختيار صورة</label>
+            <input id="imgInput" type="file" accept="image/*" class="visually-hidden">
+            <button type="button" class="btn btn-danger hidden" id="imgRemove">إزالة الصورة</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>📿 ذكر اليوم</h2>
+          <p class="hint">سيبه فاضي عشان التطبيق يختار ذكر مختلف كل يوم، أو اكتب الذكر اللي يظهر للكل.</p>
+          <label for="dailyText">الذكر أو الدعاء</label>
+          <textarea id="dailyText" rows="4" placeholder="(تلقائي)"></textarea>
+          <label for="dailyRef">المصدر (اختياري)</label>
+          <input type="text" id="dailyRef" placeholder="رواه البخاري">
+        </div>
+      </div>
+      <button type="button" class="btn btn-green" id="saveHome">حفظ ونشر للتطبيق</button>
+    </section>
+
+    <!-- الحملات -->
+    <section class="tab hidden" id="tab-campaigns">
+      <p class="hint">كل حملة بتظهر في الرئيسية لوحدها في ميعادها بالتاريخ الهجري (تلقائي). تقدر تفعّلها دلوقتي أو توقفها، وتكتب رسالة مخصصة.</p>
+      <div id="campList" class="camp-grid"></div>
+    </section>
+
+    <!-- الأذكار -->
+    <section class="tab hidden" id="tab-adhkar">
+      <div class="split">
+        <div class="card">
+          <h2>الأقسام</h2>
+          <div id="catList"></div>
+          <button type="button" class="btn btn-ghost wide" id="addCatBtn">+ قسم جديد</button>
+        </div>
+        <div class="card">
+          <div class="toolbar">
+            <h2 id="catTitle">—</h2>
+            <button type="button" class="btn btn-ghost" id="editCatBtn">تعديل القسم</button>
+            <button type="button" class="btn btn-gold" id="addItemBtn">+ ذكر جديد</button>
+          </div>
+          <div id="items"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- صدقة جارية -->
+    <section class="tab hidden" id="tab-ded">
+      <div class="grid2">
+        <div class="card">
+          <div class="toolbar"><h2>الأسماء</h2><button type="button" class="btn btn-gold" id="addDedBtn">+ اسم جديد</button></div>
+          <p class="hint">الأسماء بتظهر في الرئيسية وشاشة البداية وبتتغير تلقائي. الاسم المتوقف مش بيظهر.</p>
+          <div id="dedList"></div>
+        </div>
+        <div class="card">
+          <h2>مدة ظهور كل اسم</h2>
+          <label for="dedMinutes" class="visually-hidden">المدة</label>
+          <select id="dedMinutes">
+            <option value="1">كل دقيقة</option><option value="2">كل دقيقتين</option><option value="5">كل 5 دقائق</option>
+            <option value="10">كل 10 دقائق</option><option value="15">كل 15 دقيقة</option><option value="30">كل 30 دقيقة</option>
+            <option value="60">كل ساعة</option><option value="1440">كل يوم</option>
+          </select>
+          <button type="button" class="btn btn-green" id="saveDedMinutes">حفظ المدة</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- الختمات الجماعية -->
+    <section class="tab hidden" id="tab-khatmas">
+      <p class="hint">الختمات اللي المستخدمين عملوها صدقة جارية. تقدر تتابعها، وتمسح أي ختمة فيها كلام غير لائق.</p>
+      <div id="khatmaList"></div>
+    </section>
+
+    <!-- الأسماء الحسنى -->
+    <section class="tab hidden" id="tab-asma">
+      <div class="card">
+        <div class="toolbar"><h2>أسماء الله الحسنى</h2><button type="button" class="btn btn-gold hidden" id="importAsma">استيراد الأسماء ومعانيها</button></div>
+        <p class="hint" id="asmaHint"></p>
+        <div id="asmaList"></div>
+      </div>
+    </section>
+
+    <!-- التحديث -->
+    <section class="tab hidden" id="tab-update">
+      <div class="grid2">
+        <div class="card">
+          <h2>⬆️ إعلان نسخة جديدة</h2>
+          <p class="hint">لما تنزل نسخة جديدة، اكتب رقم البناء بتاعها، وأي موبايل عليه نسخة أقدم هيظهرله «تحديث جديد متاح».</p>
+          <label for="latestBuild">رقم آخر بناء (0 = إيقاف التنبيه)</label>
+          <input id="latestBuild" type="number" min="0" step="1" dir="ltr">
+          <label for="updateMessage">رسالة التحديث (اختياري)</label>
+          <textarea id="updateMessage" class="plain" rows="3" maxlength="300" placeholder="نسخة جديدة فيها مميزات وتحسينات 🌿"></textarea>
+          <label for="updateUrl">رابط التحديث (اختياري)</label>
+          <input type="text" id="updateUrl" dir="ltr" placeholder="https://waledoweida.com/apps/athkari/">
+          <label class="switch"><input type="checkbox" id="updateForce"> تحديث إجباري</label>
+          <button type="button" class="btn btn-green" id="saveUpdate">حفظ ونشر للتطبيق</button>
+        </div>
+        <div class="card">
+          <h2>شكل التنبيه</h2>
+          <div class="dialog-pv" id="updPreview"></div>
+        </div>
+      </div>
+    </section>
+
+    <p class="credit">✦ تصميم وتطوير: وليد أبوعويضة<br><a class="wa" href="https://wa.me/201025926261" target="_blank" rel="noopener"><span class="wa-ic" aria-hidden="true">✆</span><span dir="ltr">01025926261</span></a></p>
+  </main>
+
+  <aside class="phone-col" id="phoneCol" aria-label="معاينة التطبيق">
+    <div class="phone">
+      <div class="phone-screen" id="phone"></div>
+    </div>
+    <p class="hint center">معاينة تقريبية للرئيسية بالتعديلات الحالية</p>
+  </aside>
+</div>
+
+<div id="overlay" class="overlay hidden"><div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="نافذة"></div></div>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script src="adhkar-data.js?v=1"></script>
+<script src="asma-data.js?v=1"></script>
+<script src="admin.js?v=1"></script>
+</body>
+</html>
