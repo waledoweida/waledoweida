@@ -196,7 +196,7 @@ def app_page(lang, a):
       </ol>
       <div class="app-cta center">{dl}</div>
       <p class="app-note">{esc(x['note'])} <a href="{attr(a['privacy'])}" target="_blank" rel="noopener">{esc(t['privacy'])}</a></p>
-      <p class="app-made">{esc(t['made'])}</p>
+      <p class="app-made">{esc(t['made'])}<br><a class="app-phone" href="{attr(WA)}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg><span dir="ltr">0102 592 6261</span></a></p>
 {want(lang)}
     </div>
   </section>"""

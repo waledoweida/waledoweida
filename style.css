@@ -711,6 +711,8 @@ html:has(dialog[open]){overflow:hidden}
 .app-note{color:var(--muted);font-size:.92rem;text-align:center}
 .app-note a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .app-made{text-align:center;color:var(--accent);font-weight:600;margin:10px 0 36px}
+.app-phone{display:inline-flex;align-items:center;gap:6px;margin-top:6px;color:var(--text);font-weight:700}
+.app-phone .i{width:20px;height:20px;color:#25d366}
 @media (max-width:720px){
   .app-head{flex-direction:column;gap:18px}
   .app-icon.big{width:92px;height:92px;border-radius:24px}
