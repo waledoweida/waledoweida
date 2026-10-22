@@ -7,30 +7,107 @@
     "updated": "2026-10-22",
     "download": "/apps/athkari/download",
     "privacy": "https://waledoweida.github.io/athkari-app/privacy.html",
-    "screens": ["01_home", "13_mushaf", "14_tafsir", "12_quran", "02_reader", "03_prayer", "10_home_ded", "04_calendar", "08_tasbeeh", "13_mushaf_dark"],
+    "screens": [
+      "01_home",
+      "15_home_live",
+      "13_mushaf",
+      "14_tafsir",
+      "12_quran",
+      "02_reader",
+      "03_prayer",
+      "10_home_ded",
+      "04_calendar",
+      "08_tasbeeh",
+      "13_mushaf_dark"
+    ],
     "ar": {
       "name": "أذكاري",
       "tagline": "المصحف والأذكار ومواقيت الصلاة في تطبيق واحد",
       "summary": "رفيقك اليومي للقرآن والأذكار: المصحف كامل بالتفسير والتلاوة، أذكار الصباح والمساء، الأذان في وقته، وتذكير بالصلاة على النبي ﷺ. مجاني بالكامل وبدون إعلانات.",
       "category": "دين وروحانيات",
-      "badges": ["مجاني بالكامل", "بدون إعلانات", "يعمل بدون إنترنت", "بدون تسجيل"],
-      "screens": ["الرئيسية", "صفحة من المصحف", "التفسير", "فهرس المصحف", "قارئ الأذكار", "مواقيت الصلاة", "صدقة جارية", "التقويم الهجري", "السبحة", "المصحف ليلًا"],
+      "badges": [
+        "مجاني بالكامل",
+        "بدون إعلانات",
+        "يعمل بدون إنترنت",
+        "بدون تسجيل"
+      ],
+      "screens": [
+        "الرئيسية",
+        "صدقة جارية في الرئيسية",
+        "صفحة من المصحف",
+        "التفسير",
+        "فهرس المصحف",
+        "قارئ الأذكار",
+        "مواقيت الصلاة",
+        "صدقة جارية",
+        "التقويم الهجري",
+        "السبحة",
+        "المصحف ليلًا"
+      ],
       "features": [
-        {"icon": "book", "t": "المصحف الشريف كامل", "d": "604 صفحة بالرسم العثماني، مع فهرس السور والأجزاء، والعلامات، وتابع القراءة، والبحث في القرآن كله."},
-        {"icon": "book-open", "t": "4 تفاسير بدون إنترنت", "d": "التفسير الميسر، السعدي، ابن كثير، والجلالين. اضغط على أي آية تقرأ تفسيرها."},
-        {"icon": "headphones", "t": "استمع بصوت 12 قارئ", "d": "العفاسي، الحصري، المنشاوي، عبد الباسط وغيرهم، مع تمييز الآية وتقليب الصفحة تلقائيًا."},
-        {"icon": "sun", "t": "أذكار الصباح والمساء", "d": "وأكثر من 12 قسمًا: بعد الصلاة، النوم، الاستيقاظ والأدعية، مع العدّاد والمصدر لكل ذكر."},
-        {"icon": "mosque", "t": "مواقيت الصلاة والأذان", "d": "أذان بصوت جميل في وقت كل صلاة، وتنبيه قبل الصلاة، وحساب دقيق حسب مدينتك."},
-        {"icon": "heart", "t": "صلِّ على النبي ﷺ", "d": "تذكير بصوت كل 10 أو 15 أو 30 دقيقة أو كل ساعة، تختار اللي يناسبك."},
-        {"icon": "compass", "t": "اتجاه القبلة", "d": "بوصلة دقيقة لاتجاه القبلة من أي مكان."},
-        {"icon": "calendar", "t": "التقويم الهجري", "d": "المناسبات الإسلامية، وتذكير بصيام الاثنين والخميس والأيام البيض."},
-        {"icon": "star", "t": "صدقة جارية", "d": "أسماء أحبابك تظهر في التطبيق مع دعاء ورجاء بقراءة الفاتحة لهم."}
+        {
+          "icon": "book",
+          "t": "المصحف الشريف كامل",
+          "d": "604 صفحة بالرسم العثماني، مع فهرس السور والأجزاء، والعلامات، وتابع القراءة، والبحث في القرآن كله."
+        },
+        {
+          "icon": "book-open",
+          "t": "4 تفاسير بدون إنترنت",
+          "d": "التفسير الميسر، السعدي، ابن كثير، والجلالين. اضغط على أي آية تقرأ تفسيرها."
+        },
+        {
+          "icon": "headphones",
+          "t": "استمع بصوت 12 قارئ",
+          "d": "العفاسي، الحصري، المنشاوي، عبد الباسط وغيرهم، مع تمييز الآية وتقليب الصفحة تلقائيًا."
+        },
+        {
+          "icon": "sun",
+          "t": "أذكار الصباح والمساء",
+          "d": "وأكثر من 12 قسمًا: بعد الصلاة، النوم، الاستيقاظ والأدعية، مع العدّاد والمصدر لكل ذكر."
+        },
+        {
+          "icon": "mosque",
+          "t": "مواقيت الصلاة والأذان",
+          "d": "أذان بصوت جميل في وقت كل صلاة، وتنبيه قبل الصلاة، وحساب دقيق حسب مدينتك."
+        },
+        {
+          "icon": "heart",
+          "t": "صلِّ على النبي ﷺ",
+          "d": "تذكير بصوت كل 10 أو 15 أو 30 دقيقة أو كل ساعة، تختار اللي يناسبك."
+        },
+        {
+          "icon": "compass",
+          "t": "اتجاه القبلة",
+          "d": "بوصلة دقيقة لاتجاه القبلة من أي مكان."
+        },
+        {
+          "icon": "calendar",
+          "t": "التقويم الهجري",
+          "d": "المناسبات الإسلامية، وتذكير بصيام الاثنين والخميس والأيام البيض."
+        },
+        {
+          "icon": "star",
+          "t": "صدقة جارية",
+          "d": "أسماء أحبابك تظهر في التطبيق مع دعاء ورجاء بقراءة الفاتحة لهم."
+        }
       ],
       "steps": [
-        {"t": "حمّل الملف", "d": "اضغط زرار «تحميل للأندرويد» من موبايلك."},
-        {"t": "افتح الملف", "d": "من الإشعارات أو من مجلد التنزيلات."},
-        {"t": "اسمح بالتثبيت", "d": "لو ظهرت رسالة، اختار «الإعدادات» وفعّل «السماح من هذا المصدر»."},
-        {"t": "ثبّت وابدأ", "d": "اضغط «تثبيت» وافتح أذكاري. التحديثات الجاية هتوصلك من جوه التطبيق."}
+        {
+          "t": "حمّل الملف",
+          "d": "اضغط زرار «تحميل للأندرويد» من موبايلك."
+        },
+        {
+          "t": "افتح الملف",
+          "d": "من الإشعارات أو من مجلد التنزيلات."
+        },
+        {
+          "t": "اسمح بالتثبيت",
+          "d": "لو ظهرت رسالة، اختار «الإعدادات» وفعّل «السماح من هذا المصدر»."
+        },
+        {
+          "t": "ثبّت وابدأ",
+          "d": "اضغط «تثبيت» وافتح أذكاري. التحديثات الجاية هتوصلك من جوه التطبيق."
+        }
       ],
       "note": "التطبيق مجاني، لا يجمع أي بيانات شخصية، ولا يعرض إعلانات. نص المصحف من مشروع Tanzil بالرسم العثماني بدون تعديل."
     },
@@ -39,24 +116,89 @@
       "tagline": "Quran, daily adhkar and prayer times in one app",
       "summary": "Your daily companion for the Quran and remembrance: the full Mushaf with tafsir and recitation, morning and evening adhkar, the adhan on time, and salawat reminders. Completely free with no ads.",
       "category": "Religion & spirituality",
-      "badges": ["Completely free", "No ads", "Works offline", "No sign-up"],
-      "screens": ["Home", "Mushaf page", "Tafsir", "Quran index", "Adhkar reader", "Prayer times", "Sadaqah jariyah", "Hijri calendar", "Tasbeeh", "Mushaf at night"],
+      "badges": [
+        "Completely free",
+        "No ads",
+        "Works offline",
+        "No sign-up"
+      ],
+      "screens": [
+        "Home",
+        "Sadaqah jariyah on home",
+        "Mushaf page",
+        "Tafsir",
+        "Quran index",
+        "Adhkar reader",
+        "Prayer times",
+        "Sadaqah jariyah",
+        "Hijri calendar",
+        "Tasbeeh",
+        "Mushaf at night"
+      ],
       "features": [
-        {"icon": "book", "t": "The complete Mushaf", "d": "All 604 pages in Uthmani script, with surah and juz index, bookmarks, resume reading and full-text search."},
-        {"icon": "book-open", "t": "4 tafsirs, offline", "d": "Al-Muyassar, Al-Sa'di, Ibn Kathir and Al-Jalalayn. Tap any ayah to read its tafsir."},
-        {"icon": "headphones", "t": "12 reciters", "d": "Alafasy, Al-Husary, Al-Minshawi, Abdul Basit and more, with ayah highlighting and automatic page turns."},
-        {"icon": "sun", "t": "Morning & evening adhkar", "d": "Plus 12+ categories: after prayer, sleep, waking up and duas, each with a counter and its source."},
-        {"icon": "mosque", "t": "Prayer times & adhan", "d": "A beautiful adhan at every prayer time, a reminder before prayer, and accurate times for your city."},
-        {"icon": "heart", "t": "Salawat reminders", "d": "A spoken reminder every 10, 15 or 30 minutes or every hour — your choice."},
-        {"icon": "compass", "t": "Qibla direction", "d": "An accurate Qibla compass from anywhere."},
-        {"icon": "calendar", "t": "Hijri calendar", "d": "Islamic occasions, with reminders for Monday/Thursday and the white days fasts."},
-        {"icon": "star", "t": "Sadaqah jariyah", "d": "Names of your loved ones shown in the app with a dua and a request to read Al-Fatiha for them."}
+        {
+          "icon": "book",
+          "t": "The complete Mushaf",
+          "d": "All 604 pages in Uthmani script, with surah and juz index, bookmarks, resume reading and full-text search."
+        },
+        {
+          "icon": "book-open",
+          "t": "4 tafsirs, offline",
+          "d": "Al-Muyassar, Al-Sa'di, Ibn Kathir and Al-Jalalayn. Tap any ayah to read its tafsir."
+        },
+        {
+          "icon": "headphones",
+          "t": "12 reciters",
+          "d": "Alafasy, Al-Husary, Al-Minshawi, Abdul Basit and more, with ayah highlighting and automatic page turns."
+        },
+        {
+          "icon": "sun",
+          "t": "Morning & evening adhkar",
+          "d": "Plus 12+ categories: after prayer, sleep, waking up and duas, each with a counter and its source."
+        },
+        {
+          "icon": "mosque",
+          "t": "Prayer times & adhan",
+          "d": "A beautiful adhan at every prayer time, a reminder before prayer, and accurate times for your city."
+        },
+        {
+          "icon": "heart",
+          "t": "Salawat reminders",
+          "d": "A spoken reminder every 10, 15 or 30 minutes or every hour — your choice."
+        },
+        {
+          "icon": "compass",
+          "t": "Qibla direction",
+          "d": "An accurate Qibla compass from anywhere."
+        },
+        {
+          "icon": "calendar",
+          "t": "Hijri calendar",
+          "d": "Islamic occasions, with reminders for Monday/Thursday and the white days fasts."
+        },
+        {
+          "icon": "star",
+          "t": "Sadaqah jariyah",
+          "d": "Names of your loved ones shown in the app with a dua and a request to read Al-Fatiha for them."
+        }
       ],
       "steps": [
-        {"t": "Download", "d": "Tap “Download for Android” on your phone."},
-        {"t": "Open the file", "d": "From the notification or your Downloads folder."},
-        {"t": "Allow the install", "d": "If asked, open “Settings” and turn on “Allow from this source”."},
-        {"t": "Install and start", "d": "Tap “Install” and open Athkari. Future updates arrive inside the app."}
+        {
+          "t": "Download",
+          "d": "Tap “Download for Android” on your phone."
+        },
+        {
+          "t": "Open the file",
+          "d": "From the notification or your Downloads folder."
+        },
+        {
+          "t": "Allow the install",
+          "d": "If asked, open “Settings” and turn on “Allow from this source”."
+        },
+        {
+          "t": "Install and start",
+          "d": "Tap “Install” and open Athkari. Future updates arrive inside the app."
+        }
       ],
       "note": "Free, collects no personal data and shows no ads. The Quran text is from the Tanzil project in Uthmani script, unmodified."
     }
