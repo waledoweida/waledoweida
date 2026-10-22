@@ -294,6 +294,11 @@ def testing_page(a):
         if st.get("url"):
             rows.append(f"""          <a class="btn btn-gold" href="{attr(st['url'])}" target="_blank" rel="noopener">{svg(st['icon'])}{esc(st['btn'])}</a>""")
             rows.append(f"""          <code dir="ltr">{esc(st['url'].split('://')[1])}</code>""")
+        shots = [n for n in st.get("shots", []) if os.path.exists(os.path.join(ROOT, "apps", slug, "img", n + ".webp"))]
+        if shots:
+            figs = "".join(f"""<figure><img src="{img(slug, n)}" alt="{attr(c)}" width="270" height="585" loading="lazy"><figcaption>{esc(c)}</figcaption></figure>"""
+                           for n, c in zip(shots, [st["shot_caps"][st["shots"].index(n)] for n in shots]))
+            rows.append(f"""          <div class="tst-shots">{figs}</div>""")
         return '        <li class="tst-step">\n' + "\n".join(rows) + "\n        </li>"
     steps = "\n".join(step(st) for st in k["steps"])
     notes = "\n".join(f"""        <li><b>{esc(n['t'])}</b><span>{esc(n['d'])}</span></li>""" for n in k["notes"])
@@ -318,15 +323,6 @@ def testing_page(a):
     </div>
   </section>
 
-  <section class="app-feats-sec">
-    <div class="wrap">
-      <h2 class="app-h2">{esc(k['feats_h'])}</h2>
-      <div class="app-feats">
-{feats}
-      </div>
-    </div>
-  </section>
-
   <section class="app-install" id="steps">
     <div class="wrap narrow">
       <h2 class="app-h2">{esc(k['steps_h'])}</h2>
@@ -339,12 +335,20 @@ def testing_page(a):
       <ul class="tst-notes">
 {notes}
       </ul>
+    </div>
+  </section>
 
-      <div class="tst-alt">
-        <p>{esc(k['alt'])}</p>
-        <a class="btn btn-line" href="{t['path']}{slug}/">{svg('android')}{esc(k['alt_btn'])}</a>
+  <section class="app-feats-sec">
+    <div class="wrap">
+      <h2 class="app-h2">{esc(k['feats_h'])}</h2>
+      <div class="app-feats">
+{feats}
       </div>
+    </div>
+  </section>
 
+  <section class="app-install">
+    <div class="wrap narrow">
       <p class="tst-dua">{esc(k['dua'])}</p>
       <div class="app-cta center"><a class="btn btn-gold" href="{attr(share)}" target="_blank" rel="noopener">{svg('share')}{esc(k['share_btn'])}</a></div>
       <p class="app-made">{esc(t['made'])}<br><a class="app-phone" href="{attr(WA)}" target="_blank" rel="noopener"><svg class="i"><use href="#wa"/></svg><span dir="ltr">0102 592 6261</span></a></p>
