@@ -30,7 +30,7 @@
 </div>
 
 <div id="appView" class="hidden">
-  <aside class="side" id="side">
+  <aside class="side" id="side" aria-label="قائمة اللوحة">
     <div class="brand"><img src="/apps/athkari/img/icon.webp" alt="" width="40" height="40"><div><b>أذكاري</b><small>لوحة التحكم</small></div></div>
     <nav id="nav" aria-label="أقسام اللوحة">
       <button type="button" data-tab="overview" class="on">📊 نظرة عامة</button>
@@ -93,7 +93,7 @@
         <form class="card" id="pushForm">
           <h2>🔔 إشعار لكل المستخدمين</h2>
           <label for="pushTitle">العنوان</label>
-          <input id="pushTitle" maxlength="80" required placeholder="جمعة مباركة 🌿">
+          <input type="text" id="pushTitle" maxlength="80" required placeholder="جمعة مباركة 🌿">
           <label for="pushBody">الرسالة</label>
           <textarea id="pushBody" class="plain" maxlength="400" rows="4" placeholder="لا تنسوا قراءة سورة الكهف والصلاة على النبي ﷺ"></textarea>
           <div class="counter"><span id="pushCount">0</span>/400</div>
@@ -133,12 +133,12 @@
           <p class="hint">تهنئة أو إعلان أو صورة تظهر لكل المستخدمين.</p>
           <label class="switch"><input type="checkbox" id="bannerOn"> إظهار البانر</label>
           <label for="bannerTitle">العنوان</label>
-          <input id="bannerTitle" maxlength="60" placeholder="رمضان كريم 🌙">
+          <input type="text" id="bannerTitle" maxlength="60" placeholder="رمضان كريم 🌙">
           <label for="bannerText">النص</label>
-          <input id="bannerText" maxlength="160" placeholder="تقبّل الله منا ومنكم الصيام والقيام">
+          <input type="text" id="bannerText" maxlength="160" placeholder="تقبّل الله منا ومنكم الصيام والقيام">
           <span class="label">الصورة (اختياري)</span>
           <div class="imgbox" id="imgBox">
-            <img id="bannerImg" alt="صورة البانر" class="hidden">
+            <img id="bannerImg" alt="صورة البانر" class="hidden" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
             <div id="imgEmpty" class="hint">مفيش صورة. الأنسب صورة عرضية (مثلًا 1080×540).</div>
           </div>
           <div class="row-btns">
@@ -153,7 +153,7 @@
           <label for="dailyText">الذكر أو الدعاء</label>
           <textarea id="dailyText" rows="4" placeholder="(تلقائي)"></textarea>
           <label for="dailyRef">المصدر (اختياري)</label>
-          <input id="dailyRef" placeholder="رواه البخاري">
+          <input type="text" id="dailyRef" placeholder="رواه البخاري">
         </div>
       </div>
       <button type="button" class="btn btn-green" id="saveHome">حفظ ونشر للتطبيق</button>
@@ -231,7 +231,7 @@
           <label for="updateMessage">رسالة التحديث (اختياري)</label>
           <textarea id="updateMessage" class="plain" rows="3" maxlength="300" placeholder="نسخة جديدة فيها مميزات وتحسينات 🌿"></textarea>
           <label for="updateUrl">رابط التحديث (اختياري)</label>
-          <input id="updateUrl" dir="ltr" placeholder="https://waledoweida.com/apps/athkari/">
+          <input type="text" id="updateUrl" dir="ltr" placeholder="https://waledoweida.com/apps/athkari/">
           <label class="switch"><input type="checkbox" id="updateForce"> تحديث إجباري</label>
           <button type="button" class="btn btn-green" id="saveUpdate">حفظ ونشر للتطبيق</button>
         </div>
