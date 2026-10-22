@@ -294,10 +294,10 @@ def testing_page(a):
         if st.get("url"):
             rows.append(f"""          <a class="btn btn-gold" href="{attr(st['url'])}" target="_blank" rel="noopener">{svg(st['icon'])}{esc(st['btn'])}</a>""")
             rows.append(f"""          <code dir="ltr">{esc(st['url'].split('://')[1])}</code>""")
-        shots = [n for n in st.get("shots", []) if os.path.exists(os.path.join(ROOT, "apps", slug, "img", n + ".webp"))]
+        shots = [x for x in st.get("shots", []) if os.path.exists(os.path.join(ROOT, "apps", slug, "img", x["n"] + ".webp"))]
         if shots:
-            figs = "".join(f"""<figure><img src="{img(slug, n)}" alt="{attr(c)}" width="270" height="585" loading="lazy"><figcaption>{esc(c)}</figcaption></figure>"""
-                           for n, c in zip(shots, [st["shot_caps"][st["shots"].index(n)] for n in shots]))
+            figs = "".join(f"""<figure><img src="{img(slug, x['n'])}" alt="{attr(x['c'])}" width="{x['w']}" height="{x['h']}" loading="lazy"><figcaption>{esc(x['c'])}</figcaption></figure>"""
+                           for x in shots)
             rows.append(f"""          <div class="tst-shots">{figs}</div>""")
         return '        <li class="tst-step">\n' + "\n".join(rows) + "\n        </li>"
     steps = "\n".join(step(st) for st in k["steps"])
