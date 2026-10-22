@@ -67,7 +67,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return sendJson(res, 405, { ok: false }); }
   if (!sameOrigin(req)) return sendJson(res, 403, { ok: false, error: 'forbidden' });
   const sa = serviceAccount();
-  if (!sa) return sendJson(res, 503, { ok: false, error: 'not_configured' });
+  if (!sa) {
+    // Why the key can't be used (never the key itself), so the owner knows what to fix in Vercel.
+    const raw = process.env.ATHKARI_SERVICE_ACCOUNT;
+    const why = !raw ? 'missing' : !raw.includes('private_key') ? 'not_service_account_json' : 'invalid_json';
+    return sendJson(res, 503, { ok: false, error: 'not_configured', why, length: raw ? raw.length : 0 });
+  }
   if (!(await hit('athkari-push:' + limitKey(req), 30, 3600))) return sendJson(res, 429, { ok: false, error: 'too_many' });
 
   const body = jsonBody(req);
