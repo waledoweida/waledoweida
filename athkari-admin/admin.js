@@ -621,6 +621,8 @@
   $("saveUpdate").onclick = async () => {
     const url = $("updateUrl").value.trim();
     if (url && !/^https:\/\//i.test(url)) return toast("الرابط لازم يبدأ بـ https://");
+    const raw = $("latestBuild").value.trim();
+    if (raw && !/^\d+$/.test(raw)) return toast("اكتب رقم البناء بس (رقم صحيح زي 18)، مش رقم الإصدار 1.6.0");
     try { await saveSettings({ latestBuild: Math.max(0, parseInt($("latestBuild").value) || 0), updateMessage: $("updateMessage").value.trim(), updateUrl: url, updateForce: $("updateForce").checked }); } catch (e) { fail(e); }
   };
 
