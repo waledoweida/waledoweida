@@ -161,7 +161,7 @@ def sync_vercel():
 # includes "<", which owner text can never produce (it is escaped to &lt;)
 MARK = '<section class="post-hero country-hero">'
 # top-level folders that are never country pages
-NOT_COUNTRY_DIRS = {"en", "blog", "review", "faq", "apps", "admin", "api", "fonts", "content", "tools", "tests", "node_modules"}
+NOT_COUNTRY_DIRS = {"en", "blog", "review", "faq", "apps", "athkari-admin", "admin", "api", "fonts", "content", "tools", "tests", "node_modules"}
 
 
 def is_country_page(folder):
