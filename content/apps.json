@@ -8,8 +8,8 @@
     "download": "/apps/athkari/download",
     "privacy": "https://waledoweida.github.io/athkari-app/privacy.html",
     "screens": [
-      "01_home",
       "15_home_live",
+      "01_home",
       "13_mushaf",
       "14_tafsir",
       "12_quran",
@@ -32,8 +32,8 @@
         "بدون تسجيل"
       ],
       "screens": [
-        "الرئيسية",
         "صدقة جارية في الرئيسية",
+        "الرئيسية",
         "صفحة من المصحف",
         "التفسير",
         "فهرس المصحف",
@@ -123,8 +123,8 @@
         "No sign-up"
       ],
       "screens": [
-        "Home",
         "Sadaqah jariyah on home",
+        "Home",
         "Mushaf page",
         "Tafsir",
         "Quran index",
