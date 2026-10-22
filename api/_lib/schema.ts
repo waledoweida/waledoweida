@@ -206,7 +206,7 @@ export function validateFile(name: string, data: unknown, icons: Set<string>): u
     const rows = clean as { slug: string; code?: string }[];
     // folders that already exist at the top of the site (a country page there would clash);
     // anything starting with "wedding" is the red line
-    const reserved = new Set(['en', 'blog', 'admin', 'api', 'review', 'faq', 'fonts', 'content', 'tools', 'tests', 'node_modules']);
+    const reserved = new Set(['en', 'blog', 'admin', 'api', 'review', 'faq', 'apps', 'fonts', 'content', 'tools', 'tests', 'node_modules']);
     const slugs = rows.map((r) => r.slug);
     if (new Set(slugs).size !== slugs.length) throw new Invalid(`${name}: duplicate link`);
     if (name === 'countries') {
