@@ -489,6 +489,34 @@
   }
   $("importBtn").onclick = importAdhkar;
 
+  // استبدال كل الأذكار بالنسخة المراجعة (adhkar-data.js): نسخة احتياطية على الجهاز، ثم كتابة الكل، ثم حذف اللي مش فيها
+  let syncArmed = false;
+  function syncInfo() {
+    const d = window.DEFAULT_ADHKAR;
+    if ($("syncInfo")) $("syncInfo").textContent = d ? `${d.adhkar.length} ذكر في ${d.categories.length} قسم.` : "";
+  }
+  $("syncAdhkarBtn").onclick = async () => {
+    const data = window.DEFAULT_ADHKAR;
+    if (!data) return toast("ملف الأذكار مش موجود");
+    const btn = $("syncAdhkarBtn");
+    if (!syncArmed) { syncArmed = true; btn.textContent = "متأكد؟ دوس تاني للتأكيد"; setTimeout(() => { syncArmed = false; btn.textContent = "تحديث الأذكار للنسخة المراجعة"; }, 6000); return; }
+    syncArmed = false; btn.disabled = true; btn.textContent = "جارٍ التحديث…";
+    try {
+      const [cats, items] = await Promise.all([listAll("categories"), listAll("adhkar")]);
+      const blob = new Blob([JSON.stringify({ savedAt: new Date().toISOString(), categories: cats, adhkar: items }, null, 1)], { type: "application/json" });
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `athkari-adhkar-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+      const keep = new Set(data.adhkar.map(x => x.id));
+      const writes = [...data.categories.map(({ id, ...c }) => wSet("categories", id, c)), ...data.adhkar.map(({ id, ...x }) => wSet("adhkar", id, x)),
+        ...items.filter(x => !keep.has(x.id)).map(x => wDel("adhkar", x.id))];
+      for (let i = 0; i < writes.length; i += 400) await commit(writes.slice(i, i + 400));
+      await bumpVersion();
+      toast(`تم التحديث ✓ ${data.adhkar.length} ذكر`);
+      await loadAdhkar(); await loaders.overview();
+    } catch (err) { fail(err); }
+    btn.disabled = false; btn.textContent = "تحديث الأذكار للنسخة المراجعة";
+  };
+  syncInfo();
+
   // ───────── صدقة جارية ─────────
   const TYPES = { deceased: "متوفى (رحمة)", sick: "مريض (شفاء)", living: "حي (بركة)", custom: "دعاء من عندك" };
   function dedText(d) {
