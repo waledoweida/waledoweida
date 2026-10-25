@@ -10,7 +10,7 @@
   };
   const ICONS = { sunny: "☀️ صباح", nightlight: "🌙 مساء", mosque: "🕌 صلاة", bedtime: "😴 نوم", favorite: "🤍 دعاء",
     star: "⭐ نجمة", travel: "✈️ سفر", food: "🍽️ طعام", home: "🏠 منزل", alarm: "⏰ استيقاظ", spa: "🌿 كرب",
-    shield: "🛡️ رقية", book: "📖 كتاب" };
+    shield: "🛡️ رقية", water: "💧 وضوء", book: "📖 كتاب" };
   const TITLES = { overview: "نظرة عامة", notify: "الإشعارات", home: "الرئيسية والبانر", campaigns: "حملات المناسبات",
     adhkar: "الأذكار", usage: "استخدام التطبيق", ded: "صدقة جارية", khatmas: "الختمات الجماعية", asma: "الأسماء الحسنى", update: "تحديث التطبيق" };
   // نفس الحملات اللي في التطبيق (lib/content/campaigns.dart)
