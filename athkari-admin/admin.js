@@ -12,7 +12,7 @@
     star: "⭐ نجمة", travel: "✈️ سفر", food: "🍽️ طعام", home: "🏠 منزل", alarm: "⏰ استيقاظ", spa: "🌿 كرب",
     shield: "🛡️ رقية", book: "📖 كتاب" };
   const TITLES = { overview: "نظرة عامة", notify: "الإشعارات", home: "الرئيسية والبانر", campaigns: "حملات المناسبات",
-    adhkar: "الأذكار", ded: "صدقة جارية", khatmas: "الختمات الجماعية", asma: "الأسماء الحسنى", update: "تحديث التطبيق" };
+    adhkar: "الأذكار", usage: "استخدام التطبيق", ded: "صدقة جارية", khatmas: "الختمات الجماعية", asma: "الأسماء الحسنى", update: "تحديث التطبيق" };
   // نفس الحملات اللي في التطبيق (lib/content/campaigns.dart)
   const CAMPAIGNS = [
     { id: "eid_fitr", title: "عيد فطر مبارك", emoji: "🎉", when: "1–3 شوال", sub: "تقبّل الله منا ومنكم صالح الأعمال، وكل عام وأنتم بخير", colors: ["#7B2D26", "#C9A227"] },
@@ -194,6 +194,69 @@
         || `<span class="hint">لسه مفيش بيانات</span>`;
     } catch { $("versions").innerHTML = `<span class="hint">—</span>`; }
   };
+
+  // ───────── استخدام التطبيق (usage/ من analytics.dart في التطبيق) ─────────
+  const RECITERS = { alafasy: "مشاري العفاسي", husary: "محمود خليل الحصري", minshawi: "محمد صديق المنشاوي",
+    abdulbasit: "عبد الباسط عبد الصمد", maher: "ماهر المعيقلي", sudais: "عبد الرحمن السديس", shuraym: "سعود الشريم",
+    ghamdi: "سعد الغامدي", dossari: "ياسر الدوسري", hudhaify: "علي الحذيفي", qatami: "ناصر القطامي", abdulbasit_mj: "عبد الباسط (مجوّد)" };
+  const FEATURES = { quran: "المصحف", daily_wird: "ورد اليوم", khatma: "الختمة الجماعية", qibla: "القبلة", quran_wird: "الورد القرآني",
+    asma: "الأسماء الحسنى", calendar: "التقويم", stats: "إحصائياتي", search: "البحث", learn_prayer: "تعليم الصلاة",
+    customize: "رتّب أذكارك", share_dhikr_image: "مشاركة ذكر كصورة", share_ayah_image: "مشاركة آية كصورة",
+    tafsir_saadi: "تحميل تفسير السعدي", tafsir_ibnkathir: "تحميل تفسير ابن كثير", tafsir_jalalayn: "تحميل تفسير الجلالين",
+    tab_home: "تاب الرئيسية", tab_prayer: "تاب الصلاة", tab_favorites: "تاب المفضلة", tab_tasbeeh: "تاب السبحة", tab_settings: "تاب الإعدادات" };
+  const notifLabel = k => {
+    if (k === "prayer") return "الأذان والصلاة";
+    if (k === "other") return "إشعارات أخرى";
+    if (k.startsWith("cat_")) return "فتح " + catTitle(k.slice(4));
+    if (k.startsWith("btn_done_")) return "زرار «قرأتها ✓» — " + catTitle(k.slice(9));
+    return k;
+  };
+  const catTitle = id => (categories.find(c => c.id === id) || {}).title || id;
+  let usageDays = 7;
+  function bars(el, obj, label, max = 10) {
+    const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, max);
+    const top = rows.length ? rows[0][1] : 1;
+    $(el).innerHTML = rows.map(([k, n]) => `<div class="urow"><span>${esc(label(k))}</span><span class="vbar"><i style="width:${Math.max(3, Math.round(n * 100 / top))}%"></i></span><span>${n.toLocaleString("ar-EG")}</span></div>`).join("")
+      || `<span class="hint">لسه مفيش بيانات للفترة دي</span>`;
+  }
+  loaders.usage = async () => {
+    if (!categories.length) await loadAdhkar().catch(() => {});
+    const now = new Date();
+    const from = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - usageDays));
+    const to = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
+    ["uDevices", "uMorning", "uEvening", "uDone"].forEach(id => { $(id).textContent = "…"; });
+    const r = await api(":runQuery", { method: "POST", body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: "usage" }],
+      where: { compositeFilter: { op: "AND", filters: [
+        { fieldFilter: { field: { fieldPath: "d" }, op: "GREATER_THAN_OR_EQUAL", value: { stringValue: from } } },
+        { fieldFilter: { field: { fieldPath: "d" }, op: "LESS_THAN_OR_EQUAL", value: { stringValue: to } } },
+      ] } },
+      limit: 20000 } }) });
+    const docs = (r || []).filter(x => x.document).map(x => fromDoc(x.document));
+    const sum = g => { const o = {}; docs.forEach(d => Object.entries(d[g] || {}).forEach(([k, n]) => { o[k] = (o[k] || 0) + (+n || 0); })); return o; };
+    const devices = new Set(docs.map(d => d.id.split("_")[0]));
+    const did = cat => new Set(docs.filter(d => (d.done || {})[cat] > 0).map(d => d.id.split("_")[0])).size;
+    const pct = n => devices.size ? ` <small>(${Math.round(n * 100 / devices.size)}٪)</small>` : "";
+    $("uDevices").textContent = devices.size.toLocaleString("ar-EG");
+    $("uMorning").innerHTML = did("morning").toLocaleString("ar-EG") + pct(did("morning"));
+    $("uEvening").innerHTML = did("evening").toLocaleString("ar-EG") + pct(did("evening"));
+    $("uDone").textContent = Object.values(sum("done")).reduce((s, n) => s + n, 0).toLocaleString("ar-EG");
+    bars("uCat", sum("cat"), catTitle);
+    bars("uFeat", sum("feat"), k => FEATURES[k] || k, 12);
+    bars("uRec", sum("rec"), k => RECITERS[k] || k);
+    bars("uNotif", sum("notif"), notifLabel);
+    const perDay = {};
+    docs.forEach(d => { perDay[d.d] = (perDay[d.d] || 0) + 1; });
+    const days = Object.keys(perDay).sort().reverse().slice(0, 30);
+    const topDay = Math.max(1, ...Object.values(perDay));
+    $("uDays").innerHTML = days.map(k => `<div class="urow"><span dir="ltr">${esc(k)}</span><span class="vbar"><i style="width:${Math.round(perDay[k] * 100 / topDay)}%"></i></span><span>${perDay[k]}</span></div>`).join("")
+      || `<span class="hint">لسه مفيش بيانات</span>`;
+  };
+  document.querySelectorAll("#usageRange button").forEach(b => b.addEventListener("click", () => {
+    usageDays = +b.dataset.days;
+    document.querySelectorAll("#usageRange button").forEach(x => x.classList.toggle("on", x === b));
+    loaders.usage().catch(fail);
+  }));
 
   // ───────── الإشعارات ─────────
   const pvSync = () => {

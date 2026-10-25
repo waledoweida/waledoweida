@@ -212,3 +212,8 @@ nav button.on{background:var(--gold);color:var(--green)}
 .credit .wa{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-weight:700;text-decoration:none;margin-top:4px}
 .wa-ic{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#25D366;color:#fff;font-size:12px}
 .note small{display:block;margin-top:6px;opacity:.75;font-size:12px}
+.urow{display:grid;grid-template-columns:minmax(110px,40%) 1fr 54px;gap:8px;align-items:center;font-size:13px;font-weight:700}
+.urow small{opacity:.6;font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:inherit}
+.seg button.on{background:var(--green);color:#fff}
