@@ -230,6 +230,8 @@ KHATMA = dict(
         ("افتح الختمة", "دوس «افتح الختمة في التطبيق»، أو من التطبيق: الرئيسية ← ختمة جماعية ← انضم بكود، واكتب الكود."),
         ("احجز جزءك", "اختار جزء فاضي، واكتب اسمك، ولما تخلّص قراءته علّمه «تم»."),
     ],
+    live="الختمة دلوقتي", free="متاح", reading="بيقراه", done="اتقرا",
+    live_note="الصفحة بتتحدّث لوحدها. لحجز جزء افتح الختمة في التطبيق.",
 )
 
 
@@ -255,6 +257,17 @@ def khatma_page(a):
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="khatma-live" id="khatma-live" data-free="{attr(k['free'])}" data-reading="{attr(k['reading'])}" data-done="{attr(k['done'])}" hidden>
+    <div class="wrap narrow">
+      <h2 class="app-h2">{esc(k['live'])}</h2>
+      <p class="kl-name" id="khatma-live-name"></p>
+      <div class="kl-bar"><span id="khatma-live-bar"></span></div>
+      <p class="kl-sum" id="khatma-live-sum"></p>
+      <ol class="kl-grid" id="khatma-live-grid"></ol>
+      <p class="kl-note">{esc(k['live_note'])}</p>
     </div>
   </section>
 

@@ -10,7 +10,7 @@ import type { ApiRequest as VercelRequest, ApiResponse as VercelResponse } from 
 import { clean, jsonBody, limitKey, sameOrigin, sendJson } from './_lib/http';
 import { hit } from './_lib/ratelimit';
 
-const PROJECT = 'athkari-fd56c';
+export const PROJECT = 'athkari-fd56c';
 const WEB_API_KEY = 'AIzaSyD4ih7NvJNF_VadjfLLtLfhppsMfPl9uMk'; // public Firebase web key (not a secret)
 const ADMIN_EMAIL = 'abwwydtwlydahmd@gmail.com';
 const TOPIC = 'all';
@@ -33,7 +33,7 @@ export function serviceAccount(raw = process.env.ATHKARI_SERVICE_ACCOUNT): Servi
 const b64url = (s: string | Buffer) => Buffer.from(s).toString('base64url');
 
 /** A Google OAuth access token for FCM, from a JWT signed with the service account key. */
-async function accessToken(sa: ServiceAccount): Promise<string> {
+export async function accessToken(sa: ServiceAccount): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
   const head = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claims = b64url(JSON.stringify({
