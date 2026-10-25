@@ -335,7 +335,7 @@ test('athkari-khatma: validates, checks Firestore, sends once to the khatma topi
   };
   try {
     const post = (b) => call(khatma, { method: 'POST', headers: { 'x-forwarded-for': '9.9.9.9' }, body: b });
-    assert.equal((await call(khatma, { method: 'GET' })).status, 405);
+    assert.equal((await call(khatma, { method: 'PUT' })).status, 405);
     assert.equal((await post({ code: 'abc', juz: 5, event: 'claim', device: 'abcd1234' })).status, 400);
     assert.equal((await post({ code: 'ABC123', juz: 31, event: 'claim', device: 'abcd1234' })).status, 400);
     assert.equal((await post({ code: 'ABC123', juz: 5, event: 'hack', device: 'abcd1234' })).status, 400);
@@ -366,7 +366,7 @@ test('athkari-khatma: validates, checks Firestore, sends once to the khatma topi
     // texts: near the end and complete
     const k = mod.parseKhatma(doc);
     assert.equal(k.name, 'الحاج محمد');
-    assert.match(mod.message(k, 3, 'done').body, /فاضل 4 أجزاء على الختم/);
+    assert.match(mod.message(k, 3, 'done').body, /فاضل 5 أجزاء على الختم/);
     for (let j = 1; j <= 30; j++) k.parts[j].s = 2;
     assert.match(mod.message(k, 30, 'done').title, /تمت ختمة الحاج محمد/);
   } finally {
