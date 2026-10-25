@@ -310,3 +310,67 @@ test('the services counter is worked out on the server: same numbers as before, 
   assert.ok(r.body.n >= require('../.build/_lib/counter-start.js').COUNTER.base);
   assert.equal((await call(counter, { method: 'POST' })).status, 405);
 });
+
+test('athkari-khatma: validates, checks Firestore, sends once to the khatma topic', async () => {
+  const { generateKeyPairSync } = require('node:crypto');
+  const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  process.env.ATHKARI_SERVICE_ACCOUNT = JSON.stringify({
+    client_email: 'x@athkari.iam.gserviceaccount.com', private_key: privateKey.export({ type: 'pkcs8', format: 'pem' }),
+  });
+  const khatma = load('athkari-khatma.js');
+  const mod = require('../.build/athkari-khatma.js');
+  const part = (s, n = '', d = '') => ({ mapValue: { fields: { s: { integerValue: String(s) }, n: { stringValue: n }, d: { stringValue: d } } } });
+  const parts = {};
+  for (let j = 1; j <= 30; j++) parts[String(j)] = part(j <= 26 ? 2 : 0, 'سارة', 'zzzzzzzz');
+  parts['5'] = part(1, 'أحمد', 'abcd1234');
+  const doc = { fields: { name: { stringValue: 'الحاج محمد' }, round: { integerValue: '0' }, parts: { mapValue: { fields: parts } } } };
+  const sent = [];
+  const orig = global.fetch;
+  global.fetch = async (url, opt) => {
+    if (url.startsWith('https://redis.test')) return orig(url, opt);
+    if (url.includes('firestore.googleapis.com')) return url.endsWith('/NOPE00') ? { ok: false, status: 404 } : { ok: true, status: 200, json: async () => doc };
+    if (url.includes('oauth2.googleapis.com')) return { ok: true, json: async () => ({ access_token: 't' }) };
+    if (url.includes('fcm.googleapis.com')) { sent.push(JSON.parse(opt.body).message); return { ok: true, json: async () => ({ name: 'm' }) }; }
+    throw new Error('unexpected ' + url);
+  };
+  try {
+    const post = (b) => call(khatma, { method: 'POST', headers: { 'x-forwarded-for': '9.9.9.9' }, body: b });
+    assert.equal((await call(khatma, { method: 'PUT' })).status, 405);
+    assert.equal((await post({ code: 'abc', juz: 5, event: 'claim', device: 'abcd1234' })).status, 400);
+    assert.equal((await post({ code: 'ABC123', juz: 31, event: 'claim', device: 'abcd1234' })).status, 400);
+    assert.equal((await post({ code: 'ABC123', juz: 5, event: 'hack', device: 'abcd1234' })).status, 400);
+    assert.equal((await post({ code: 'NOPE00', juz: 5, event: 'claim', device: 'abcd1234' })).status, 404);
+    // the part isn't this device's, or isn't in that state: refused, nothing sent
+    assert.equal((await post({ code: 'ABC123', juz: 5, event: 'claim', device: 'ffffffff' })).status, 409);
+    assert.equal((await post({ code: 'ABC123', juz: 5, event: 'done', device: 'abcd1234' })).status, 409);
+    assert.equal(sent.length, 0);
+    const ok = await post({ code: 'ABC123', juz: 5, event: 'claim', device: 'abcd1234' });
+    assert.deepEqual(ok.body, { ok: true, sent: true });
+    assert.equal(sent[0].topic, 'khatma_ABC123');
+    assert.equal(sent[0].data.type, 'khatma');
+    assert.equal(sent[0].data.device, 'abcd1234');
+    assert.match(sent[0].data.body, /أحمد حجز الجزء 5/);
+    assert.equal(sent[0].notification, undefined); // data only: the app hides it from the sender
+    // the same event again is not re-sent
+    assert.deepEqual((await post({ code: 'ABC123', juz: 5, event: 'claim', device: 'abcd1234' })).body, { ok: true, sent: false });
+    assert.equal(sent.length, 1);
+    // the page on the site: names and states, never the device ids
+    const g = await call(khatma, { method: 'GET', query: { c: 'ABC123' } });
+    assert.equal(g.status, 200);
+    assert.equal(g.body.name, 'الحاج محمد');
+    assert.equal(g.body.parts.length, 30);
+    assert.deepEqual(g.body.parts[4], { s: 1, n: 'أحمد' });
+    assert.ok(!JSON.stringify(g.body).includes('abcd1234'));
+    assert.equal((await call(khatma, { method: 'GET', query: { c: 'x' } })).status, 400);
+    assert.equal((await call(khatma, { method: 'GET', query: { c: 'NOPE00' } })).status, 404);
+    // texts: near the end and complete
+    const k = mod.parseKhatma(doc);
+    assert.equal(k.name, 'الحاج محمد');
+    assert.match(mod.message(k, 3, 'done').body, /فاضل 5 أجزاء على الختم/);
+    for (let j = 1; j <= 30; j++) k.parts[j].s = 2;
+    assert.match(mod.message(k, 30, 'done').title, /تمت ختمة الحاج محمد/);
+  } finally {
+    global.fetch = orig;
+    delete process.env.ATHKARI_SERVICE_ACCOUNT;
+  }
+});
