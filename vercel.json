@@ -1082,7 +1082,7 @@
     },
     {
       "source": "/apps/athkari/download",
-      "destination": "https://waledoweida.github.io/athkari-app/athkari.apk",
+      "destination": "https://play.google.com/store/apps/details?id=com.athkari.athkari",
       "permanent": false
     }
   ]

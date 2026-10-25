@@ -106,20 +106,20 @@
       ],
       "steps": [
         {
-          "t": "حمّل الملف",
-          "d": "اضغط زرار «تحميل للأندرويد» من موبايلك."
+          "t": "افتح جوجل بلاي",
+          "d": "اضغط زرار «حمّل من جوجل بلاي» من موبايلك."
         },
         {
-          "t": "افتح الملف",
-          "d": "من الإشعارات أو من مجلد التنزيلات."
+          "t": "ثبّت التطبيق",
+          "d": "اضغط «تثبيت»، والتطبيق هينزل زي أي تطبيق تاني."
         },
         {
-          "t": "اسمح بالتثبيت",
-          "d": "لو ظهرت رسالة، اختار «الإعدادات» وفعّل «السماح من هذا المصدر»."
+          "t": "افتح وابدأ",
+          "d": "افتح أذكاري، والتحديثات الجاية هتوصلك أوتوماتيك من جوجل بلاي."
         },
         {
-          "t": "ثبّت وابدأ",
-          "d": "اضغط «تثبيت» وافتح أذكاري. التحديثات الجاية هتوصلك من جوه التطبيق."
+          "t": "منزّله من الموقع قبل كده؟",
+          "d": "امسح النسخة القديمة الأول، وبعدين نزّله من جوجل بلاي عشان التحديثات توصلك على طول."
         }
       ],
       "note": "التطبيق مجاني، لا يجمع أي بيانات شخصية، ولا يعرض إعلانات. نص المصحف من مشروع Tanzil بالرسم العثماني بدون تعديل."
@@ -206,20 +206,20 @@
       ],
       "steps": [
         {
-          "t": "Download",
-          "d": "Tap “Download for Android” on your phone."
+          "t": "Open Google Play",
+          "d": "Tap “Get it on Google Play” on your phone."
         },
         {
-          "t": "Open the file",
-          "d": "From the notification or your Downloads folder."
+          "t": "Install",
+          "d": "Tap “Install” like any other app."
         },
         {
-          "t": "Allow the install",
-          "d": "If asked, open “Settings” and turn on “Allow from this source”."
+          "t": "Open and start",
+          "d": "Open Athkari. Future updates arrive automatically from Google Play."
         },
         {
-          "t": "Install and start",
-          "d": "Tap “Install” and open Athkari. Future updates arrive inside the app."
+          "t": "Installed it from this site before?",
+          "d": "Uninstall the old copy first, then install from Google Play so updates reach you automatically."
         }
       ],
       "note": "Free, collects no personal data and shows no ads. The Quran text is from the Tanzil project in Uthmani script, unmodified."
@@ -350,6 +350,7 @@
       "notes": [],
       "dua": "🤲 «الدال على الخير كفاعله»، شارك الصفحة دي وخدها صدقة جارية.",
       "share": "جرّب تطبيق أذكاري 🌙 المصحف والتفسير والأذكار ومواقيت الصلاة، مجاني وبدون إعلانات. انضم للمختبرين من هنا:"
-    }
+    },
+    "store": "https://play.google.com/store/apps/details?id=com.athkari.athkari"
   }
 ]
