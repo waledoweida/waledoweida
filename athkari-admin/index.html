@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Cairo:wght@400;600;700;800&amp;display=swap">
-<link rel="stylesheet" href="admin.css?v=3">
+<link rel="stylesheet" href="admin.css?v=4">
 </head>
 <body>
 
@@ -34,6 +34,7 @@
     <div class="brand"><img src="/apps/athkari/img/icon.webp" alt="" width="40" height="40"><div><b>أذكاري</b><small>لوحة التحكم</small></div></div>
     <nav id="nav" aria-label="أقسام اللوحة">
       <button type="button" data-tab="overview" class="on">📊 نظرة عامة</button>
+      <button type="button" data-tab="usage">📈 استخدام التطبيق</button>
       <button type="button" data-tab="notify">🔔 الإشعارات</button>
       <button type="button" data-tab="home">🏠 الرئيسية والبانر</button>
       <button type="button" data-tab="campaigns">🌙 حملات المناسبات</button>
@@ -85,6 +86,32 @@
         </div>
       </div>
       <p class="hint">العدّ مجهول تمامًا: كل موبايل بيبعت مرة في اليوم رقم عشوائي وتاريخ الفتح ورقم الإصدار بس.</p>
+    </section>
+
+    <!-- استخدام التطبيق -->
+    <section class="tab hidden" id="tab-usage">
+      <div class="toolbar">
+        <h2>استخدام التطبيق</h2>
+        <div class="seg" id="usageRange">
+          <button type="button" data-days="1">امبارح</button>
+          <button type="button" data-days="7" class="on">آخر 7 أيام</button>
+          <button type="button" data-days="30">آخر 30 يوم</button>
+        </div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><b id="uDevices">—</b><span>موبايل استخدم التطبيق</span></div>
+        <div class="tile"><b id="uMorning">—</b><span>كمّلوا أذكار الصباح</span></div>
+        <div class="tile"><b id="uEvening">—</b><span>كمّلوا أذكار المساء</span></div>
+        <div class="tile"><b id="uDone">—</b><span>مرة إكمال لأي قسم</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>الأقسام الأكثر فتحًا</h2><div id="uCat" class="versions"></div></div>
+        <div class="card"><h2>المميزات الأكثر استخدامًا</h2><div id="uFeat" class="versions"></div></div>
+        <div class="card"><h2>القرّاء الأكثر استماعًا</h2><div id="uRec" class="versions"></div></div>
+        <div class="card"><h2>الإشعارات اللي اتفتحت</h2><div id="uNotif" class="versions"></div></div>
+      </div>
+      <div class="card"><h2>الاستخدام يوم بيوم</h2><div id="uDays" class="versions"></div></div>
+      <p class="hint">الإحصائيات مجهولة تمامًا: كل موبايل بيبعت ملخص يومه (عدد مرات فتح الأقسام والمميزات) مرة واحدة في اليوم اللي بعده، من غير أي بيانات شخصية. بتبدأ تظهر مع تحديث التطبيق الجديد.</p>
     </section>
 
     <!-- الإشعارات -->
@@ -264,6 +291,6 @@
 
 <script src="adhkar-data.js?v=3"></script>
 <script src="asma-data.js?v=1"></script>
-<script src="admin.js?v=3"></script>
+<script src="admin.js?v=4"></script>
 </body>
 </html>
