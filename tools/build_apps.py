@@ -23,7 +23,7 @@ T = {
         features="المميزات", screens="صور من التطبيق", install="طريقة التثبيت", privacy="سياسة الخصوصية",
         made="تصميم وتطوير: وليد أبوعويضة", want_h="عايز تطبيق لمشروعك؟",
         want_p="بصمّم تطبيقات ومواقع احترافية بلوحة تحكم تحدّث منها المحتوى بنفسك. كلّمني ونتكلم عن فكرتك.",
-        apk="ملف APK", all_apps="كل التطبيقات",
+        apk="ملف APK", all_apps="كل التطبيقات", play="حمّل من جوجل بلاي", play_small="مجاني • Google Play",
     ),
     "en": dict(
         path="/en/apps/", alt="/apps/", title="My apps", h1="Apps I've built",
@@ -33,9 +33,17 @@ T = {
         features="Features", screens="Screenshots", install="How to install", privacy="Privacy policy",
         made="Designed & built by Waled Abu Oweida", want_h="Want an app for your business?",
         want_p="I build polished apps and websites with a control panel so you can update the content yourself. Let's talk about your idea.",
-        apk="APK file", all_apps="All apps",
+        apk="APK file", all_apps="All apps", play="Get it on Google Play", play_small="Free • Google Play",
     ),
 }
+
+def download_button(a, t):
+    """زرار التحميل: جوجل بلاي لو التطبيق عليه (a["store"])، وإلا ملف الـ APK."""
+    if a.get("store"):
+        return (f"""<a class="btn btn-gold app-dl" href="{attr(a['store'])}" target="_blank" rel="noopener">{svg('android')}"""
+                f"""<span>{esc(t['play'])}<small>{esc(t['play_small'])}</small></span></a>""")
+    return f"""<a class="btn btn-gold app-dl" href="{a['download']}" download>{svg('android')}<span>{esc(t['download'])}<small>{esc(t['free'])} • {esc(t['apk'])} • {a['size_mb']} {esc(t['mb'])}</small></span></a>"""
+
 
 ICON = {
     "book": '<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
@@ -157,7 +165,7 @@ def app_page(lang, a):
     facts_html = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>" for k, v in facts)
     test_btn = (f"""\n            <a class="btn btn-ghost app-dl" href="{t['path']}{slug}/test/">{svg('check')}<span>{esc(a['testing']['cta'])}<small>{esc(a['testing']['cta_small'])}</small></span></a>"""
                 if lang == "ar" and a.get("testing") else "")
-    dl = f"""<a class="btn btn-gold app-dl" href="{a['download']}" download>{svg('android')}<span>{esc(t['download'])}<small>{esc(t['free'])} • {esc(t['apk'])} • {a['size_mb']} {esc(t['mb'])}</small></span></a>"""
+    dl = download_button(a, t)
     body = f"""  <section class="post-hero app-hero">
     <div class="wrap">
       <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}">{esc(t['title'])}</a> / <span>{esc(x['name'])}</span></div>
@@ -211,7 +219,7 @@ def app_page(lang, a):
         "@context": "https://schema.org", "@type": "MobileApplication", "name": x["name"], "inLanguage": lang,
         "description": x["summary"], "url": SITE + path, "operatingSystem": f"Android {a['android']}+",
         "applicationCategory": "LifestyleApplication", "softwareVersion": a["version"],
-        "fileSize": f"{a['size_mb']}MB", "downloadUrl": SITE + a["download"], "image": SITE + img(slug, "icon"),
+        "fileSize": f"{a['size_mb']}MB", "downloadUrl": a.get("store") or SITE + a["download"], "image": SITE + img(slug, "icon"),
         "screenshot": [SITE + img(slug, s) for s in a["screens"][:4]],
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
         "author": {"@type": "Person", "name": d["name"], "url": SITE + d["home"]},
@@ -242,7 +250,7 @@ def khatma_page(a):
     slug, x = a["slug"], a["ar"]
     path = t["path"] + slug + "/khatma/"
     steps = "\n".join(f"""        <li><b>{esc(h)}</b><span>{esc(b)}</span></li>""" for h, b in k["steps"])
-    dl = f"""<a class="btn btn-gold app-dl" href="{a['download']}" download>{svg('android')}<span>{esc(t['download'])}<small>{esc(t['free'])} • {esc(t['apk'])} • {a['size_mb']} {esc(t['mb'])}</small></span></a>"""
+    dl = download_button(a, t)
     body = f"""  <section class="post-hero app-hero">
     <div class="wrap narrow">
       <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}{slug}/">{esc(x['name'])}</a> / <span>{esc(k['title'])}</span></div>
