@@ -148,7 +148,7 @@
   $("phoneCol").addEventListener("click", e => { if (e.target.id === "phoneCol") $("phoneCol").classList.remove("open"); });
 
   // ───────── البيانات ─────────
-  const DEFAULTS = { bannerEnabled: false, bannerTitle: "", bannerText: "", dailyText: "", dailyReference: "", dedicationMinutes: 1,
+  const DEFAULTS = { bannerEnabled: false, bannerTitle: "", bannerText: "", dailyText: "", dailyReference: "", dedicationMinutes: 1, dedicationSeconds: 0,
     latestBuild: 0, updateMessage: "", updateUrl: "", updateForce: false, bannerImageV: 0 };
   let settings = { ...DEFAULTS }, categories = [], adhkar = [], dedications = [], campOverrides = {}, bannerImage = "", currentCat = null;
 
@@ -160,7 +160,7 @@
       const img = await api("/media/banner");
       bannerImage = img ? (fromDoc(img).data || "") : "";
     } else bannerImage = "";
-    fillHome(); fillUpdate(); $("dedMinutes").value = String(settings.dedicationMinutes || 1);
+    fillHome(); fillUpdate(); $("dedMinutes").value = String(settings.dedicationSeconds || (settings.dedicationMinutes || 1) * 60);
   }
   async function saveSettings(patch, msg) {
     settings = { ...settings, ...patch };
@@ -651,7 +651,7 @@
     };
   }
   $("addDedBtn").onclick = () => openDedForm(null);
-  $("saveDedMinutes").onclick = async () => { try { await saveSettings({ dedicationMinutes: parseInt($("dedMinutes").value) || 1 }); } catch (e) { fail(e); } };
+  $("saveDedMinutes").onclick = async () => { try { const sec = parseInt($("dedMinutes").value) || 60; await saveSettings({ dedicationSeconds: sec, dedicationMinutes: Math.max(1, Math.round(sec / 60)) }); } catch (e) { fail(e); } };
 
   // ───────── الختمات الجماعية ─────────
   loaders.khatmas = async () => {
