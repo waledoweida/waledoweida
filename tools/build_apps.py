@@ -310,7 +310,7 @@ MAWAQIT = dict(
     lead="مواقيت الصلاة لشهر كامل في كل محافظات مصر، بالتاريخ الميلادي والهجري، ومظبوطة على التوقيت الصيفي والشتوي.",
     desc="مواقيت الصلاة في القاهرة والجيزة والإسكندرية وكل محافظات مصر لشهر كامل: الفجر والشروق والظهر والعصر والمغرب والعشاء، بالتاريخ الهجري، وقابلة للطباعة.",
     link="مواقيت الصلاة في مصر لشهر كامل",
-    city="المدينة", prev="الشهر اللي فات", next="الشهر الجاي", print="اطبع الجدول",
+    month="مواقيت الشهر", city="المدينة", prev="الشهر اللي فات", next="الشهر الجاي", print="اطبع الجدول",
     next_h="الصلاة الجاية", left="فاضل", day="اليوم", hijri="هجري",
     names=["الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"],
     legend_fri="يوم الجمعة", legend_white="الأيام البيض (13 و14 و15)",
@@ -357,7 +357,7 @@ def mawaqit_page(a):
     <div class="wrap">
       <div class="mq-bar">
         <button type="button" class="mq-btn" id="mq-prev">{esc(k['prev'])}</button>
-        <h2 class="app-h2" id="mq-month"></h2>
+        <h2 class="app-h2" id="mq-month">{esc(k['month'])}</h2>
         <button type="button" class="mq-btn" id="mq-next">{esc(k['next'])}</button>
       </div>
       <noscript><p class="mq-note">{esc(k['noscript'])}</p></noscript>
