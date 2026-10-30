@@ -77,7 +77,14 @@ def paths():
         out.append(T[lang]["path"])
         out += [T[lang]["path"] + a["slug"] + "/" for a in apps()]
     out += [T["ar"]["path"] + a["slug"] + "/test/" for a in apps() if a.get("testing")]
+    out += [T["ar"]["path"] + a["slug"] + "/mawaqit/" for a in apps() if a.get("mawaqit")]
     return out
+
+
+def alternates():
+    """Arabic-only pages: their English alternate is the app's English page."""
+    return {T["ar"]["path"] + a["slug"] + sub: T["en"]["path"] + a["slug"] + "/"
+            for a in apps() for sub, key in (("/test/", "testing"), ("/mawaqit/", "mawaqit")) if a.get(key)}
 
 
 def img(slug, name):
@@ -166,6 +173,8 @@ def app_page(lang, a):
     test_btn = (f"""\n            <a class="btn btn-ghost app-dl" href="{t['path']}{slug}/test/">{svg('check')}<span>{esc(a['testing']['cta'])}<small>{esc(a['testing']['cta_small'])}</small></span></a>"""
                 if lang == "ar" and a.get("testing") else "")
     dl = download_button(a, t)
+    mq = (f"""\n          <p class="app-more"><a href="{t['path']}{slug}/mawaqit/">{svg('calendar')}<span>{esc(MAWAQIT['link'])}</span></a></p>"""
+          if lang == "ar" and a.get("mawaqit") else "")
     body = f"""  <section class="post-hero app-hero">
     <div class="wrap">
       <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}">{esc(t['title'])}</a> / <span>{esc(x['name'])}</span></div>
@@ -179,7 +188,7 @@ def app_page(lang, a):
           <div class="app-cta">
             {dl}{test_btn}
           </div>
-          <dl class="app-facts">{facts_html}</dl>
+          <dl class="app-facts">{facts_html}</dl>{mq}
         </div>
       </div>
     </div>
@@ -296,6 +305,95 @@ def khatma_page(a):
                 ch=chrome("ar", T["en"]["path"] + slug + "/"))
 
 
+MAWAQIT = dict(
+    title="مواقيت الصلاة في مصر", h1="مواقيت الصلاة في مصر",
+    lead="مواقيت الصلاة لشهر كامل في كل محافظات مصر، بالتاريخ الميلادي والهجري، ومظبوطة على التوقيت الصيفي والشتوي.",
+    desc="مواقيت الصلاة في القاهرة والجيزة والإسكندرية وكل محافظات مصر لشهر كامل: الفجر والشروق والظهر والعصر والمغرب والعشاء، بالتاريخ الهجري، وقابلة للطباعة.",
+    link="مواقيت الصلاة في مصر لشهر كامل",
+    city="المدينة", prev="الشهر اللي فات", next="الشهر الجاي", print="اطبع الجدول",
+    next_h="الصلاة الجاية", left="فاضل", day="اليوم", hijri="هجري",
+    names=["الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"],
+    legend_fri="يوم الجمعة", legend_white="الأيام البيض (13 و14 و15)",
+    method="الحساب بطريقة الهيئة المصرية العامة للمساحة (الفجر 19.5°، العشاء 17.5°)، والتاريخ الهجري بتقويم أم القرى. ممكن يختلف الميعاد دقيقة عن جدول مسجدك بسبب التقريب.",
+    noscript="الجدول بيتحسب على جهازك، فلازم JavaScript يكون شغال في المتصفح.",
+    app_h="المواقيت دي في جيبك، ومن غير نت",
+    app_p="أذكاري بيحسب مواقيت الصلاة لمدينتك وينبّهك بالأذان في وقته، ومعاه أذكار الصباح والمساء والمصحف كامل. مجاني ومن غير إعلانات، وشغال من غير إنترنت.",
+)
+
+
+def mawaqit_page(a):
+    """/apps/<slug>/mawaqit/ — a month of prayer times for Egypt's cities. mawaqit.js computes them on the visitor's
+    device with the app's own method (PrayTimes, Egyptian General Authority of Survey), Cairo's DST included."""
+    t, d, k = T["ar"], L["ar"], MAWAQIT
+    slug, x = a["slug"], a["ar"]
+    path = t["path"] + slug + "/mawaqit/"
+    cells = "\n".join(f"""        <li data-p="{i}"><span>{esc(n)}</span><b>--:--</b></li>""" for i, n in enumerate(k["names"]))
+    heads = "".join(f"<th scope=\"col\">{esc(n)}</th>" for n in k["names"])
+    body = f"""  <section class="post-hero app-hero mq-hero">
+    <div class="wrap narrow">
+      <div class="crumbs"><a href="{d['home']}">{esc(d['crumbs_home'])}</a> / <a href="{t['path']}{slug}/">{esc(x['name'])}</a> / <span>{esc(k['title'])}</span></div>
+      <h1>{esc(k['h1'])}</h1>
+      <p class="lead">{esc(k['lead'])}</p>
+      <div class="mq-pick">
+        <label for="mq-city">{esc(k['city'])}</label>
+        <select id="mq-city"></select>
+      </div>
+      <div class="mq-today" id="mq-today">
+        <p class="mq-date" id="mq-today-date"></p>
+        <div class="mq-next">
+          <span>{esc(k['next_h'])}</span>
+          <b id="mq-next-name"></b>
+          <em id="mq-next-at"></em>
+          <span class="mq-left">{esc(k['left'])} <b dir="ltr" id="mq-next-left">--:--:--</b></span>
+        </div>
+        <ol class="mq-cells">
+{cells}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="mq-month-sec">
+    <div class="wrap">
+      <div class="mq-bar">
+        <button type="button" class="mq-btn" id="mq-prev">{esc(k['prev'])}</button>
+        <h2 class="app-h2" id="mq-month"></h2>
+        <button type="button" class="mq-btn" id="mq-next">{esc(k['next'])}</button>
+      </div>
+      <noscript><p class="mq-note">{esc(k['noscript'])}</p></noscript>
+      <div class="mq-scroll">
+        <table class="mq-table">
+          <caption id="mq-cap">{esc(k['title'])}</caption>
+          <thead><tr><th scope="col">{esc(k['day'])}</th><th scope="col" class="h">{esc(k['hijri'])}</th>{heads}</tr></thead>
+          <tbody id="mq-body"></tbody>
+        </table>
+      </div>
+      <p class="mq-legend"><span class="mq-key fri"></span>{esc(k['legend_fri'])} <span class="mq-key white"></span>{esc(k['legend_white'])}</p>
+      <p class="mq-note">{esc(k['method'])}</p>
+      <p class="mq-print-row"><button type="button" class="mq-btn" id="mq-print">{esc(k['print'])}</button></p>
+    </div>
+  </section>
+
+  <section class="app-install mq-app">
+    <div class="wrap narrow">
+      <div class="mq-cta">
+        <img class="app-icon" src="{img(slug, 'icon')}" alt="{attr(x['name'])}" width="80" height="80" loading="lazy">
+        <div>
+          <h2 class="app-h2">{esc(k['app_h'])}</h2>
+          <p>{esc(k['app_p'])}</p>
+          <div class="app-cta">{download_button(a, t)}<a class="mq-btn" href="{t['path']}{slug}/">{esc(t['details'])}</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="/apps/{slug}/mawaqit/mawaqit.js" defer></script>"""
+    ld = {"@context": "https://schema.org", "@type": "WebPage", "inLanguage": "ar", "name": k["title"],
+          "description": k["desc"], "url": SITE + path}
+    return page("ar", title=page_title(k["title"], d["short"]), desc=k["desc"], path=path,
+                alt_path=T["en"]["path"] + slug + "/", og_type="website", ld=ld, body=body,
+                ch=chrome("ar", T["en"]["path"] + slug + "/"))
+
+
 def testing_page(a):
     """/apps/<slug>/test/ — how to join the app's Google Play closed test: the features, the two links
     (the testers' Google Group, then Google Play's opt-in page) and the download, step by step."""
@@ -394,6 +492,8 @@ def build():
                 write(f"apps/{a['slug']}/test/index.html", testing_page(a))
             if lang == "ar" and a.get("khatma"):
                 write(f"apps/{a['slug']}/khatma/index.html", khatma_page(a))
+            if lang == "ar" and a.get("mawaqit"):
+                write(f"apps/{a['slug']}/mawaqit/index.html", mawaqit_page(a))
     return paths()
 
 
