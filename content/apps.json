@@ -225,6 +225,7 @@
       "note": "Free, collects no personal data and shows no ads. The Quran text is from the Tanzil project in Uthmani script, unmodified."
     },
     "khatma": true,
+    "mawaqit": true,
     "testing": {
       "group": "https://groups.google.com/g/athkari-testers",
       "optin": "https://play.google.com/apps/testing/com.athkari.athkari",
