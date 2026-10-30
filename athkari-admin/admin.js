@@ -224,15 +224,19 @@
     const now = new Date();
     const from = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - usageDays));
     const to = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
+    // التحليلات الدقيقة محتاجة 60 يوم (الرجوع بعد شهر)، والباقي بيتفلتر على الفترة المختارة
+    const from60 = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 60));
     ["uDevices", "uMorning", "uEvening", "uDone"].forEach(id => { $(id).textContent = "…"; });
     const r = await api(":runQuery", { method: "POST", body: JSON.stringify({ structuredQuery: {
       from: [{ collectionId: "usage" }],
       where: { compositeFilter: { op: "AND", filters: [
-        { fieldFilter: { field: { fieldPath: "d" }, op: "GREATER_THAN_OR_EQUAL", value: { stringValue: from } } },
+        { fieldFilter: { field: { fieldPath: "d" }, op: "GREATER_THAN_OR_EQUAL", value: { stringValue: from60 } } },
         { fieldFilter: { field: { fieldPath: "d" }, op: "LESS_THAN_OR_EQUAL", value: { stringValue: to } } },
       ] } },
-      limit: 20000 } }) });
-    const docs = (r || []).filter(x => x.document).map(x => fromDoc(x.document));
+      limit: 50000 } }) });
+    const all = (r || []).filter(x => x.document).map(x => fromDoc(x.document));
+    const docs = all.filter(d => d.d >= from);
+    analytics(all, docs, to);
     const sum = g => { const o = {}; docs.forEach(d => Object.entries(d[g] || {}).forEach(([k, n]) => { o[k] = (o[k] || 0) + (+n || 0); })); return o; };
     const devices = new Set(docs.map(d => d.id.split("_")[0]));
     const did = cat => new Set(docs.filter(d => (d.done || {})[cat] > 0).map(d => d.id.split("_")[0])).size;
@@ -252,6 +256,38 @@
     $("uDays").innerHTML = days.map(k => `<div class="urow"><span dir="ltr">${esc(k)}</span><span class="vbar"><i style="width:${Math.round(perDay[k] * 100 / topDay)}%"></i></span><span>${perDay[k]}</span></div>`).join("")
       || `<span class="hint">لسه مفيش بيانات</span>`;
   };
+  // ───────── التحليلات الدقيقة (الحسابات في athkariAnalytics تحت، ومعاها اختبارات) ─────────
+  const ANDROID = { 24: "7", 25: "7.1", 26: "8", 27: "8.1", 28: "9", 29: "10", 30: "11", 31: "12", 32: "12L", 33: "13", 34: "14", 35: "15", 36: "16", 37: "17" };
+  const fmtNum = n => Math.round(n).toLocaleString("ar-EG");
+  const fmtDur = sec => {
+    if (!sec) return "—";
+    const m = Math.round(sec / 60);
+    return m < 1 ? `${Math.round(sec)} ث` : m < 60 ? `${m} د` : `${Math.floor(m / 60)} س ${m % 60} د`;
+  };
+  const hourLabel = h => { const n = +h.slice(1); return `${n % 12 === 0 ? 12 : n % 12} ${n < 12 ? "ص" : "م"}`; };
+  function analytics(all, docs, yesterday) {
+    const a = window.athkariAnalytics.compute(all, docs, yesterday);
+    $("aNew").textContent = fmtNum(a.installs);
+    $("aUpd").textContent = fmtNum(a.updates);
+    $("aOpens").textContent = a.opensPerDevDay ? a.opensPerDevDay.toLocaleString("ar-EG", { maximumFractionDigits: 1 }) : "—";
+    $("aTime").textContent = fmtDur(a.secPerDevDay);
+    $("aDau").textContent = fmtNum(a.dau); $("aWau").textContent = fmtNum(a.wau); $("aMau").textContent = fmtNum(a.mau);
+    $("aSess").textContent = fmtDur(a.secPerSession);
+    const ret = [["بعد يوم", a.ret.d1], ["بعد أسبوع", a.ret.d7], ["بعد شهر", a.ret.d30]];
+    $("aRet").innerHTML = ret.map(([k, x]) => x.cohort
+      ? `<div class="urow"><span>${k}</span><span class="vbar"><i style="width:${Math.max(3, Math.round(x.rate * 100))}%"></i></span><span>${Math.round(x.rate * 100)}٪ <small>(${x.back}/${x.cohort})</small></span></div>`
+      : `<div class="urow"><span>${k}</span><span class="hint">لسه بدري</span><span></span></div>`).join("");
+    const hours = {}; for (let h = 0; h < 24; h++) { const k = "h" + String(h).padStart(2, "0"); hours[k] = a.hours[k] || 0; }
+    const topH = Math.max(1, ...Object.values(hours));
+    $("aHours").innerHTML = Object.values(a.hours).some(Boolean)
+      ? Object.entries(hours).map(([k, n]) => `<div class="urow"><span>${hourLabel(k)}</span><span class="vbar"><i style="width:${Math.round(n * 100 / topH)}%"></i></span><span>${n}</span></div>`).join("")
+      : `<span class="hint">لسه مفيش بيانات</span>`;
+    bars("aLife", a.lifePaths, k => k);
+    bars("aSrc", a.sources, k => k === "play" ? "جوجل بلاي" : "مكان تاني (الموقع / مشاركة)");
+    bars("aBrand", a.brands, k => k);
+    bars("aAndroid", a.android, k => "أندرويد " + (ANDROID[k] || k));
+  }
+
   document.querySelectorAll("#usageRange button").forEach(b => b.addEventListener("click", () => {
     usageDays = +b.dataset.days;
     document.querySelectorAll("#usageRange button").forEach(x => x.classList.toggle("on", x === b));

@@ -217,3 +217,4 @@ nav button.on{background:var(--gold);color:var(--green)}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .seg button{border:0;background:transparent;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:inherit}
 .seg button.on{background:var(--green);color:#fff}
+.tab > h2.sub{font-size:19px;color:var(--green);margin:26px 0 10px}
