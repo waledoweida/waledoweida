@@ -13,7 +13,7 @@ import { accessToken, PROJECT, serviceAccount } from './athkari-push';
 
 type Event = 'claim' | 'done';
 interface Part { s: number; n: string; d: string }
-export interface Khatma { name: string; round: number; parts: Record<number, Part> }
+export interface Khatma { name: string; round: number; parts: Record<number, Part>; private?: boolean }
 
 export function valid(b: Record<string, unknown> | null): { code: string; juz: number; event: Event; device: string } | null {
   const code = typeof b?.code === 'string' ? b.code : '';
@@ -36,7 +36,7 @@ export function parseKhatma(doc: unknown): Khatma | null {
     const p = raw[String(j)]?.mapValue?.fields ?? {};
     parts[j] = { s: Number(p.s?.integerValue ?? p.s?.doubleValue ?? 0), n: String(p.n?.stringValue ?? ''), d: String(p.d?.stringValue ?? '') };
   }
-  return { name: String(f.name?.stringValue ?? '').slice(0, 60), round: Number(f.round?.integerValue ?? 0), parts };
+  return { name: String(f.name?.stringValue ?? '').slice(0, 60), round: Number(f.round?.integerValue ?? 0), parts, private: f.private?.booleanValue === true };
 }
 
 /** The notification text, or null when this event isn't worth announcing. */
@@ -53,8 +53,12 @@ export function message(k: Khatma, juz: number, event: Event): { title: string; 
   return { title, body: `${who} أتم الجزء ${juz} ✓ — اتقرا ${done} من 30 جزء` };
 }
 
+/** Reads with the service account when it is set (private khatmas can't be read publicly), else publicly. */
 async function readKhatma(code: string): Promise<Khatma | null | 'missing'> {
-  const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/khatmas/${code}`);
+  const sa = serviceAccount();
+  const headers: Record<string, string> = {};
+  if (sa) headers.Authorization = `Bearer ${await accessToken(sa, 'https://www.googleapis.com/auth/datastore')}`;
+  const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/khatmas/${code}`, { headers });
   if (r.status === 404) return 'missing';
   if (!r.ok) throw new Error('firestore');
   return parseKhatma(await r.json());
@@ -68,6 +72,8 @@ async function show(req: VercelRequest, res: VercelResponse): Promise<void> {
   let k: Khatma | null | 'missing';
   try { k = await readKhatma(code); } catch { return sendJson(res, 502, { ok: false, error: 'firestore' }); }
   if (k === 'missing' || !k) return sendJson(res, 404, { ok: false, error: 'no_khatma' });
+  // ختمة خاصة: مابنعرضش أسامي ولا تقدّم على الموقع (بتتفتح في التطبيق بالرقم السري بس)
+  if (k.private) return sendJson(res, 403, { ok: false, error: 'private' });
   const parts = [];
   for (let j = 1; j <= 30; j++) parts.push({ s: k.parts[j].s, n: k.parts[j].s ? k.parts[j].n.slice(0, 30) : '' });
   res.setHeader('Cache-Control', 'public, max-age=20');

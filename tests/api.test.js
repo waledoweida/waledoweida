@@ -374,3 +374,143 @@ test('athkari-khatma: validates, checks Firestore, sends once to the khatma topi
     delete process.env.ATHKARI_SERVICE_ACCOUNT;
   }
 });
+
+test('athkari-khatma-manage: private khatma by PIN, owner controls, relink, limits', async () => {
+  const { generateKeyPairSync, createHash } = require('node:crypto');
+  const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  process.env.ATHKARI_SERVICE_ACCOUNT = JSON.stringify({
+    client_email: 'x@athkari.iam.gserviceaccount.com', private_key: privateKey.export({ type: 'pkcs8', format: 'pem' }),
+  });
+  const manage = load('athkari-khatma-manage.js');
+  const mod = require('../.build/athkari-khatma-manage.js');
+  const sha = (s) => createHash('sha256').update(s).digest('hex');
+  const ownerKey = 'k'.repeat(32);
+
+  // ذاكرة Firestore بسيطة: GET/PATCH(بشرط updateTime)/POST/DELETE
+  const docs = new Map();
+  let ver = 0;
+  const part = (s, n = '', d = '') => ({ mapValue: { fields: { s: { integerValue: String(s) }, n: { stringValue: n }, d: { stringValue: d } } } });
+  const parts = {};
+  for (let j = 1; j <= 30; j++) parts[String(j)] = part(0);
+  parts['3'] = part(1, 'منى', 'mmmm1111');
+  const put = (code, fields) => docs.set(code, { fields, updateTime: 't' + (++ver) });
+  put('PRIV01', { name: { stringValue: 'المرحوم أحمد' }, round: { integerValue: '0' }, parts: { mapValue: { fields: parts } },
+    owner: { stringValue: sha(ownerKey) }, private: { booleanValue: true }, pin: { stringValue: mod.pinHash('PRIV01', '4321') } });
+  put('PUBL01', { name: { stringValue: 'عامة' }, round: { integerValue: '0' }, parts: { mapValue: { fields: { ...parts } } },
+    owner: { stringValue: sha(ownerKey) } });
+
+  const orig = global.fetch;
+  const setPath = (fields, path, value) => {
+    const m = /^parts\.`(\d+)`$/.exec(path);
+    if (m) fields.parts.mapValue.fields[m[1]] = value.parts.mapValue.fields[m[1]];
+    else fields[path] = value[path];
+  };
+  global.fetch = async (url, opt = {}) => {
+    if (url.startsWith('https://redis.test')) return orig(url, opt);
+    if (url.includes('oauth2.googleapis.com')) return { ok: true, json: async () => ({ access_token: 't' }) };
+    const u = new URL(url);
+    if (!u.host.includes('firestore')) throw new Error('unexpected ' + url);
+    assert.equal(opt.headers?.Authorization, 'Bearer t'); // دايمًا بحساب الخدمة
+    const id = u.pathname.split('/').pop();
+    const method = opt.method || 'GET';
+    if (method === 'POST') {
+      const code = u.searchParams.get('documentId');
+      if (docs.has(code)) return { ok: false, status: 409 };
+      put(code, JSON.parse(opt.body).fields);
+      return { ok: true, status: 200, json: async () => ({}) };
+    }
+    if (method === 'DELETE') { docs.delete(id); return { ok: true, status: 200 }; }
+    const d = docs.get(id);
+    if (!d) return { ok: false, status: 404 };
+    if (method === 'GET') return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(d)) };
+    if (method === 'PATCH') {
+      if (u.searchParams.get('currentDocument.updateTime') !== d.updateTime) return { ok: false, status: 400, text: async () => 'FAILED_PRECONDITION' };
+      const value = JSON.parse(opt.body).fields;
+      for (const p of u.searchParams.getAll('updateMask.fieldPaths')) setPath(d.fields, p, value);
+      d.updateTime = 't' + (++ver);
+      return { ok: true, status: 200, json: async () => ({}) };
+    }
+    throw new Error('method ' + method);
+  };
+  let ip = 1;
+  const post = (b, addr = '7.7.7.7') => call(manage, { method: 'POST', headers: { 'x-forwarded-for': addr }, body: b });
+  try {
+    assert.equal((await call(manage, { method: 'GET' })).status, 405);
+    assert.equal((await post({ code: 'bad', action: 'view' })).status, 400);
+    assert.equal((await post({ code: 'NOPE00', action: 'view', pin: '4321' })).status, 404);
+    // عامة: من غير مالك ده مش شغله (التطبيق بيكلّم Firestore مباشرة)
+    assert.equal((await post({ code: 'PUBL01', action: 'view' })).status, 400);
+
+    // الرقم السري الغلط مرفوض، والصح بيرجّع الأسامي من غير أرقام الأجهزة، و«mine» لصاحب الجزء بس
+    assert.equal((await post({ code: 'PRIV01', action: 'view', pin: '0000' })).status, 401);
+    const v = await post({ code: 'PRIV01', action: 'view', pin: '4321', device: 'mmmm1111' });
+    assert.equal(v.status, 200);
+    assert.equal(v.body.name, 'المرحوم أحمد');
+    assert.deepEqual(v.body.parts[2], { s: 1, n: 'منى', mine: true });
+    assert.ok(!JSON.stringify(v.body).includes('mmmm1111'));
+    const other = await post({ code: 'PRIV01', action: 'view', pin: '4321', device: 'oooo2222' });
+    assert.equal(other.body.parts[2].mine, false);
+
+    // حجز وإتمام وتسليم بالرقم السري؛ مايقدرش يعلّم على جزء حد تاني
+    assert.equal((await post({ code: 'PRIV01', action: 'claim', pin: '4321', juz: 3, name: 'علي', device: 'oooo2222' })).status, 409);
+    assert.equal((await post({ code: 'PRIV01', action: 'claim', pin: '4321', juz: 7, name: 'علي', device: 'oooo2222' })).status, 200);
+    assert.equal((await post({ code: 'PRIV01', action: 'done', pin: '4321', juz: 3, done: true, device: 'oooo2222' })).status, 409);
+    assert.equal((await post({ code: 'PRIV01', action: 'done', pin: '4321', juz: 7, done: true, device: 'oooo2222' })).status, 200);
+    assert.equal(docs.get('PRIV01').fields.parts.mapValue.fields['7'].mapValue.fields.s.integerValue, '2');
+    assert.equal((await post({ code: 'PRIV01', action: 'release', pin: '4321', juz: 3, device: 'oooo2222' })).status, 409);
+
+    // أوامر المالك: من غير المفتاح ممنوع
+    assert.equal((await post({ code: 'PRIV01', action: 'lock', locked: true, pin: '4321' })).status, 403);
+    assert.equal((await post({ code: 'PRIV01', action: 'lock', locked: true, ownerKey: 'wrong' })).status, 403);
+    assert.equal((await post({ code: 'PRIV01', action: 'lock', locked: true, ownerKey })).status, 200);
+    assert.equal((await post({ code: 'PRIV01', action: 'claim', pin: '4321', juz: 9, name: 'علي', device: 'oooo2222' })).status, 423);
+    assert.equal((await post({ code: 'PRIV01', action: 'lock', locked: false, ownerKey })).status, 200);
+    assert.equal((await post({ code: 'PRIV01', action: 'free', juz: 3, ownerKey })).status, 200);
+    assert.equal(docs.get('PRIV01').fields.parts.mapValue.fields['3'].mapValue.fields.s.integerValue, '0');
+    assert.equal((await post({ code: 'PRIV01', action: 'rename', name: 'المرحوم الحاج أحمد', ownerKey })).status, 200);
+    const ov = await post({ code: 'PRIV01', action: 'view', ownerKey });
+    assert.equal(ov.body.owner, true);
+    assert.equal(ov.body.name, 'المرحوم الحاج أحمد');
+
+    // لينك جديد: الكود القديم بيقف، والجديد بنفس الأجزاء، والرقم السري متربط بالكود الجديد
+    assert.equal((await post({ code: 'PRIV01', action: 'relink', ownerKey })).status, 400); // لازم الرقم السري
+    const rl = await post({ code: 'PRIV01', action: 'relink', ownerKey, pin: '4321' });
+    assert.equal(rl.status, 200);
+    assert.match(rl.body.code, /^[A-Z0-9]{6}$/);
+    assert.equal(docs.has('PRIV01'), false);
+    const nv = await post({ code: rl.body.code, action: 'view', pin: '4321', device: 'oooo2222' });
+    assert.equal(nv.status, 200);
+    assert.equal(nv.body.parts[6].mine, true);
+
+    // شيل الرقم السري: الختمة بقت عامة
+    assert.deepEqual((await post({ code: rl.body.code, action: 'pin', pin: '', ownerKey })).body, { ok: true, private: false });
+    assert.equal(docs.get(rl.body.code).fields.private.booleanValue, false);
+
+    // تخمين الرقم السري: 5 مرات وبعدها ممنوع لمدة
+    put('PRIV02', { name: { stringValue: 'س' }, round: { integerValue: '0' }, parts: { mapValue: { fields: { ...parts } } },
+      owner: { stringValue: sha(ownerKey) }, private: { booleanValue: true }, pin: { stringValue: mod.pinHash('PRIV02', '1111') } });
+    for (let i = 0; i < 5; i++) assert.equal((await post({ code: 'PRIV02', action: 'view', pin: String(2000 + i) }, '8.8.8.8')).status, 401);
+    assert.equal((await post({ code: 'PRIV02', action: 'view', pin: '1111' }, '8.8.8.8')).status, 429);
+    assert.equal((await post({ code: 'PRIV02', action: 'view', pin: '1111' }, '9.9.9.1')).status, 200);
+    ip++;
+  } finally {
+    global.fetch = orig;
+    delete process.env.ATHKARI_SERVICE_ACCOUNT;
+  }
+});
+
+test('athkari-khatma: private khatmas are not shown on the site page', async () => {
+  const khatma = load('athkari-khatma.js');
+  const orig = global.fetch;
+  global.fetch = async (url, opt) => {
+    if (url.startsWith('https://redis.test')) return orig(url, opt);
+    if (url.includes('firestore.googleapis.com')) return { ok: true, status: 200, json: async () => ({ fields: {
+      name: { stringValue: 'خاصة' }, round: { integerValue: '0' }, private: { booleanValue: true }, parts: { mapValue: { fields: {} } } } }) };
+    throw new Error('unexpected ' + url);
+  };
+  try {
+    const g = await call(khatma, { method: 'GET', query: { c: 'PRIV03' } });
+    assert.equal(g.status, 403);
+    assert.ok(!JSON.stringify(g.body).includes('خاصة'));
+  } finally { global.fetch = orig; }
+});

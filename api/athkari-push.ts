@@ -15,7 +15,7 @@ const WEB_API_KEY = 'AIzaSyD4ih7NvJNF_VadjfLLtLfhppsMfPl9uMk'; // public Firebas
 const ADMIN_EMAIL = 'abwwydtwlydahmd@gmail.com';
 const TOPIC = 'all';
 
-interface ServiceAccount { client_email: string; private_key: string }
+export interface ServiceAccount { client_email: string; private_key: string }
 
 export function serviceAccount(raw = process.env.ATHKARI_SERVICE_ACCOUNT): ServiceAccount | null {
   if (!raw) return null;
@@ -32,12 +32,12 @@ export function serviceAccount(raw = process.env.ATHKARI_SERVICE_ACCOUNT): Servi
 
 const b64url = (s: string | Buffer) => Buffer.from(s).toString('base64url');
 
-/** A Google OAuth access token for FCM, from a JWT signed with the service account key. */
-export async function accessToken(sa: ServiceAccount): Promise<string> {
+/** A Google OAuth access token (FCM by default, or another scope), from a JWT signed with the service account key. */
+export async function accessToken(sa: ServiceAccount, scope = 'https://www.googleapis.com/auth/firebase.messaging'): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
   const head = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claims = b64url(JSON.stringify({
-    iss: sa.client_email, scope: 'https://www.googleapis.com/auth/firebase.messaging',
+    iss: sa.client_email, scope,
     aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600,
   }));
   const signer = createSign('RSA-SHA256');
