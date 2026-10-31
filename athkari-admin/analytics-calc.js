@@ -74,7 +74,22 @@
     return out;
   }
 
-  const api = { compute, addDays };
+  /** الأخطاء متجمّعة بالبصمة (g): العدد الكلي، عدد الموبايلات، النسخ، آخر يوم، ومثال للرسالة والمكان */
+  function groupCrashes(docs) {
+    const g = {};
+    for (const d of docs) {
+      const k = d.g || "?";
+      const x = g[k] || (g[k] = { sig: k, count: 0, dev: new Set(), versions: new Set(), last: "", message: d.m || "", stack: d.s || "" });
+      x.count += +d.c || 1;
+      x.dev.add(String(d.id || "").split("_")[2] || d.id);
+      if (d.v) x.versions.add(d.v);
+      if ((d.d || "") > x.last) x.last = d.d;
+    }
+    return Object.values(g).map(x => ({ sig: x.sig, count: x.count, devices: x.dev.size, versions: [...x.versions].sort(),
+      last: x.last, message: x.message, stack: x.stack })).sort((a, b) => b.devices - a.devices || b.count - a.count);
+  }
+
+  const api = { compute, addDays, groupCrashes };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.athkariAnalytics = api;
 })(typeof window !== "undefined" ? window : this);

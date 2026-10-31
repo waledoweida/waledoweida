@@ -218,3 +218,4 @@ nav button.on{background:var(--gold);color:var(--green)}
 .seg button{border:0;background:transparent;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:inherit}
 .seg button.on{background:var(--green);color:#fff}
 .tab > h2.sub{font-size:19px;color:var(--green);margin:26px 0 10px}
+.crash{border-bottom:1px solid #e7e2d4;padding:8px 0}.crash summary{cursor:pointer;line-height:1.7}.crash pre{white-space:pre-wrap;font-size:11px;background:#faf7ef;padding:8px;border-radius:8px;overflow:auto}

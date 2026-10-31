@@ -237,6 +237,7 @@
     const all = (r || []).filter(x => x.document).map(x => fromDoc(x.document));
     const docs = all.filter(d => d.d >= from);
     analytics(all, docs, to);
+    crashes(ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30))).catch(() => { $("aCrashes").innerHTML = `<span class="hint">—</span>`; });
     const sum = g => { const o = {}; docs.forEach(d => Object.entries(d[g] || {}).forEach(([k, n]) => { o[k] = (o[k] || 0) + (+n || 0); })); return o; };
     const devices = new Set(docs.map(d => d.id.split("_")[0]));
     const did = cat => new Set(docs.filter(d => (d.done || {})[cat] > 0).map(d => d.id.split("_")[0])).size;
@@ -286,6 +287,17 @@
     bars("aSrc", a.sources, k => k === "play" ? "جوجل بلاي" : "مكان تاني (الموقع / مشاركة)");
     bars("aBrand", a.brands, k => k);
     bars("aAndroid", a.android, k => "أندرويد " + (ANDROID[k] || k));
+  }
+
+  // ───────── الأخطاء (crashes/ من crash_report.dart) ─────────
+  async function crashes(from) {
+    const r = await api(":runQuery", { method: "POST", body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: "crashes" }],
+      where: { fieldFilter: { field: { fieldPath: "d" }, op: "GREATER_THAN_OR_EQUAL", value: { stringValue: from } } },
+      limit: 5000 } }) });
+    const groups = window.athkariAnalytics.groupCrashes((r || []).filter(x => x.document).map(x => fromDoc(x.document)));
+    $("aCrashes").innerHTML = groups.length ? groups.slice(0, 20).map(g => `<details class="crash"><summary><b>${g.count.toLocaleString("ar-EG")}×</b> على ${g.devices} موبايل • ${esc(g.versions.join("، "))} • آخر مرة ${esc(g.last)}<br><span dir="ltr">${esc(g.message)}</span></summary><pre dir="ltr">${esc(g.stack)}</pre></details>`).join("")
+      : `<span class="hint">مفيش أخطاء متسجّلة 👌</span>`;
   }
 
   document.querySelectorAll("#usageRange button").forEach(b => b.addEventListener("click", () => {

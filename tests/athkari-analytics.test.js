@@ -1,7 +1,7 @@
 // حسابات «التحليلات الدقيقة» في لوحة تحكم أذكاري: أرقام معروفة ← نتيجة متوقعة
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { compute, addDays } = require('../athkari-admin/analytics-calc.js');
+const { compute, addDays, groupCrashes } = require('../athkari-admin/analytics-calc.js');
 
 const doc = (dev, d, extra = {}) => ({ id: `${dev}_${d}`, d, ...extra });
 
@@ -74,4 +74,18 @@ test('الموبايلات ومصدر التثبيت: آخر معلومة لكل
   assert.deepEqual(a.sources, { play: 1, other: 1 });
   assert.deepEqual(a.brands, { Samsung: 1, Xiaomi: 1 });
   assert.deepEqual(a.android, { 34: 1, 33: 1 });
+});
+
+test('الأخطاء: متجمّعة بالبصمة، وعدد الموبايلات والمرات صح', () => {
+  const g = groupCrashes([
+    { id: 'aaaaaaaaaaaa_2026-11-01_d1', g: 'aaaaaaaaaaaa', d: '2026-11-01', v: '2.1.0', m: 'RangeError', s: 'x', c: 3 },
+    { id: 'aaaaaaaaaaaa_2026-11-02_d2', g: 'aaaaaaaaaaaa', d: '2026-11-02', v: '2.1.0', m: 'RangeError', s: 'x', c: 1 },
+    { id: 'bbbbbbbbbbbb_2026-11-02_d1', g: 'bbbbbbbbbbbb', d: '2026-11-02', v: '2.0.0', m: 'Null', s: 'y', c: 9 },
+  ]);
+  assert.equal(g.length, 2);
+  assert.equal(g[0].sig, 'aaaaaaaaaaaa'); // موبايلين أهم من موبايل واحد
+  assert.equal(g[0].count, 4);
+  assert.equal(g[0].devices, 2);
+  assert.equal(g[0].last, '2026-11-02');
+  assert.deepEqual(g[1].versions, ['2.0.0']);
 });
