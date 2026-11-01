@@ -12,7 +12,7 @@ import { hit } from './_lib/ratelimit';
 
 export const PROJECT = 'athkari-fd56c';
 const WEB_API_KEY = 'AIzaSyD4ih7NvJNF_VadjfLLtLfhppsMfPl9uMk'; // public Firebase web key (not a secret)
-const ADMIN_EMAIL = 'abwwydtwlydahmd@gmail.com';
+export const ADMIN_EMAIL = 'abwwydtwlydahmd@gmail.com';
 const TOPIC = 'all';
 
 export interface ServiceAccount { client_email: string; private_key: string }
@@ -54,7 +54,7 @@ export async function accessToken(sa: ServiceAccount, scope = 'https://www.googl
 }
 
 /** The email behind a Firebase ID token (Google checks the token), or null if it isn't valid. */
-async function tokenEmail(idToken: string): Promise<string | null> {
+export async function tokenEmail(idToken: string): Promise<string | null> {
   const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${WEB_API_KEY}`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }),
   });

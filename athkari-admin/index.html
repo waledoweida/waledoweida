@@ -268,6 +268,37 @@
 
     <!-- الختمات الجماعية -->
     <section class="tab hidden" id="tab-khatmas">
+      <div class="card" id="pkCard">
+        <div class="toolbar"><h2>🌍 الختمة العامة</h2><span class="hint" id="pkStatus">—</span></div>
+        <p class="hint">ختمة واحدة مفتوحة لكل مستخدمي التطبيق: كل واحد ياخد جزء ويقراه جوه التطبيق، والسيرفر هو اللي بيعلّم «تم» بعد ما يتأكد إن كل صفحة ظهرت المدة المطلوبة.</p>
+        <div id="pkNow"></div>
+        <form id="pkForm">
+          <label for="pkName">اسم الختمة / النية</label>
+          <input type="text" id="pkName" maxlength="80" required placeholder="مثال: ختمة أذكاري العامة">
+          <label for="pkDua">الدعاء أو الإهداء (اختياري)</label>
+          <textarea id="pkDua" class="plain" maxlength="400" rows="2" placeholder="مثال: صدقة جارية على أرواح موتى المسلمين"></textarea>
+          <div class="grid2">
+            <div><label for="pkMin">أقل وقت لكل صفحة (ثانية)</label><input id="pkMin" type="number" min="5" max="120" value="15"></div>
+            <div><label for="pkHold">مهلة قراءة الجزء (ساعات)</label><input id="pkHold" type="number" min="1" max="48" value="6"></div>
+          </div>
+          <label class="switch"><input id="pkRepeat" type="checkbox" checked> لما الأجزاء كلها تتحجز أو الختمة تخلص، تبدأ ختمة جديدة تلقائيًا</label>
+          <div class="toolbar">
+            <button type="submit" class="btn btn-gold" id="pkStart">ابدأ ختمة جديدة</button>
+            <button type="button" class="btn btn-ghost" id="pkSave">حفظ الإعدادات للختمة الحالية</button>
+            <button type="button" class="btn btn-danger" id="pkStop">إيقاف الختمة العامة</button>
+          </div>
+        </form>
+        <div>
+          <h2 class="sub">إشعار لكل المستخدمين</h2>
+          <label for="pkPushTitle">العنوان</label>
+          <input type="text" id="pkPushTitle" maxlength="80" value="شارك في الختمة العامة 🤍">
+          <label for="pkPushBody">النص</label>
+          <input type="text" id="pkPushBody" maxlength="300" value="خُد جزء واقرأه من التطبيق، ونختم القرآن مع بعض">
+          <button type="button" class="btn btn-green" id="pkNotify">ابعت الإشعار للكل</button>
+          <span class="hint">الضغط على الإشعار بيفتح شاشة الختمة العامة في التطبيق.</span>
+        </div>
+      </div>
+      <h2>الختمات اللي عملها المستخدمين</h2>
       <p class="hint">الختمات اللي المستخدمين عملوها صدقة جارية. تقدر تتابعها، وتمسح أي ختمة فيها كلام غير لائق.</p>
       <div id="khatmaList"></div>
     </section>

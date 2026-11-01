@@ -701,8 +701,55 @@
   $("addDedBtn").onclick = () => openDedForm(null);
   $("saveDedMinutes").onclick = async () => { try { const sec = parseInt($("dedMinutes").value) || 60; await saveSettings({ dedicationSeconds: sec, dedicationMinutes: Math.max(1, Math.round(sec / 60)) }); } catch (e) { fail(e); } };
 
+  // ───────── الختمة العامة (/api/athkari-public-khatma) ─────────
+  async function pk(action, extra = {}) {
+    const r = await fetch("/api/athkari-public-khatma", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, idToken: await token(), ...extra }) });
+    const d = await r.json().catch(() => ({}));
+    if (d.error === "not_configured") { throw new Error("محتاج متغير ATHKARI_SERVICE_ACCOUNT في Vercel (زي الإشعار الفوري)"); }
+    if (!r.ok || !d.ok) throw new Error({ not_admin: "الحساب ده مش أدمن", name: "اكتب اسم الختمة", no_open_khatma: "مفيش ختمة عامة مفتوحة دلوقتي" }[d.error] || "تعذّر الاتصال بالسيرفر");
+    return d;
+  }
+  const pkStatusText = { open: "مفتوحة", full: "الأجزاء كلها اتحجزت", done: "تمت ✓", stopped: "متوقفة" };
+  async function loadPublicKhatma() {
+    try {
+      const d = await pk("admin_state");
+      const st = d.settings || {}, k = d.khatma;
+      if (st.name) $("pkName").value = st.name;
+      $("pkDua").value = st.dua || "";
+      $("pkMin").value = st.minPageSec || 15;
+      $("pkHold").value = st.holdHours || 6;
+      $("pkRepeat").checked = st.repeat !== false;
+      $("pkStatus").textContent = k ? `الختمة رقم ${k.seq} • ${pkStatusText[k.status] || k.status}` : "مفيش ختمة عامة شغالة";
+      $("pkNow").innerHTML = k ? `<div class="rowline"><div class="who"><b>${esc(k.name)}</b><span>اتقرا ${k.done}/30 • بيتقرا ${k.taken - k.done}${k.createdAt ? " • بدأت " + esc(fmtTime(k.createdAt)) : ""}</span>
+        <div class="progress"><i style="width:${Math.round(k.done * 100 / 30)}%"></i></div>
+        <div class="pk-grid">${k.parts.map((s, i) => `<span class="pk-${s}" title="الجزء ${i + 1}">${i + 1}</span>`).join("")}</div></div></div>` : "";
+    } catch (e) { $("pkStatus").textContent = e.message; }
+  }
+  const pkFields = () => ({ name: $("pkName").value.trim(), dua: $("pkDua").value.trim(), minPageSec: +$("pkMin").value || 15,
+    holdHours: +$("pkHold").value || 6, repeat: $("pkRepeat").checked });
+  $("pkForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!(await confirmBox("تبدأ ختمة عامة جديدة؟ لو فيه ختمة شغالة هتتوقف."))) return;
+    try { await pk("start", pkFields()); toast("بدأت الختمة العامة ✓"); await loadPublicKhatma(); } catch (err) { fail(err); }
+  });
+  $("pkSave").onclick = async () => { try { await pk("settings", pkFields()); toast("اتحفظت الإعدادات ✓"); await loadPublicKhatma(); } catch (err) { fail(err); } };
+  $("pkStop").onclick = async () => {
+    if (!(await confirmBox("توقف الختمة العامة؟ التطبيق هيقول إن مفيش ختمة مفتوحة."))) return;
+    try { await pk("stop"); toast("اتوقفت"); await loadPublicKhatma(); } catch (err) { fail(err); }
+  };
+  $("pkNotify").onclick = async () => {
+    if (!(await confirmBox("تبعت الإشعار لكل مستخدمي التطبيق؟"))) return;
+    try {
+      await pk("notify", { title: $("pkPushTitle").value.trim(), body: $("pkPushBody").value.trim() });
+      await addDoc("pushes", { title: $("pkPushTitle").value.trim(), body: $("pkPushBody").value.trim(), at: Date.now() }).catch(() => {});
+      toast("اتبعت الإشعار لكل المستخدمين ✓");
+    } catch (err) { fail(err); }
+  };
+
   // ───────── الختمات الجماعية ─────────
   loaders.khatmas = async () => {
+    loadPublicKhatma();
     const list = (await listAll("khatmas")).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     $("khatmaList").innerHTML = list.map(k => {
       const parts = Object.values(k.parts || {});
