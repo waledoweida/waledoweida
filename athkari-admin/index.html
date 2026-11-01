@@ -111,6 +111,33 @@
         <div class="card"><h2>الإشعارات اللي اتفتحت</h2><div id="uNotif" class="versions"></div></div>
       </div>
       <div class="card"><h2>الاستخدام يوم بيوم</h2><div id="uDays" class="versions"></div></div>
+
+      <h2 class="sub">التحليلات الدقيقة</h2>
+      <div class="tiles">
+        <div class="tile"><b id="aNew">—</b><span>تثبيت جديد</span></div>
+        <div class="tile"><b id="aUpd">—</b><span>حدّثوا التطبيق</span></div>
+        <div class="tile"><b id="aOpens">—</b><span>مرة فتح في اليوم (متوسط للموبايل)</span></div>
+        <div class="tile"><b id="aTime">—</b><span>مدة الاستخدام في اليوم (متوسط للموبايل)</span></div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><b id="aDau">—</b><span>نشطين امبارح</span></div>
+        <div class="tile"><b id="aWau">—</b><span>نشطين آخر 7 أيام</span></div>
+        <div class="tile"><b id="aMau">—</b><span>نشطين آخر 30 يوم</span></div>
+        <div class="tile"><b id="aSess">—</b><span>متوسط مدة الفتحة الواحدة</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>بيرجعوا للتطبيق؟</h2><div id="aRet" class="versions"></div>
+          <p class="hint">من كل اللي ثبّتوا في يوم معيّن: كام واحد فتح التطبيق تاني بعد يوم، وبعد أسبوع، وبعد شهر.</p></div>
+        <div class="card"><h2>أوقات الاستخدام</h2><div id="aHours" class="versions"></div></div>
+        <div class="card"><h2>التحديث من نسخة لنسخة</h2><div id="aLife" class="versions"></div></div>
+        <div class="card"><h2>اتثبّت منين</h2><div id="aSrc" class="versions"></div></div>
+        <div class="card"><h2>أنواع الموبايلات</h2><div id="aBrand" class="versions"></div></div>
+        <div class="card"><h2>نسخ أندرويد</h2><div id="aAndroid" class="versions"></div></div>
+      </div>
+      <h2 class="sub">الأخطاء في التطبيق (آخر 30 يوم)</h2>
+      <div class="card"><div id="aCrashes" class="versions"></div>
+        <p class="hint">كل خطأ متجمّع بنوعه ومكانه في الكود: اتكرر كام مرة وعلى كام موبايل وفي أنهي نسخة. من غير أي بيانات شخصية.</p></div>
+      <p class="hint">التحليلات الدقيقة بتبدأ مع تحديث التطبيق الجديد (الموبايلات اللي لسه على النسخة القديمة مش بتبعتها). أجهزة الاختبار مش بتتحسب.</p>
       <p class="hint">الإحصائيات مجهولة تمامًا: كل موبايل بيبعت ملخص يومه (عدد مرات فتح الأقسام والمميزات) مرة واحدة في اليوم اللي بعده، من غير أي بيانات شخصية. بتبدأ تظهر مع تحديث التطبيق الجديد.</p>
     </section>
 
@@ -228,17 +255,50 @@
           <h2>مدة ظهور كل اسم</h2>
           <label for="dedMinutes" class="visually-hidden">المدة</label>
           <select id="dedMinutes">
-            <option value="1">كل دقيقة</option><option value="2">كل دقيقتين</option><option value="5">كل 5 دقائق</option>
-            <option value="10">كل 10 دقائق</option><option value="15">كل 15 دقيقة</option><option value="30">كل 30 دقيقة</option>
-            <option value="60">كل ساعة</option><option value="1440">كل يوم</option>
+            <option value="20">كل 20 ثانية</option><option value="30">كل 30 ثانية</option>
+            <option value="60">كل دقيقة</option><option value="120">كل دقيقتين</option><option value="300">كل 5 دقائق</option>
+            <option value="600">كل 10 دقائق</option><option value="900">كل 15 دقيقة</option><option value="1800">كل 30 دقيقة</option>
+            <option value="3600">كل ساعة</option><option value="86400">كل يوم</option>
           </select>
           <button type="button" class="btn btn-green" id="saveDedMinutes">حفظ المدة</button>
+          <p class="hint">20 و30 ثانية بيشتغلوا في نسخ التطبيق الجديدة؛ النسخ الأقدم بتغيّر الاسم كل دقيقة.</p>
         </div>
       </div>
     </section>
 
     <!-- الختمات الجماعية -->
     <section class="tab hidden" id="tab-khatmas">
+      <div class="card" id="pkCard">
+        <div class="toolbar"><h2>🌍 الختمة العامة</h2><span class="hint" id="pkStatus">—</span></div>
+        <p class="hint">ختمة واحدة مفتوحة لكل مستخدمي التطبيق: كل واحد ياخد جزء ويقراه جوه التطبيق، والسيرفر هو اللي بيعلّم «تم» بعد ما يتأكد إن كل صفحة ظهرت المدة المطلوبة.</p>
+        <div id="pkNow"></div>
+        <form id="pkForm">
+          <label for="pkName">اسم الختمة / النية</label>
+          <input type="text" id="pkName" maxlength="80" required placeholder="مثال: ختمة أذكاري العامة">
+          <label for="pkDua">الدعاء أو الإهداء (اختياري)</label>
+          <textarea id="pkDua" class="plain" maxlength="400" rows="2" placeholder="مثال: صدقة جارية على أرواح موتى المسلمين"></textarea>
+          <div class="grid2">
+            <div><label for="pkMin">أقل وقت لكل صفحة (ثانية)</label><input id="pkMin" type="number" min="5" max="120" value="15"></div>
+            <div><label for="pkHold">مهلة قراءة الجزء (ساعات)</label><input id="pkHold" type="number" min="1" max="48" value="6"></div>
+          </div>
+          <label class="switch"><input id="pkRepeat" type="checkbox" checked> لما الأجزاء كلها تتحجز أو الختمة تخلص، تبدأ ختمة جديدة تلقائيًا</label>
+          <div class="toolbar">
+            <button type="submit" class="btn btn-gold" id="pkStart">ابدأ ختمة جديدة</button>
+            <button type="button" class="btn btn-ghost" id="pkSave">حفظ الإعدادات للختمة الحالية</button>
+            <button type="button" class="btn btn-danger" id="pkStop">إيقاف الختمة العامة</button>
+          </div>
+        </form>
+        <div>
+          <h2 class="sub">إشعار لكل المستخدمين</h2>
+          <label for="pkPushTitle">العنوان</label>
+          <input type="text" id="pkPushTitle" maxlength="80" value="شارك في الختمة العامة 🤍">
+          <label for="pkPushBody">النص</label>
+          <input type="text" id="pkPushBody" maxlength="300" value="خُد جزء واقرأه من التطبيق، ونختم القرآن مع بعض">
+          <button type="button" class="btn btn-green" id="pkNotify">ابعت الإشعار للكل</button>
+          <span class="hint">الضغط على الإشعار بيفتح شاشة الختمة العامة في التطبيق.</span>
+        </div>
+      </div>
+      <h2>الختمات اللي عملها المستخدمين</h2>
       <p class="hint">الختمات اللي المستخدمين عملوها صدقة جارية. تقدر تتابعها، وتمسح أي ختمة فيها كلام غير لائق.</p>
       <div id="khatmaList"></div>
     </section>
@@ -291,6 +351,7 @@
 
 <script src="adhkar-data.js?v=5"></script>
 <script src="asma-data.js?v=1"></script>
-<script src="admin.js?v=5"></script>
+<script src="analytics-calc.js?v=1"></script>
+<script src="admin.js?v=6"></script>
 </body>
 </html>

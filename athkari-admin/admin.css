@@ -217,3 +217,11 @@ nav button.on{background:var(--gold);color:var(--green)}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .seg button{border:0;background:transparent;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:inherit}
 .seg button.on{background:var(--green);color:#fff}
+.tab > h2.sub{font-size:19px;color:var(--green);margin:26px 0 10px}
+.crash{border-bottom:1px solid #e7e2d4;padding:8px 0}.crash summary{cursor:pointer;line-height:1.7}.crash pre{white-space:pre-wrap;font-size:11px;background:#faf7ef;padding:8px;border-radius:8px;overflow:auto}
+
+/* الختمة العامة: الأجزاء الثلاثين */
+.pk-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 8px; }
+.pk-grid span { text-align: center; padding: 4px 0; border-radius: 6px; font-size: 12px; background: var(--line, #e5e5e5); }
+.pk-grid .pk-1 { background: rgba(201, 162, 39, .35); }
+.pk-grid .pk-2 { background: #C9A227; color: #fff; }
