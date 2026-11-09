@@ -225,3 +225,11 @@ nav button.on{background:var(--gold);color:var(--green)}
 .pk-grid span { text-align: center; padding: 4px 0; border-radius: 6px; font-size: 12px; background: var(--line, #e5e5e5); }
 .pk-grid .pk-1 { background: rgba(201, 162, 39, .35); }
 .pk-grid .pk-2 { background: #C9A227; color: #fff; }
+
+/* جوجل بلاي */
+.gp-chart{display:flex;align-items:flex-end;gap:3px;height:140px;padding:8px 0;direction:ltr}
+.gp-bar{flex:1;height:100%;display:flex;align-items:flex-end;background:rgba(201,162,39,.08);border-radius:4px}
+.gp-bar i{display:block;width:100%;background:#C9A227;border-radius:4px;min-height:2px}
+.tablewrap{overflow-x:auto}
+.gp-table{width:100%;border-collapse:collapse;font-size:14px}
+.gp-table th,.gp-table td{padding:6px 8px;border-bottom:1px solid rgba(127,127,127,.2);text-align:center;white-space:nowrap}

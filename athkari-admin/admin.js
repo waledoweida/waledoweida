@@ -12,7 +12,7 @@
     star: "⭐ نجمة", travel: "✈️ سفر", food: "🍽️ طعام", home: "🏠 منزل", alarm: "⏰ استيقاظ", spa: "🌿 كرب",
     shield: "🛡️ رقية", water: "💧 وضوء", book: "📖 كتاب" };
   const TITLES = { overview: "نظرة عامة", notify: "الإشعارات", home: "الرئيسية والبانر", campaigns: "حملات المناسبات",
-    adhkar: "الأذكار", usage: "استخدام التطبيق", ded: "صدقة جارية", khatmas: "الختمات الجماعية", asma: "الأسماء الحسنى", update: "تحديث التطبيق" };
+    adhkar: "الأذكار", usage: "استخدام التطبيق", play: "جوجل بلاي", ded: "صدقة جارية", khatmas: "الختمات الجماعية", asma: "الأسماء الحسنى", update: "تحديث التطبيق" };
   // نفس الحملات اللي في التطبيق (lib/content/campaigns.dart)
   const CAMPAIGNS = [
     { id: "eid_fitr", title: "عيد فطر مبارك", emoji: "🎉", when: "1–3 شوال", sub: "تقبّل الله منا ومنكم صالح الأعمال، وكل عام وأنتم بخير", colors: ["#7B2D26", "#C9A227"] },
@@ -700,6 +700,35 @@
   }
   $("addDedBtn").onclick = () => openDedForm(null);
   $("saveDedMinutes").onclick = async () => { try { const sec = parseInt($("dedMinutes").value) || 60; await saveSettings({ dedicationSeconds: sec, dedicationMinutes: Math.max(1, Math.round(sec / 60)) }); } catch (e) { fail(e); } };
+
+  // ───────── أرقام جوجل بلاي (/api/athkari-play-stats) ─────────
+  const fmtN = n => n == null ? "—" : Number(n).toLocaleString("ar-EG");
+  loaders.play = async () => {
+    $("gpStatus").textContent = "بيحمّل…";
+    const r = await fetch("/api/athkari-play-stats", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken: await token() }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) {
+      const msg = { not_configured: "محتاج متغير ATHKARI_SERVICE_ACCOUNT في Vercel",
+        no_access: "حساب الخدمة لسه مالوش صلاحية التقارير في Play Console" + (d.account ? ` (${d.account})` : ""),
+        not_admin: "الحساب ده مش أدمن" }[d.error] || "تعذّر قراءة تقارير جوجل بلاي";
+      $("gpStatus").textContent = msg;
+      return;
+    }
+    const t = d.totals || {}, days = d.days || [];
+    $("gpUsers").textContent = fmtN(t.totalUsers);
+    $("gpActive").textContent = fmtN(t.active);
+    $("gp7").textContent = fmtN(t.installs7);
+    $("gpRating").textContent = t.rating == null ? "—" : Number(t.rating).toFixed(2) + " ★";
+    $("gpStatus").textContent = days.length ? "آخر تقرير: " + t.lastDate : "لسه مفيش تقارير (جوجل بتبدأ تكتبها بعد كام يوم من النشر)";
+    const last = days.slice(-30);
+    const max = Math.max(1, ...last.map(x => x.installs || 0));
+    $("gpChart").innerHTML = last.map(x => `<div class="gp-bar" title="${esc(x.date)}: ${fmtN(x.installs)} تثبيت"><i style="height:${Math.round((x.installs || 0) * 100 / max)}%"></i></div>`).join("");
+    $("gpFacts").innerHTML = `<li>تثبيت جديد آخر 28 يوم: <b>${fmtN(t.installs28)}</b></li>
+      <li>إلغاء تثبيت آخر 28 يوم: <b>${fmtN(t.uninstalls28)}</b></li>
+      <li>أعطال آخر 7 أيام: <b>${fmtN(t.crashes7)}</b> • توقف عن الاستجابة (ANR): <b>${fmtN(t.anrs7)}</b></li>`;
+    $("gpRows").innerHTML = days.slice(-30).reverse().map(x => `<tr><td>${esc(x.date)}</td><td>${fmtN(x.installs)}</td><td>${fmtN(x.uninstalls)}</td><td>${fmtN(x.active)}</td><td>${fmtN(x.crashes)}</td><td>${x.rating == null ? "—" : Number(x.rating).toFixed(1)}</td></tr>`).join("");
+  };
 
   // ───────── الختمة العامة (/api/athkari-public-khatma) ─────────
   async function pk(action, extra = {}) {

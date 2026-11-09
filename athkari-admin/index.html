@@ -35,6 +35,7 @@
     <nav id="nav" aria-label="أقسام اللوحة">
       <button type="button" data-tab="overview" class="on">📊 نظرة عامة</button>
       <button type="button" data-tab="usage">📈 استخدام التطبيق</button>
+      <button type="button" data-tab="play">▶️ جوجل بلاي</button>
       <button type="button" data-tab="notify">🔔 الإشعارات</button>
       <button type="button" data-tab="home">🏠 الرئيسية والبانر</button>
       <button type="button" data-tab="campaigns">🌙 حملات المناسبات</button>
@@ -86,6 +87,26 @@
         </div>
       </div>
       <p class="hint">العدّ مجهول تمامًا: كل موبايل بيبعت مرة في اليوم رقم عشوائي وتاريخ الفتح ورقم الإصدار بس.</p>
+    </section>
+
+    <!-- جوجل بلاي -->
+    <section class="tab hidden" id="tab-play">
+      <div class="tiles">
+        <div class="tile"><b id="gpUsers">—</b><span>كل التثبيتات (مستخدمين)</span></div>
+        <div class="tile"><b id="gpActive">—</b><span>الأجهزة اللي عليها التطبيق</span></div>
+        <div class="tile"><b id="gp7">—</b><span>تثبيت جديد آخر 7 أيام</span></div>
+        <div class="tile"><b id="gpRating">—</b><span>متوسط التقييم</span></div>
+      </div>
+      <div class="card">
+        <div class="toolbar"><h2>آخر 30 يوم</h2><span class="hint" id="gpStatus">—</span></div>
+        <div id="gpChart" class="gp-chart"></div>
+        <ul class="facts" id="gpFacts"></ul>
+      </div>
+      <div class="card">
+        <h2>يوم بيوم</h2>
+        <div class="tablewrap"><table class="gp-table"><thead><tr><th>اليوم</th><th>تثبيت</th><th>إلغاء تثبيت</th><th>أجهزة نشطة</th><th>أعطال</th><th>تقييم اليوم</th></tr></thead><tbody id="gpRows"></tbody></table></div>
+      </div>
+      <p class="hint">الأرقام دي من تقارير جوجل بلاي الرسمية، وبتتحدّث مرة في اليوم، وبتتأخر يوم أو اتنين عن النهارده.</p>
     </section>
 
     <!-- استخدام التطبيق -->
