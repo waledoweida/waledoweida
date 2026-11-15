@@ -203,6 +203,7 @@
     asma: "الأسماء الحسنى", calendar: "التقويم", stats: "إحصائياتي", search: "البحث", learn_prayer: "تعليم الصلاة",
     customize: "رتّب أذكارك", share_dhikr_image: "مشاركة ذكر كصورة", share_ayah_image: "مشاركة آية كصورة",
     tafsir_saadi: "تحميل تفسير السعدي", tafsir_ibnkathir: "تحميل تفسير ابن كثير", tafsir_jalalayn: "تحميل تفسير الجلالين",
+    hifz_home: "تحفيظ القرآن", hifz_plan: "خطتي وأهدافي", hifz_stats: "إحصائيات الحفظ", dhikr_memorize: "احفظ الذكر",
     tab_home: "تاب الرئيسية", tab_prayer: "تاب الصلاة", tab_favorites: "تاب المفضلة", tab_tasbeeh: "تاب السبحة", tab_settings: "تاب الإعدادات" };
   const notifLabel = k => {
     if (k === "prayer") return "الأذان والصلاة";
@@ -213,6 +214,27 @@
   };
   const catTitle = id => (categories.find(c => c.id === id) || {}).title || id;
   let usageDays = 7;
+  // «سمّع بصوتي»: المحرك علّم كام كلمة غلط، والمستخدم صحّح كام منهم، وفاته كام غلطة
+  function voiceQuality(v) {
+    const n = k => +v[k] || 0;
+    const pct = (a, b) => b ? (100 * a / b).toLocaleString("ar-EG", { maximumFractionDigits: 1 }) + "٪" : "—";
+    const num = x => x.toLocaleString("ar-EG");
+    const words = n("words"), flag = n("flag"), fix = n("fix"), miss = n("miss"), starts = n("start");
+    if (!starts && !words && !n("dl_ok")) { $("uVoice").innerHTML = `<span class="hint">لسه مفيش استخدام للفترة دي</span>`; return; }
+    const rows = [
+      ["مرات التسميع", num(starts)],
+      ["تحميل المحرك", `${num(n("dl_ok"))} نجح • ${num(n("dl_fail"))} فشل`],
+      ["دقائق صوت", num(Math.round(n("sec") / 60))],
+      ["كلمات اتحكم عليها", num(words)],
+      ["دقة الحكم", pct(words - fix - miss, words)],
+      ["إنذار كاذب (صحّحه المستخدم)", `${pct(fix, words)} <small>(${num(fix)} من ${num(flag)} علامة)</small>`],
+      ["غلطة فاتت المحرك", `${pct(miss, words)} <small>(${num(miss)})</small>`],
+      ["رفض إذن الميكروفون", num(n("denied"))],
+      ["المحرك وقع / الميكروفون فشل", `${num(n("engine_fail"))} / ${num(n("mic_fail"))}`],
+      ["موبايلات أبطأ من الكلام", num(n("slow"))],
+    ];
+    $("uVoice").innerHTML = rows.map(([k, val]) => `<div class="urow"><span>${esc(k)}</span><span></span><span class="wide">${val}</span></div>`).join("");
+  }
   function bars(el, obj, label, max = 10) {
     const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, max);
     const top = rows.length ? rows[0][1] : 1;
@@ -247,7 +269,11 @@
     $("uEvening").innerHTML = did("evening").toLocaleString("ar-EG") + pct(did("evening"));
     $("uDone").textContent = Object.values(sum("done")).reduce((s, n) => s + n, 0).toLocaleString("ar-EG");
     bars("uCat", sum("cat"), catTitle);
-    bars("uFeat", sum("feat"), k => FEATURES[k] || k, 12);
+    const feat = sum("feat");
+    const voice = {}, plain = {};
+    Object.entries(feat).forEach(([k, n]) => { if (k.startsWith("voice_")) voice[k.slice(6)] = n; else plain[k] = n; });
+    bars("uFeat", plain, k => FEATURES[k] || k, 12);
+    voiceQuality(voice);
     bars("uRec", sum("rec"), k => RECITERS[k] || k);
     bars("uNotif", sum("notif"), notifLabel);
     const perDay = {};
