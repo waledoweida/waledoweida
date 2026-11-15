@@ -214,6 +214,8 @@ nav button.on{background:var(--gold);color:var(--green)}
 .note small{display:block;margin-top:6px;opacity:.75;font-size:12px}
 .urow{display:grid;grid-template-columns:minmax(110px,40%) 1fr 54px;gap:8px;align-items:center;font-size:13px;font-weight:700}
 .urow small{opacity:.6;font-weight:600}
+#uVoice .urow{grid-template-columns:minmax(150px,55%) 0 1fr}
+#uVoice .wide{text-align:end}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .seg button{border:0;background:transparent;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:inherit}
 .seg button.on{background:var(--green);color:#fff}
