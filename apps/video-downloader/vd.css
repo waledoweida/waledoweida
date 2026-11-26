@@ -1,2 +1,6 @@
 .vd-shot{margin:0}
 .vd-shot img{display:block;width:100%;max-width:1044px;height:auto;margin:0 auto;border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.vd-shot figcaption{text-align:center;color:var(--muted);font-size:.92rem;margin-top:10px}
+.vd-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.vd-shots .vd-shot img{border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.22)}
+@media (max-width:820px){.vd-shots{grid-template-columns:1fr}}
