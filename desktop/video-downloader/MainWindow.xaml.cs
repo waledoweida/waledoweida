@@ -521,7 +521,14 @@ namespace VideoDownloader
             var p = new Process { StartInfo = YtDlp.StartInfo(args), EnableRaisingEvents = true };
             item.Process = p;
             p.OutputDataReceived += (s, e) => { if (e.Data != null) Dispatcher.BeginInvoke(new Action(() => OnLine(item, e.Data))); };
-            p.ErrorDataReceived += (s, e) => { if (e.Data != null) lock (err) err.AppendLine(e.Data); };
+            p.ErrorDataReceived += (s, e) =>
+            {
+                if (e.Data == null) return;
+                // in quiet mode yt-dlp writes the post-processing lines to stderr
+                if (e.Data.StartsWith("[M]", StringComparison.Ordinal) || e.Data.StartsWith("[P]", StringComparison.Ordinal))
+                    Dispatcher.BeginInvoke(new Action(() => OnLine(item, e.Data)));
+                else lock (err) err.AppendLine(e.Data);
+            };
             p.Exited += (s, e) =>
             {
                 // let the last output lines arrive first
@@ -610,7 +617,7 @@ namespace VideoDownloader
         static string Clean(string s)
         {
             s = (s ?? "").Trim();
-            return s == "NA" || s == "Unknown" || s.StartsWith("Unknown", StringComparison.Ordinal) ? "" : s;
+            return s == "NA" || s == "N/A" || s == "Unknown" || s.StartsWith("Unknown", StringComparison.Ordinal) ? "" : s;
         }
 
         static double ParsePercent(string s)

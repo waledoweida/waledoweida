@@ -338,7 +338,7 @@ namespace VideoDownloader
         {
             return new[]
             {
-                "--ignore-config", "--no-colors",
+                "--ignore-config", "--no-colors", "--encoding", "utf-8",
                 "--ffmpeg-location", Paths.Tools,
                 "--js-runtimes", "deno:" + Paths.Deno,
             };
