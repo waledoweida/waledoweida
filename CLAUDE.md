@@ -61,6 +61,14 @@ changes these paths.
   The panel shows "building" while the latest commit on `main` is an `Admin: …` save.
 - Change the schema and `content/*.json` together; the API rejects files that don't match it.
 
+## Video downloader (`/download/`)
+
+- `download/index.html` (hand-written page, own `dl.css` / `dl.js`; not generated, not in the sitemap build) and
+  `api/download.ts`, which forwards the request to a Cobalt instance and returns the download link.
+- Vercel env vars: `COBALT_API_URL`, `COBALT_API_KEY`. Without them the API answers `not_configured`.
+  Running the Cobalt server: `tools/cobalt/README.md`. Tests: `tests/download.test.js`.
+- `download/dl.js` is written compact and comment-free by hand (not part of `build_js.py`).
+
 ## Checks
 
 - `npm run check` = types + API tests + HTML validation (`html-validate`, wedding excluded via `.htmlvalidateignore`).

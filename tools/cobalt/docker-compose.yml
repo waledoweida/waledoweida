@@ -1,0 +1,31 @@
+# Cobalt — the download engine behind waledoweida.com/download/ (see README.md in this folder).
+# Run on a small VPS:  docker compose up -d
+services:
+  cobalt:
+    image: ghcr.io/imputnet/cobalt:11
+    restart: unless-stopped
+    init: true
+    read_only: true
+    ports:
+      - "9000:9000/tcp"
+    environment:
+      # the public address of this server (the download links point here)
+      API_URL: "https://dl.waledoweida.com/"
+      # only requests carrying a key from keys.json are accepted
+      API_AUTH_REQUIRED: "1"
+      API_KEY_URL: "file:///keys.json"
+      # optional: YouTube cookies if YouTube starts asking to sign in (see README)
+      # COOKIE_PATH: "/cookies.json"
+    volumes:
+      - ./keys.json:/keys.json:ro
+      # - ./cookies.json:/cookies.json
+    labels:
+      - com.centurylinklabs.watchtower.scope=cobalt
+
+  # keeps cobalt updated automatically (YouTube changes often)
+  watchtower:
+    image: ghcr.io/containrrr/watchtower
+    restart: unless-stopped
+    command: --cleanup --scope cobalt --interval 900 --include-restarting
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
