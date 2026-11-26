@@ -35,6 +35,7 @@ jobs:
           if (-not $p.WaitForExit(120000)) { $p.Kill(); Get-Content shots\shot.log -ErrorAction SilentlyContinue; Get-Content "$env:LOCALAPPDATA\WaledVideoDownloader\log.txt" -ErrorAction SilentlyContinue; throw 'screenshots timed out' }
           if (Test-Path shots\shot-error.txt) { Get-Content shots\shot-error.txt; throw 'screenshot failed' }
           Get-ChildItem shots
+          foreach ($f in Get-ChildItem shots\*.png) { Write-Output ("B64:" + $f.Name + ":" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($f.FullName))) }
 
       - name: Engine test (real download)
         continue-on-error: true

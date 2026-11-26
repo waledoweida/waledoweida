@@ -802,7 +802,7 @@ namespace VideoDownloader
         void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var running = _items.Where(i => i.IsActive).ToList();
-            if (running.Count > 0)
+            if (running.Count > 0 && !_demo)
             {
                 var r = MessageBox.Show(this, "فيه " + running.Count + " تنزيل لسه شغال. لو قفلت البرنامج هيتلغوا.\n\nتقفل برضه؟",
                     "تنزيل الفيديوهات", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No,
