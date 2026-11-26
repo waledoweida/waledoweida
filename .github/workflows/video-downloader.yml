@@ -37,13 +37,20 @@ jobs:
           Get-ChildItem shots
           foreach ($f in Get-ChildItem shots\*.png) { Write-Output ("B64:" + $f.Name + ":" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($f.FullName))) }
 
-      - name: Engine test (real download)
+      - name: Engine test (real downloads)
         continue-on-error: true
         run: |
-          $p = Start-Process -FilePath out\VideoDownloader.exe -ArgumentList '--engine-test', 'https://www.youtube.com/watch?v=jNQXAC9IVRw', "$PWD\engine" -PassThru
-          if (-not $p.WaitForExit(600000)) { $p.Kill() }
-          Get-Content engine\engine.log
-          if ($p.ExitCode -ne 0) { throw "engine test exit $($p.ExitCode)" }
+          # YouTube often blocks GitHub's servers ("not a bot"), so other sites prove the download path too
+          $ok = 0; $i = 0
+          foreach ($u in 'https://www.youtube.com/watch?v=jNQXAC9IVRw', 'https://www.dailymotion.com/video/x5kesuj', 'https://archive.org/details/Popeye_forPresident') {
+            $i++
+            $p = Start-Process -FilePath out\VideoDownloader.exe -ArgumentList '--engine-test', $u, "$PWD\engine\$i" -PassThru
+            if (-not $p.WaitForExit(420000)) { $p.Kill() }
+            Write-Output "===== $u -> exit $($p.ExitCode)"
+            Get-Content "engine\$i\engine.log" -ErrorAction SilentlyContinue
+            if ($p.ExitCode -eq 0) { $ok++ }
+          }
+          if ($ok -eq 0) { throw 'no site downloaded' }
 
       - name: Package
         run: |
@@ -59,7 +66,7 @@ jobs:
           path: |
             desktop/video-downloader/VideoDownloader.zip
             desktop/video-downloader/shots/
-            desktop/video-downloader/engine/engine.log
+            desktop/video-downloader/engine/
           if-no-files-found: warn
 
       - name: Publish release
