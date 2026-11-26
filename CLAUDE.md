@@ -69,6 +69,16 @@ changes these paths.
   Running the Cobalt server: `tools/cobalt/README.md`. Tests: `tests/download.test.js`.
 - `download/dl.js` is written compact and comment-free by hand (not part of `build_js.py`).
 
+## Windows video downloader (`desktop/video-downloader/`)
+
+- WPF app on .NET Framework 4.8 (runs on every Windows 10/11, nothing to install). It drives yt-dlp, ffmpeg and deno,
+  which it downloads on first run into `%LOCALAPPDATA%\WaledVideoDownloader\tools` and keeps updated (`yt-dlp -U`).
+- `.github/workflows/video-downloader.yml` builds it on `windows-latest`, renders screenshots (`--shot`; RTL renders
+  mirrored in RenderTargetBitmap, flip to view), runs real downloads (`--engine-test`; YouTube usually blocks GitHub's
+  servers, other sites prove the path) and, on `main`, publishes `VideoDownloader.zip` as release
+  `video-downloader-v<Version>` marked latest. Bump `<Version>` in the csproj for a new release.
+- Its page `apps/video-downloader/` is hand-written (not in `content/apps.json`); `build_apps.HAND_WRITTEN` keeps it from being pruned.
+
 ## Checks
 
 - `npm run check` = types + API tests + HTML validation (`html-validate`, wedding excluded via `.htmlvalidateignore`).

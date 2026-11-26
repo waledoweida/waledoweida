@@ -497,9 +497,13 @@ def build():
     return paths()
 
 
+# hand-written app pages that are not in content/apps.json (never pruned)
+HAND_WRITTEN = {"video-downloader"}
+
+
 def prune():
     """Delete the pages of apps that were removed from content/apps.json (their images stay until removed by hand)."""
-    keep = {a["slug"] for a in apps()}
+    keep = {a["slug"] for a in apps()} | HAND_WRITTEN
     for base in ("apps", "en/apps"):
         full = os.path.join(ROOT, base)
         if not os.path.isdir(full):
