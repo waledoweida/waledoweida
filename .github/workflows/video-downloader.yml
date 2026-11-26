@@ -32,7 +32,7 @@ jobs:
       - name: Screenshots (the windows must load and render)
         run: |
           $p = Start-Process -FilePath out\VideoDownloader.exe -ArgumentList '--shot', "$PWD\shots" -PassThru
-          if (-not $p.WaitForExit(120000)) { $p.Kill(); throw 'screenshots timed out' }
+          if (-not $p.WaitForExit(120000)) { $p.Kill(); Get-Content shots\shot.log -ErrorAction SilentlyContinue; Get-Content "$env:LOCALAPPDATA\WaledVideoDownloader\log.txt" -ErrorAction SilentlyContinue; throw 'screenshots timed out' }
           if (Test-Path shots\shot-error.txt) { Get-Content shots\shot-error.txt; throw 'screenshot failed' }
           Get-ChildItem shots
 
@@ -52,6 +52,7 @@ jobs:
           (Get-Item VideoDownloader.zip).Length
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: video-downloader
           path: |

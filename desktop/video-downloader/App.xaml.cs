@@ -39,9 +39,8 @@ namespace VideoDownloader
 
         static async Task WaitRender(int ms)
         {
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
             await Task.Delay(ms);
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
         }
 
         static void Save(FrameworkElement el, string path)
@@ -69,14 +68,19 @@ namespace VideoDownloader
         async Task Shots(string dir)
         {
             int code = 0;
+            void Mark(string m) { try { File.AppendAllText(Path.Combine(dir, "shot.log"), DateTime.Now.ToString("HH:mm:ss.fff ") + m + Environment.NewLine); } catch { } }
             try
             {
                 Directory.CreateDirectory(dir);
+                Mark("start");
                 var w = new MainWindow();
                 w.DemoMode();
                 MainWindow = w;
+                Mark("window created");
                 w.Show();
+                Mark("shown");
                 await WaitRender(800);
+                Mark("rendered");
                 Save((FrameworkElement)w.Content, Path.Combine(dir, "1-empty.png"));
                 w.LoadDemo(DemoThumb());
                 await WaitRender(1200);
@@ -87,6 +91,7 @@ namespace VideoDownloader
                 w.ShowSetupDemo();
                 await WaitRender(500);
                 Save((FrameworkElement)w.Content, Path.Combine(dir, "4-setup.png"));
+                Mark("all saved");
             }
             catch (Exception ex)
             {

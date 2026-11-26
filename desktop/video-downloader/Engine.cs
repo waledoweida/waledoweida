@@ -501,7 +501,7 @@ namespace VideoDownloader
                 "--print", "before_dl:[T]%(title)s",
                 "--print", "after_move:[F]%(filepath)s",
                 "--windows-filenames", "--no-mtime", "--embed-metadata",
-                "--retries", "5", "--fragment-retries", "10", "--concurrent-fragments", "4",
+                "--retries", "5", "--fragment-retries", "10", "--concurrent-fragments", "8", "--buffer-size", "1M", "--socket-timeout", "20",
                 "-P", r.Folder,
             };
 

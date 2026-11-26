@@ -22,7 +22,7 @@ namespace VideoDownloader
 {
     public partial class MainWindow : Window
     {
-        const int MaxParallel = 2;
+        const int MaxParallel = 3;
 
         readonly ObservableCollection<DownloadItem> _items = new ObservableCollection<DownloadItem>();
         readonly Settings _settings = Settings.Load();
@@ -69,7 +69,7 @@ namespace VideoDownloader
                 MaxBtn.Content = WindowState == WindowState.Maximized ? "" : "";
                 WindowFrame.BorderThickness = WindowState == WindowState.Maximized ? new Thickness(7) : new Thickness(1);
             };
-            Activated += (s, e) => CheckClipboard();
+            Activated += (s, e) => { if (!_demo) CheckClipboard(); };
             DragEnter += OnDragOver;
             DragOver += OnDragOver;
             DragLeave += (s, e) => DropHint.Visibility = Visibility.Collapsed;
