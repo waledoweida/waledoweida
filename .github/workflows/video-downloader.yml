@@ -1,0 +1,76 @@
+# Builds the Windows video downloader (desktop/video-downloader, WPF on .NET Framework 4.8,
+# so it runs on every Windows 10/11 with nothing to install), checks that its windows render,
+# and on main publishes VideoDownloader.zip as the latest GitHub release — the download button
+# on waledoweida.com/apps/video-downloader/ points to releases/latest/download/VideoDownloader.zip.
+name: Video downloader (Windows)
+
+on:
+  push:
+    paths: ["desktop/video-downloader/**", ".github/workflows/video-downloader.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-downloader-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: desktop/video-downloader
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: dotnet build VideoDownloader.csproj -c Release -o out
+
+      - name: Screenshots (the windows must load and render)
+        run: |
+          $p = Start-Process -FilePath out\VideoDownloader.exe -ArgumentList '--shot', "$PWD\shots" -PassThru
+          if (-not $p.WaitForExit(120000)) { $p.Kill(); throw 'screenshots timed out' }
+          if (Test-Path shots\shot-error.txt) { Get-Content shots\shot-error.txt; throw 'screenshot failed' }
+          Get-ChildItem shots
+
+      - name: Engine test (real download)
+        continue-on-error: true
+        run: |
+          $p = Start-Process -FilePath out\VideoDownloader.exe -ArgumentList '--engine-test', 'https://www.youtube.com/watch?v=jNQXAC9IVRw', "$PWD\engine" -PassThru
+          if (-not $p.WaitForExit(600000)) { $p.Kill() }
+          Get-Content engine\engine.log
+          if ($p.ExitCode -ne 0) { throw "engine test exit $($p.ExitCode)" }
+
+      - name: Package
+        run: |
+          New-Item -ItemType Directory -Force pkg\VideoDownloader | Out-Null
+          Copy-Item out\VideoDownloader.exe, out\VideoDownloader.exe.config, README-AR.txt pkg\VideoDownloader\
+          Compress-Archive -Path pkg\VideoDownloader -DestinationPath VideoDownloader.zip -Force
+          (Get-Item VideoDownloader.zip).Length
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-downloader
+          path: |
+            desktop/video-downloader/VideoDownloader.zip
+            desktop/video-downloader/shots/
+            desktop/video-downloader/engine/engine.log
+          if-no-files-found: warn
+
+      - name: Publish release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $v = ([xml](Get-Content VideoDownloader.csproj)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
+          $tag = "video-downloader-v$v"
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag VideoDownloader.zip --clobber
+          } else {
+            gh release create $tag VideoDownloader.zip --latest --title "برنامج تنزيل الفيديوهات للويندوز $v" --notes "تصميم المهندس وليد أبوعويضة • مجاني وآمن 100%. فك الضغط وشغّل VideoDownloader.exe"
+          }
+          exit 0
